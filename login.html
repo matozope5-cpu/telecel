@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Telecel Clone</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body{
+  margin:0;
+  background:#f5f5f5;
+  display:flex;
+  justify-content:center;
+}
+
+.container{
+  width:360px;
+  min-height:100vh;
+  background:#f7f7f7;
+  position:relative;
+  padding:20px;
+  overflow:hidden;
+}
+
+/* TOP RED SHAPE */
+.top-bg{
+  position:absolute;
+  top:0;
+  right:0;
+  width:220px;
+  height:220px;
+  background:linear-gradient(135deg, rgba(255,0,0,0.25), rgba(255,0,0,0.6));
+  border-bottom-left-radius:120px;
+}
+
+/* LOGO */
+.logo{
+  text-align:center;
+  margin-top:60px;
+}
+
+/* ULTRA-SPECIFIC SELECTOR TO FORCE WHITE 't' */
+.logo .logo-circle {
+  width:52px;
+  height:52px;
+  background:#ff0000;
+  border-radius:50%;
+  color: #ffffff !important;        /* pure white, forced */
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:30px;
+  margin:auto;
+  font-weight:800;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1;                  /* prevents extra height */
+  text-decoration: none;            /* remove any possible underline */
+}
+
+.logo-text{
+  color:#ff0000;
+  font-size:26px;
+  font-weight:bold;
+  margin-top:8px;
+}
+
+/* TEXT */
+.title{
+  text-align:center;
+  color:#ff0000;
+  font-size:20px;
+  font-weight:600;
+  margin-top:15px;
+}
+
+.subtitle{
+  text-align:center;
+  color:#666;
+  font-size:15px;
+  margin-top:10px;
+  line-height:1.5;
+}
+
+/* FORM */
+.form{
+  margin-top:30px;
+}
+
+.label{
+  font-size:13px;
+  color:#666;
+  margin-bottom:8px;
+}
+
+.input, .select{
+  width:100%;
+  height:50px;
+  border-radius:12px;
+  border:1px solid #ddd;
+  padding:0 15px;
+  font-size:15px;
+  background:#fff;
+}
+
+/* CUSTOM DROPDOWN */
+.dropdown{
+  position:relative;
+  cursor:pointer;
+}
+
+.select-wrapper{
+  position:relative;
+}
+
+.select{
+  width:100%;
+  height:50px;
+  border-radius:12px;
+  border:1px solid #ddd;
+  padding:0 40px 0 15px;
+  font-size:15px;
+  background:#fff;
+}
+
+/* ARROW ICON */
+.arrow{
+  position:absolute;
+  right:15px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:14px;
+  color:#888;
+  transition:0.3s;
+}
+
+.arrow.rotate{
+  transform:translateY(-50%) rotate(180deg);
+}
+
+.dropdown-list{
+  position:absolute;
+  width:100%;
+  background:#fff;
+  border-radius:12px;
+  box-shadow:0 4px 15px rgba(0,0,0,0.1);
+  margin-top:5px;
+  display:none;
+  overflow:hidden;
+}
+
+.dropdown-item{
+  padding:15px;
+  font-size:15px;
+}
+
+.dropdown-item.active{
+  background:#ffe5e5;
+  color:#ff0000;
+}
+
+.dropdown-item:hover{
+  background:#f5f5f5;
+}
+
+/* BUTTONS */
+.btn{
+  width:100%;
+  height:55px;
+  border:none;
+  border-radius:14px;
+  font-size:16px;
+  margin-top:20px;
+  cursor:pointer;
+}
+
+.btn-primary{
+  background:#ff0000;
+  color:#fff;
+  font-weight:600;
+}
+
+.btn-outline{
+  background:transparent;
+  border:2px solid #ff0000;
+  color:#666;
+  font-weight:600;
+}
+
+/* VERSION */
+.version{
+  text-align:center;
+  color:#aaa;
+  font-size:12px;
+  margin-top:20px;
+}
+
+/* ERROR TOAST */
+.error-box{
+  position:absolute;
+  top:20px;
+  left:20px;
+  right:20px;
+  background:#fff;
+  border:2px solid #ff4d4d;
+  border-radius:12px;
+  padding:15px;
+  display:none;
+  box-shadow:0 5px 20px rgba(0,0,0,0.1);
+}
+
+.error-title{
+  color:#ff0000;
+  font-weight:bold;
+  margin-bottom:5px;
+}
+
+.error-text{
+  color:#444;
+  font-size:14px;
+}
+
+.close{
+  position:absolute;
+  right:15px;
+  top:10px;
+  cursor:pointer;
+  font-size:18px;
+  color:#999;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="top-bg"></div>
+
+  <!-- ERROR -->
+  <div class="error-box" id="errorBox">
+    <div class="close" onclick="hideError()">×</div>
+    <div class="error-title">Error</div>
+    <div class="error-text">Account details provided is incorrect</div>
+  </div>
+
+  <!-- LOGO -->
+  <div class="logo">
+    <!-- inline style as ultimate fallback -->
+    <div class="logo-circle" style="color: #ffffff !important;">t</div>
+    <div class="logo-text">telecel</div>
+  </div>
+
+  <!-- TEXT -->
+  <div class="title">Welcome to Telecel Play</div>
+  <div class="subtitle">
+    Enter your number to sign up or log in.<br>
+    You need to be a Telecel subscriber to proceed.
+  </div>
+
+  <!-- FORM -->
+  <div class="form">
+
+    <div class="label">Account type</div>
+
+    <div class="dropdown" onclick="toggleDropdown()">
+
+  <div class="select-wrapper">
+    <input class="select" id="selectedType" value="Mobile" readonly>
+    <span class="arrow" id="arrow">▼</span>
+  </div>
+
+  <div class="dropdown-list" id="dropdownList">
+    <div class="dropdown-item active" onclick="selectType(event,'Mobile')">Mobile</div>
+    <div class="dropdown-item" onclick="selectType(event,'Broadband')">Broadband</div>
+  </div>
+
+</div>
+
+    <div class="label" id="inputLabel" style="margin-top:15px;">Phone Number</div>
+    <input class="input" id="inputField" placeholder="020XXXXXXX">
+
+    <button class="btn btn-primary" onclick="submitForm()">Next</button>
+    <button class="btn btn-outline">Go Back</button>
+
+    <div class="version">v26.2.2(TPA-2622)</div>
+
+  </div>
+
+</div>
+
+<script>
+function toggleDropdown(){
+  const list = document.getElementById("dropdownList");
+  list.style.display = list.style.display === "block" ? "none" : "block";
+}
+
+function selectType(e,type){
+  e.stopPropagation();
+
+  document.getElementById("selectedType").value = type;
+
+  document.querySelectorAll(".dropdown-item").forEach(item=>{
+    item.classList.remove("active");
+  });
+  e.target.classList.add("active");
+
+  // Change input dynamically
+  if(type === "Mobile"){
+    document.getElementById("inputLabel").innerText = "Phone Number";
+    document.getElementById("inputField").placeholder = "020XXXXXXX";
+  } else {
+    document.getElementById("inputLabel").innerText = "User ID / Account Number";
+    document.getElementById("inputField").placeholder = "Eg: Xgtrjj";
+  }
+
+  document.getElementById("dropdownList").style.display = "none";
+}
+
+function submitForm(){
+  const value = document.getElementById("inputField").value;
+
+  if(value.trim() === ""){
+    showError();
+  } else {
+    showError(); // simulate failure like screenshot
+  }
+}
+
+function showError(){
+  document.getElementById("errorBox").style.display = "block";
+}
+
+function hideError(){
+  document.getElementById("errorBox").style.display = "none";
+}
+
+// close dropdown if clicked outside
+document.addEventListener("click", function(e){
+  if(!e.target.closest(".dropdown")){
+    document.getElementById("dropdownList").style.display = "none";
+  }
+});
+</script>
+
+</body>
+</html>

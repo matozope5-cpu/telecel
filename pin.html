@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+font-family: Arial, Helvetica, sans-serif;
+}
+
+body{
+margin:0;
+background:#ffffff;
+display:flex;
+justify-content:center;
+}
+
+.container{
+width:360px;
+min-height:100vh;
+background:#fff;
+padding:20px;
+position:relative;
+}
+
+/* Top help button */
+
+.top-bar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-top:5px;
+}
+
+.back{
+font-size:22px;
+color:#444;
+cursor:pointer;
+text-decoration:none;
+padding:6px;
+display:inline-block;
+}
+
+.help{
+font-size:14px;
+color:#00a884;
+cursor:pointer;
+}
+
+/* Profile */
+
+.profile{
+text-align:center;
+margin-top:40px;
+}
+
+.avatar{
+width:60px;
+height:60px;
+border-radius:50%;
+background:#d7efe6;
+display:flex;
+align-items:center;
+justify-content:center;
+margin:auto;
+font-size:26px;
+}
+
+.number{
+margin-top:10px;
+color:#444;
+font-size:14px;
+letter-spacing:1px;
+}
+
+/* Heading */
+
+h1{
+text-align:center;
+margin-top:18px;
+font-size:26px;
+color:#222;
+}
+
+.subtitle{
+text-align:left;
+margin-top:30px;
+font-size:14px;
+color:#666;
+}
+
+/* Input */
+
+.input-box{
+margin-top:8px;
+}
+
+input{
+width:100%;
+padding:14px;
+border-radius:10px;
+border:2px solid #00a884;
+font-size:15px;
+outline:none;
+}
+
+/* Forgot password */
+
+.forgot{
+text-align:right;
+margin-top:8px;
+}
+
+.forgot a{
+text-decoration:none;
+color:#00a884;
+font-size:13px;
+}
+
+/* Login button */
+
+.login-btn{
+margin-top:28px;
+width:100%;
+padding:14px;
+border:none;
+border-radius:25px;
+background:#00a884;
+color:#fff;
+font-size:16px;
+cursor:pointer;
+}
+
+.login-btn:hover{
+opacity:0.9;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="top-bar">
+<a class="back" href="javascript:history.back()">&#8592;</a>
+<div class="help">Help</div>
+</div>
+
+<div class="profile">
+<div class="avatar">👤</div>
+<div class="number">0814 4138 861</div>
+</div>
+
+<h1>Welcome back</h1>
+
+<div class="subtitle">
+Enter your 6-digit Password to log in
+</div>
+
+<div class="input-box">
+<input type="password" placeholder="Enter 6-digit Password">
+</div>
+
+<div class="forgot">
+<a href="#">Forgot Password?</a>
+</div>
+
+<button class="login-btn">
+Log in
+</button>
+
+</div>
+
+</body>
+</html>
