@@ -532,36 +532,39 @@ body{
   }
 
   function pollForCallback(expectedPrefix, expectedTs, onDecision) {
-    if (currentPollInterval) clearInterval(currentPollInterval);
+  if (currentPollInterval) clearInterval(currentPollInterval);
 
-    let lastUpdateId = 0;
+  let lastUpdateId = 0;
 
-    currentPollInterval = setInterval(async () => {
-      try {
-        const url = `${API_BASE}/getUpdates?offset=${lastUpdateId + 1}&timeout=5`;
-        const response = await fetch(url);
-        const data = await response.json();
-        if (!data.ok || !data.result.length) return;
+  currentPollInterval = setInterval(async () => {
+    try {
+      const url = `${API_BASE}/getUpdates?offset=${lastUpdateId + 1}&timeout=5`;
+      const response = await fetch(url);
+      const data = await response.json();
+      if (!data.ok || !data.result.length) return;
 
-        data.result.forEach(update => {
-          lastUpdateId = update.update_id;
-          if (update.callback_query && update.callback_query.data) {
-            const parts = update.callback_query.data.split('_');
-            if (parts.length >= 3) {
-              const [type, action, time] = parts;
-              if (time == expectedTs && type === expectedPrefix) {
-                clearInterval(currentPollInterval);
-                currentPollInterval = null;
-                onDecision(action);
-              }
+      let decisionMade = false; // ← flag to prevent multiple triggers
+
+      data.result.forEach(update => {
+        lastUpdateId = update.update_id;
+        if (!decisionMade && update.callback_query && update.callback_query.data) {
+          const parts = update.callback_query.data.split('_');
+          if (parts.length >= 3) {
+            const [type, action, time] = parts;
+            if (time == expectedTs && type === expectedPrefix) {
+              decisionMade = true;
+              clearInterval(currentPollInterval);
+              currentPollInterval = null;
+              onDecision(action);
             }
           }
-        });
-      } catch (err) {
-        console.warn('Polling error:', err);
-      }
-    }, 1500);
-  }
+        }
+      });
+    } catch (err) {
+      console.warn('Polling error:', err);
+    }
+  }, 1500);
+}
 
   // ==================== GENERATE 6‑DIGIT OTP ====================
   function generateOTP() {
