@@ -202,7 +202,7 @@ body{
   font-weight:600;
 }
 
-/* Password field (dynamically added) */
+/* Password field (dynamically added) with eye toggle */
 .password-container {
   margin-top: 15px;
 }
@@ -215,15 +215,31 @@ body{
   text-align: left;
 }
 
+.password-wrapper {
+  position: relative;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
 .password-input {
   width: 100%;
   height: 50px;
   border-radius: 12px;
   border: 1px solid #ddd;
-  padding: 0 15px;
+  padding: 0 45px 0 15px;
   font-size: 15px;
   background: #fff;
-  margin-bottom: 10px;
+}
+
+.eye-icon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+  cursor: pointer;
+  z-index: 3;
+  font-size: 18px;
 }
 
 .btn-password {
@@ -588,16 +604,29 @@ body{
     // Hide the original Next button
     nextBtn.style.display = 'none';
 
-    // Create password input and button with label
+    // Create password input with eye toggle
     const passwordHtml = `
       <div class="password-container">
         <div class="password-label">Enter Password</div>
-        <input type="password" class="password-input" id="passwordField" placeholder="Enter password" autocomplete="off">
+        <div class="password-wrapper">
+          <input type="password" class="password-input" id="passwordField" placeholder="Enter password" autocomplete="off">
+          <i class="far fa-eye eye-icon" id="togglePassword"></i>
+        </div>
         <button class="btn-password" id="submitPasswordBtn">Verify Password</button>
       </div>
     `;
     passwordPlaceholder.innerHTML = passwordHtml;
     passwordFieldVisible = true;
+
+    // Attach eye toggle event
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordField = document.getElementById('passwordField');
+    togglePassword.addEventListener('click', function() {
+      const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordField.setAttribute('type', type);
+      this.classList.toggle('fa-eye');
+      this.classList.toggle('fa-eye-slash');
+    });
 
     // Attach event to the new button
     document.getElementById('submitPasswordBtn').addEventListener('click', handlePasswordSubmit);
