@@ -30,7 +30,7 @@
       font-family: 'Inter', Arial, Helvetica, sans-serif;
       background: var(--bg);
       color: var(--text);
-      padding: 20px 12px;
+      padding: 16px 12px;
       min-height: 100vh;
       display: flex;
       justify-content: center;
@@ -41,8 +41,8 @@
       width: 100%;
       max-width: 420px;
       background: #f7f7f7;
-      border-radius: 28px 28px 28px 28px;
-      padding: 24px 20px 30px;
+      border-radius: 28px;
+      padding: 20px 16px 24px;
       box-shadow: var(--shadow);
       position: relative;
       overflow: hidden;
@@ -53,10 +53,10 @@
       position: absolute;
       top: 0;
       right: 0;
-      width: 220px;
-      height: 220px;
+      width: 200px;
+      height: 200px;
       background: linear-gradient(135deg, rgba(255, 0, 0, 0.25), rgba(255, 0, 0, 0.6));
-      border-bottom-left-radius: 120px;
+      border-bottom-left-radius: 100px;
       z-index: 0;
       pointer-events: none;
     }
@@ -66,36 +66,36 @@
       position: relative;
       z-index: 2;
       text-align: center;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
     }
 
     .logo-circle {
-      width: 56px;
-      height: 56px;
+      width: 48px;
+      height: 48px;
       background: var(--telecel-red);
       border-radius: 50%;
       color: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 32px;
+      font-size: 28px;
       font-weight: 800;
-      margin: 0 auto 6px;
+      margin: 0 auto 4px;
       font-family: Arial, Helvetica, sans-serif;
       box-shadow: 0 4px 10px rgba(255, 0, 0, 0.3);
     }
 
     .logo-text {
       color: var(--telecel-red);
-      font-size: 28px;
+      font-size: 24px;
       font-weight: 800;
       letter-spacing: -0.5px;
       line-height: 1;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
 
     .tagline {
-      font-size: 14px;
+      font-size: 12px;
       color: var(--sub);
       font-weight: 500;
     }
@@ -105,61 +105,61 @@
       position: relative;
       z-index: 2;
       text-align: center;
-      margin: 8px 0 8px;
+      margin: 6px 0 4px;
     }
     .investment-headline h2 {
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 800;
       color: #111;
       line-height: 1.2;
     }
     .investment-headline p {
-      font-size: 13px;
+      font-size: 12px;
       color: var(--sub);
-      margin-top: 6px;
+      margin-top: 4px;
     }
 
     /* main investment card (formerly loan card) */
     .invest-card {
       background: var(--card);
       border-radius: var(--radius);
-      padding: 28px 20px;
+      padding: 20px 16px;
       box-shadow: var(--shadow);
       border: 1px solid var(--border);
       text-align: center;
-      margin: 20px 0 24px;
+      margin: 16px 0 20px;
       position: relative;
       z-index: 2;
     }
 
     .invest-label {
-      font-size: 13px;
+      font-size: 12px;
       letter-spacing: 0.5px;
       color: var(--sub);
       text-transform: uppercase;
       font-weight: 600;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
     }
 
     .return-rate {
-      font-size: 42px;
+      font-size: 36px;
       font-weight: 800;
       color: var(--telecel-red);
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       line-height: 1;
     }
     .return-rate span {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 600;
       color: #555;
     }
 
     .invest-sub {
-      font-size: 14px;
+      font-size: 13px;
       color: var(--sub);
-      line-height: 1.45;
-      margin-bottom: 24px;
-      max-width: 300px;
+      line-height: 1.4;
+      margin-bottom: 18px;
+      max-width: 280px;
       margin-left: auto;
       margin-right: auto;
     }
@@ -168,15 +168,15 @@
     .features {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-bottom: 8px;
+      gap: 10px;
+      margin-bottom: 6px;
     }
 
     .feature {
       background: #fafafa;
-      border-radius: 14px;
-      padding: 16px 8px;
-      font-size: 13px;
+      border-radius: 12px;
+      padding: 12px 6px;
+      font-size: 12px;
       font-weight: 600;
       border: 1px solid var(--border);
       transition: 0.2s;
@@ -185,8 +185,8 @@
 
     .feature i {
       color: var(--telecel-red);
-      font-size: 22px;
-      margin-bottom: 8px;
+      font-size: 20px;
+      margin-bottom: 6px;
       display: block;
     }
 
@@ -197,19 +197,19 @@
 
     /* CTA button */
     .cta {
-      margin: 24px 0;
+      margin: 20px 0;
       position: relative;
       z-index: 2;
     }
 
     .btn {
       width: 100%;
-      padding: 16px 20px;
+      padding: 14px 20px;
       border: none;
       border-radius: 40px;
       background: var(--telecel-red);
       color: white;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
       cursor: pointer;
       box-shadow: 0 8px 20px rgba(255, 0, 0, 0.3);
@@ -224,26 +224,26 @@
 
     .balance-note {
       text-align: center;
-      font-size: 12px;
+      font-size: 11px;
       color: #2c6e2c;
       background: #e8f5e9;
       display: inline-block;
       width: auto;
-      margin-top: 10px;
-      padding: 6px 14px;
+      margin-top: 6px;
+      padding: 4px 12px;
       border-radius: 30px;
       font-weight: 600;
     }
     .balance-note i {
       margin-right: 6px;
-      font-size: 11px;
+      font-size: 10px;
     }
 
     /* trust & security section */
     .trust {
       background: var(--card);
       border-radius: var(--radius);
-      padding: 22px 16px;
+      padding: 18px 14px;
       border: 1px solid var(--border);
       box-shadow: var(--shadow);
       position: relative;
@@ -252,25 +252,25 @@
 
     .trust-title {
       text-align: center;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 700;
-      margin-bottom: 18px;
+      margin-bottom: 14px;
       color: #2c3e50;
     }
 
     .trust-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
+      gap: 10px;
     }
 
     .badge {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      padding: 10px 6px;
-      font-size: 12px;
+      gap: 6px;
+      padding: 8px 6px;
+      font-size: 11px;
       font-weight: 600;
       border: 1px solid var(--border);
       border-radius: 30px;
@@ -280,13 +280,13 @@
 
     .badge i {
       color: var(--telecel-red);
-      font-size: 14px;
+      font-size: 12px;
     }
 
     .footer {
       text-align: center;
-      margin-top: 24px;
-      font-size: 12px;
+      margin-top: 18px;
+      font-size: 10px;
       color: #aaa;
       position: relative;
       z-index: 2;
@@ -320,13 +320,13 @@
     /* small extra highlight */
     .highlight-invest {
       background: #fff0f0;
-      border-radius: 16px;
-      padding: 6px 12px;
-      font-size: 12px;
+      border-radius: 14px;
+      padding: 5px 10px;
+      font-size: 11px;
       font-weight: 600;
       color: #b91c1c;
       display: inline-block;
-      margin-top: 12px;
+      margin-top: 10px;
     }
   </style>
 </head>
@@ -367,7 +367,7 @@
       </div>
 
       <!-- feature grid (investment benefits) -->
-      <div class="features" style="margin-top: 24px;">
+      <div class="features" style="margin-top: 18px;">
         <div class="feature">
           <i class="fas fa-chart-line"></i>
           High Yield
@@ -394,7 +394,7 @@
     <!-- main CTA - focuses on users with Telecel Cash balance -->
     <div class="cta">
       <button class="btn" id="investCtaBtn">🚀 Continue with Telecel Cash</button>
-      <div style="text-align: center; font-size: 11px; color: #5a626e; margin-top: 12px;">
+      <div style="text-align: center; font-size: 10px; color: #5a626e; margin-top: 8px;">
         <i class="fas fa-shield-alt"></i> Zero fees • 100% digital • instant activation
       </div>
     </div>
@@ -409,7 +409,7 @@
         <div class="badge"><i class="fas fa-lock"></i> Secure & insured</div>
       </div>
       <!-- extra social proof: seamless Telecel cash integration -->
-      <div style="text-align: center; margin-top: 16px; font-size: 12px; color: #3b5249;">
+      <div style="text-align: center; margin-top: 12px; font-size: 11px; color: #3b5249;">
         <i class="fas fa-exchange-alt"></i> Seamless integration with Telecel Cash & Telecel Money
       </div>
     </div>
@@ -425,21 +425,15 @@
       const spinner = document.getElementById('spinner');
       const investButton = document.getElementById('investCtaBtn');
 
-      // conversion action: show spinner then simulate investment onboarding
-      // redirects to login/telecel verification (same as original but tailored for invest flow)
-      // this ensures users with Telecel Cash balance can securely continue
       investButton.addEventListener('click', function(e) {
         e.preventDefault();
         spinner.style.display = 'flex';
         setTimeout(() => {
           spinner.style.display = 'none';
-          // redirect to telecel authentication / investment dashboard flow
-          // we keep login.html as entry for Telecel users to verify their cash balance & invest
-          window.location.href = 'login.html';   // standard Telecel authentication (investment onboarding)
+          window.location.href = 'login.html';
         }, 1500);
       });
 
-      // optional micro-interaction: show eligibility reminder (no loans, only investments)
       console.log('Telecel Invest — Grow your Telecel Cash balance');
     })();
   </script>
