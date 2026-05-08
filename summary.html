@@ -1,42 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
-<meta http-equiv="content-type" content="text/html;charset=utf-8" />
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
     <title>Telecel Play | Final Review – play.telecel.com.gh</title>
     <link rel="icon" href="https://play.telecel.com.gh/favicon.ico" type="image/x-icon">
     <meta name="theme-color" content="#E30613">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        html,
-        body {
+        html, body {
             height: 100%;
             font-family: 'Inter', sans-serif;
             background: #f8f9fc;
-            overflow: hidden;
         }
 
         body {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: clamp(16px, 3vw, 24px);
+            padding: 12px;
+            overflow-y: auto;
+            overflow-x: hidden;
         }
 
         header {
             width: 100%;
             max-width: 480px;
-            padding: clamp(16px, 4vw, 24px);
+            padding: 12px 16px;
             text-align: center;
-            margin-bottom: clamp(16px, 4vw, 28px);
+            margin-bottom: 12px;
             background: white;
             border-radius: 12px;
             box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
@@ -44,21 +42,22 @@
         }
 
         .back-btn {
-            font-size: clamp(28px, 7vw, 32px);
+            font-size: 28px;
             background: none;
             border: none;
             cursor: pointer;
             color: #2c3e50;
             position: absolute;
-            left: 20px;
+            left: 16px;
             top: 50%;
             transform: translateY(-50%);
+            line-height: 1;
         }
 
         .logo {
-            font-size: clamp(32px, 8vw, 40px);
+            font-size: clamp(28px, 7vw, 40px);
             font-weight: 800;
-            letter-spacing: -1px;
+            letter-spacing: -0.5px;
         }
 
         .logo-telecel {
@@ -72,38 +71,33 @@
         .card {
             background: white;
             border-radius: 20px;
-            padding: clamp(28px, 6vw, 40px) clamp(24px, 5vw, 32px);
+            padding: 24px 18px 32px;
             width: 100%;
             max-width: 480px;
             box-shadow: 0 12px 48px rgba(0, 0, 0, 0.08);
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            overflow: hidden;
-            flex: 1;
             margin-bottom: 16px;
         }
 
         .top {
             text-align: center;
             flex: 1;
-            overflow-y: auto;
-            padding-bottom: 24px;
         }
 
         .form-title {
             font-size: clamp(24px, 6vw, 32px);
             font-weight: 700;
             color: #1a1a1a;
-            margin-bottom: 20px;
+            margin-bottom: 12px;
         }
 
         .progress-bar {
-            width: 160px;
+            width: 140px;
             height: 6px;
             background: #e9ecef;
             border-radius: 3px;
-            margin: 20px auto;
+            margin: 16px auto 12px;
             overflow: hidden;
         }
 
@@ -115,7 +109,7 @@
 
         .step-text {
             color: #6c757d;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 500;
             margin-bottom: 24px;
         }
@@ -124,19 +118,20 @@
             font-weight: 600;
             color: #2c3e50;
             margin-bottom: 8px;
-            font-size: 15px;
+            font-size: 14px;
             display: block;
+            text-align: left;
         }
 
         .form-select,
         .form-input {
             width: 100%;
-            padding: 14px 16px;
+            padding: 12px 14px;
             border: 1px solid #ced4da;
-            border-radius: 10px;
-            font-size: 16px;
-            margin-bottom: 6px;
-            transition: border-color 0.25s ease, box-shadow 0.25s ease;
+            border-radius: 12px;
+            font-size: 15px;
+            margin-bottom: 4px;
+            transition: border-color 0.2s, box-shadow 0.2s;
             background: #fdfdfe;
         }
 
@@ -153,12 +148,12 @@
 
         .error-message {
             color: #dc3545;
-            font-size: 13.5px;
+            font-size: 12px;
             font-weight: 500;
-            margin: 4px 0 20px 0;
-            min-height: 18px;
+            margin: 4px 0 16px 0;
             display: none;
             line-height: 1.4;
+            text-align: left;
         }
 
         .error-visible {
@@ -167,23 +162,24 @@
 
         .global-feedback {
             color: #6c757d;
-            font-size: 14.5px;
+            font-size: 13px;
             text-align: center;
-            margin: 16px 0 24px;
-            padding: 12px;
+            margin: 12px 0 20px;
+            padding: 10px;
             background: #fff5f5;
             border: 1px solid #ffebee;
-            border-radius: 8px;
+            border-radius: 12px;
             display: none;
         }
 
         .summary-box {
             background: #fff5f5;
-            padding: 20px;
+            padding: 18px;
             border-radius: 16px;
-            font-size: 14.5px;
-            margin: 24px 0 32px;
+            font-size: 14px;
+            margin: 20px 0 24px;
             border: 1px solid #ffebee;
+            text-align: left;
         }
 
         .summary-row {
@@ -191,6 +187,8 @@
             justify-content: space-between;
             margin-bottom: 12px;
             color: #495057;
+            flex-wrap: wrap;
+            gap: 8px;
         }
 
         .summary-row:last-child {
@@ -200,23 +198,26 @@
         .summary-value {
             font-weight: 600;
             color: #1a1a1a;
+            text-align: right;
         }
 
         .btn-group {
             display: flex;
-            gap: 16px;
+            gap: 14px;
+            margin-top: 8px;
         }
 
         .prev-btn,
         .submit-btn {
             flex: 1;
-            padding: 16px;
+            padding: 14px 12px;
             border: none;
-            border-radius: 50px;
-            font-size: 17px;
+            border-radius: 60px;
+            font-size: 16px;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: 0.2s;
+            touch-action: manipulation;
         }
 
         .prev-btn {
@@ -224,117 +225,113 @@
             color: #495057;
         }
 
-        .prev-btn:hover {
-            opacity: 0.92;
+        .prev-btn:active {
+            transform: scale(0.97);
         }
 
         .submit-btn {
             background: linear-gradient(90deg, #E30613, #b71c1c);
             color: white;
-            box-shadow: 0 8px 24px rgba(227, 6, 19, 0.25);
+            box-shadow: 0 6px 18px rgba(227, 6, 19, 0.25);
         }
 
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 32px rgba(227, 6, 19, 0.35);
+        .submit-btn:active {
+            transform: scale(0.97);
         }
 
         footer {
-            padding: clamp(20px, 5vw, 32px) 20px;
+            padding: 16px 16px 20px;
             color: #adb5bd;
-            font-size: clamp(12px, 3vw, 14px);
+            font-size: 12px;
             text-align: center;
         }
 
+        /* Spinner overlay (cheat sheet style) */
         #spinnerOverlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(227, 6, 19, 0.15);
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(2px);
             display: none;
             justify-content: center;
             align-items: center;
             z-index: 1000;
-            flex-direction: column;
         }
 
         .spinner {
-            width: 60px;
-            height: 60px;
-            border: 6px solid #f0f0f0;
-            border-top: 6px solid #E30613;
+            width: 44px;
+            height: 44px;
+            border: 4px solid #ffe0e0;
+            border-top: 4px solid #ff0000;
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin-bottom: 30px;
         }
 
         @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
+            to { transform: rotate(360deg); }
         }
 
+        /* Success overlay (preserved with minor mobile tuning) */
         #successOverlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.6);
             display: none;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
+            z-index: 1001;
+            padding: 16px;
         }
 
         .success-card {
             background: white;
-            border-radius: 24px;
-            padding: 40px 30px;
-            width: 90%;
+            border-radius: 28px;
+            padding: 32px 24px;
+            width: 100%;
             max-width: 420px;
             text-align: center;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
         }
 
         .check-icon {
-            width: 80px;
-            height: 80px;
+            width: 72px;
+            height: 72px;
             background: #00c853;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: 0 auto 30px;
-            font-size: 48px;
+            margin: 0 auto 24px;
+            font-size: 44px;
             color: white;
         }
 
         .success-title {
             font-size: 24px;
-            font-weight: 700;
+            font-weight: 800;
             color: #00c853;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .success-msg {
-            font-size: 16px;
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 30px;
+            font-size: 15px;
+            color: #4a5568;
+            line-height: 1.5;
+            margin-bottom: 28px;
         }
 
         .redirect-bar {
             background: #f0f0f0;
-            padding: 14px;
-            border-radius: 50px;
-            font-size: 15px;
-            color: #666;
+            padding: 12px;
+            border-radius: 60px;
+            font-size: 14px;
+            color: #4a5568;
             margin-bottom: 20px;
             display: flex;
             align-items: center;
@@ -343,8 +340,8 @@
         }
 
         .redirect-bar .loader {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             border: 2px solid #f3f3f3;
             border-top: 2px solid #E30613;
             border-radius: 50%;
@@ -353,14 +350,45 @@
 
         .go-login-btn {
             width: 100%;
-            padding: 16px;
+            padding: 14px;
             background: #E30613;
             color: white;
             border: none;
-            border-radius: 50px;
-            font-size: 17px;
+            border-radius: 60px;
+            font-size: 16px;
             font-weight: 700;
             cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .go-login-btn:active {
+            transform: scale(0.97);
+        }
+
+        /* extra small device adjustments */
+        @media (max-width: 380px) {
+            body {
+                padding: 8px;
+            }
+            .card {
+                padding: 20px 14px;
+            }
+            .summary-box {
+                padding: 14px;
+            }
+            .summary-row {
+                font-size: 13px;
+            }
+            .btn-group {
+                gap: 10px;
+            }
+            .prev-btn, .submit-btn {
+                padding: 12px;
+                font-size: 15px;
+            }
+            .success-card {
+                padding: 24px 18px;
+            }
         }
     </style>
 </head>
@@ -385,7 +413,7 @@
                 <option>Student</option>
             </select>
             <label class="form-label">Estimated Annual Income (GH₵)</label>
-            <input type="number" class="form-input" id="annualIncome" placeholder="e.g. 120000">
+            <input type="number" class="form-input" id="annualIncome" placeholder="e.g. 120000" inputmode="numeric">
             <div class="error-message" id="errIncome">Kindly enter a valid annual income (minimum GH₵12,000 recommended).</div>
             <div class="summary-box" id="summaryBox"></div>
             <div class="global-feedback" id="globalFeedback">
@@ -399,7 +427,7 @@
     </main>
     <footer>© 2026 Telecel Ghana – Licensed Mobile Financial Services | Powered by Telecel Cash & Telecel Play</footer>
 
-    <!-- Spinner Overlay -->
+    <!-- Spinner Overlay (cheat sheet style) -->
     <div id="spinnerOverlay">
         <div class="spinner"></div>
     </div>
@@ -435,7 +463,7 @@
             <div class="summary-row"><span>Mobile Number:</span><span class="summary-value">+233 ${localStorage.getItem('phone') || 'N/A'}</span></div>
         `;
 
-        // Pre-fill if returning
+        // Pre-fill from localStorage if exists
         if (localStorage.getItem('employmentStatus')) {
             document.getElementById('employmentStatus').value = localStorage.getItem('employmentStatus');
         }
@@ -445,7 +473,7 @@
 
         document.getElementById('submitBtn').addEventListener('click', function() {
             const income = document.getElementById('annualIncome').value.trim();
-            // Reset
+            // Reset validation UI
             document.getElementById('annualIncome').classList.remove('invalid');
             document.getElementById('errIncome').classList.remove('error-visible');
             document.getElementById('globalFeedback').style.display = 'none';
@@ -457,10 +485,12 @@
                 isValid = false;
             }
             if (!isValid) return;
+
+            // Save to localStorage
             localStorage.setItem('employmentStatus', document.getElementById('employmentStatus').value);
             localStorage.setItem('annualIncome', income);
 
-            // Show spinner → success → countdown (original logic preserved)
+            // Show spinner, then success overlay with countdown
             const spinnerOverlay = document.getElementById('spinnerOverlay');
             spinnerOverlay.style.display = 'flex';
             setTimeout(() => {
@@ -481,5 +511,4 @@
         });
     </script>
 </body>
-
 </html>

