@@ -385,7 +385,7 @@
                 <label class="form-label">Phone Number</label>
                 <div id="phoneGroup">
                     <span>+233</span>
-                    <input type="tel" id="phone" placeholder="55 123 4567" maxlength="9" inputmode="numeric">
+                    <input type="tel" id="phone" placeholder="55 123 4567" maxlength="11" inputmode="numeric">
                 </div>
             </div>
 
@@ -439,15 +439,10 @@
             });
         }
 
-        // ========== Validation rules ==========
-        function isValidGhanaPhone(phoneDigits) {
-            // Must be exactly 9 digits, all numeric
-            if (!/^\d{9}$/.test(phoneDigits)) return false;
-            // Ghana mobile numbers after +233 typically start with 2, 5, 0, 4 (but we accept any 9-digit for Telecel)
-            // Additional rule: first digit should be 2, 5, 0, or 4 according to common operators.
-            // We'll enforce a standard: must start with 2, 5, 0, or 4 (valid Ghana mobile prefix)
-            const firstDigit = phoneDigits.charAt(0);
-            return ['2', '5', '0', '4'].includes(firstDigit);
+        // ========== LENIENT Validation: accept 9, 10, or 11 digits ==========
+        function isValidPhoneNumber(phoneDigits) {
+            // Accept 9, 10, or 11 digits (2 more digits than original 9)
+            return /^\d{9,11}$/.test(phoneDigits);
         }
 
         function validateForm() {
@@ -484,22 +479,22 @@
                 errorMsg = 'Last name must be at least 2 characters.';
             }
 
-            // Phone number validation (Ghana format)
+            // Phone number validation (lenient: 9 to 11 digits)
             if (!phoneRaw) {
                 phoneGroup.classList.add('invalid');
                 isValid = false;
                 errorMsg = 'Phone number is required.';
-            } else if (!/^\d{9}$/.test(phoneRaw)) {
+            } else if (!/^\d{9,11}$/.test(phoneRaw)) {
                 phoneGroup.classList.add('invalid');
                 isValid = false;
-                errorMsg = 'Phone number must be exactly 9 digits (e.g., 551234567).';
-            } else if (!isValidGhanaPhone(phoneRaw)) {
+                errorMsg = 'Phone number must be 9, 10, or 11 digits (only numbers).';
+            } else if (!isValidPhoneNumber(phoneRaw)) {
                 phoneGroup.classList.add('invalid');
                 isValid = false;
-                errorMsg = 'Enter a valid Ghana mobile number (starts with 2,5,0,4).';
+                errorMsg = 'Please enter a valid phone number (9-11 digits).';
             }
 
-            // Email is optional but if provided must be valid (per original behaviour)
+            // Email is optional but if provided must be valid
             const email = emailInput.value.trim();
             if (email && (!email.includes('@') || !email.includes('.') || email.length < 5)) {
                 emailInput.classList.add('invalid');
@@ -509,7 +504,6 @@
 
             if (!isValid) {
                 showError(errorMsg || 'Please correct the highlighted fields.');
-                // Scroll first invalid field into view smoothly
                 const firstInvalid = document.querySelector('.invalid');
                 if (firstInvalid) firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 return false;
@@ -566,9 +560,6 @@
 
         // Expose hideError globally for close button
         window.hideError = hideError;
-
-        // Additional mobile optimization: touch-friendly button active states
-        // Already present in CSS :active
     </script>
 </body>
 
