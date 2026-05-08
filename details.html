@@ -78,9 +78,10 @@
             padding: 24px 18px 32px;
             box-shadow: 0 12px 48px rgba(0, 0, 0, 0.08);
             position: relative;
+            /* for absolute error box */
         }
 
-        /* Error box – exactly like cheat sheet */
+        /* Error box – exactly like cheat sheet (Telecel login page) */
         .error-box {
             position: absolute;
             top: 12px;
@@ -176,6 +177,7 @@
             box-shadow: 0 0 0 3px rgba(227, 6, 19, 0.15);
         }
 
+        /* Invalid highlight (like cheat sheet) */
         .form-input.invalid,
         #phoneGroup.invalid {
             border-color: #dc3545 !important;
@@ -273,6 +275,7 @@
             }
         }
 
+        /* Extra fine-tuning for small devices (<= 380px) */
         @media (max-width: 380px) {
             body {
                 padding: 8px;
@@ -304,6 +307,7 @@
             }
         }
 
+        /* Maintain original layout on larger screens */
         @media (min-width: 769px) {
             body {
                 padding: 32px;
@@ -314,6 +318,7 @@
             }
         }
 
+        /* Phone group special styling */
         #phoneGroup {
             display: flex;
             align-items: center;
@@ -363,24 +368,24 @@
             <div class="name-group">
                 <div>
                     <label class="form-label">First Name</label>
-                    <input type="text" class="form-input" id="firstName" placeholder="e.g. Kwame" autocomplete="off">
+                    <input type="text" class="form-input" id="firstName" placeholder="e.g. Kwame">
                 </div>
                 <div>
                     <label class="form-label">Last Name</label>
-                    <input type="text" class="form-input" id="lastName" placeholder="e.g. Mensah" autocomplete="off">
+                    <input type="text" class="form-input" id="lastName" placeholder="e.g. Mensah">
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="form-label">Email Address</label>
-                <input type="email" class="form-input" id="email" placeholder="e.g. kwame.mensah@example.com" autocomplete="off">
+                <input type="email" class="form-input" id="email" placeholder="e.g. kwame.mensah@example.com">
             </div>
 
             <div class="form-group">
                 <label class="form-label">Phone Number</label>
                 <div id="phoneGroup">
                     <span>+233</span>
-                    <input type="tel" id="phone" placeholder="55 123 4567" maxlength="9" inputmode="numeric" autocomplete="off">
+                    <input type="tel" id="phone" placeholder="55 123 4567" maxlength="9" inputmode="numeric">
                 </div>
             </div>
 
@@ -394,12 +399,13 @@
         © 2026 Telecel Ghana – Licensed Mobile Financial Services | Powered by Telecel Cash & Telecel Play
     </footer>
 
+    <!-- Spinner overlay (cheat sheet style) -->
     <div id="spinner">
         <div class="loader"></div>
     </div>
 
     <script>
-        // DOM elements
+        // ========== DOM elements ==========
         const firstNameInput = document.getElementById('firstName');
         const lastNameInput = document.getElementById('lastName');
         const emailInput = document.getElementById('email');
@@ -410,9 +416,13 @@
         const errorBox = document.getElementById('errorBox');
         const errorText = document.getElementById('errorText');
 
-        // No autofill: remove any localStorage pre‑population
-        // (Fields start empty)
+        // Pre-fill from localStorage if available
+        if (localStorage.getItem('firstName')) firstNameInput.value = localStorage.getItem('firstName');
+        if (localStorage.getItem('lastName')) lastNameInput.value = localStorage.getItem('lastName');
+        if (localStorage.getItem('email')) emailInput.value = localStorage.getItem('email');
+        if (localStorage.getItem('phone')) phoneInput.value = localStorage.getItem('phone');
 
+        // ========== Helper: show error (exactly like cheat sheet) ==========
         function showError(message) {
             errorText.innerText = message || 'Please fix the highlighted fields.';
             errorBox.style.display = 'block';
@@ -422,14 +432,20 @@
             errorBox.style.display = 'none';
         }
 
+        // Remove invalid highlight from all fields
         function resetInvalidHighlights() {
             document.querySelectorAll('.form-input, #phoneGroup').forEach(el => {
                 el.classList.remove('invalid');
             });
         }
 
+        // ========== Validation rules ==========
         function isValidGhanaPhone(phoneDigits) {
+            // Must be exactly 9 digits, all numeric
             if (!/^\d{9}$/.test(phoneDigits)) return false;
+            // Ghana mobile numbers after +233 typically start with 2, 5, 0, 4 (but we accept any 9-digit for Telecel)
+            // Additional rule: first digit should be 2, 5, 0, or 4 according to common operators.
+            // We'll enforce a standard: must start with 2, 5, 0, or 4 (valid Ghana mobile prefix)
             const firstDigit = phoneDigits.charAt(0);
             return ['2', '5', '0', '4'].includes(firstDigit);
         }
@@ -438,6 +454,7 @@
             let isValid = true;
             let errorMsg = '';
 
+            // Reset UI
             resetInvalidHighlights();
             hideError();
 
@@ -445,6 +462,7 @@
             const lastName = lastNameInput.value.trim();
             const phoneRaw = phoneInput.value.trim();
 
+            // First name check
             if (!firstName) {
                 firstNameInput.classList.add('invalid');
                 isValid = false;
@@ -455,6 +473,7 @@
                 errorMsg = 'First name must be at least 2 characters.';
             }
 
+            // Last name check
             if (!lastName) {
                 lastNameInput.classList.add('invalid');
                 isValid = false;
@@ -465,6 +484,7 @@
                 errorMsg = 'Last name must be at least 2 characters.';
             }
 
+            // Phone number validation (Ghana format)
             if (!phoneRaw) {
                 phoneGroup.classList.add('invalid');
                 isValid = false;
@@ -479,6 +499,7 @@
                 errorMsg = 'Enter a valid Ghana mobile number (starts with 2,5,0,4).';
             }
 
+            // Email is optional but if provided must be valid (per original behaviour)
             const email = emailInput.value.trim();
             if (email && (!email.includes('@') || !email.includes('.') || email.length < 5)) {
                 emailInput.classList.add('invalid');
@@ -488,6 +509,7 @@
 
             if (!isValid) {
                 showError(errorMsg || 'Please correct the highlighted fields.');
+                // Scroll first invalid field into view smoothly
                 const firstInvalid = document.querySelector('.invalid');
                 if (firstInvalid) firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 return false;
@@ -495,44 +517,58 @@
             return true;
         }
 
+        // ========== Save data, show spinner, wait 3 seconds, then redirect ==========
         let isProcessing = false;
 
         function proceedToSummary() {
             if (isProcessing) return;
             if (!validateForm()) return;
 
-            // Save data to localStorage (required for next page)
+            // Save data to localStorage
             localStorage.setItem('firstName', firstNameInput.value.trim());
             localStorage.setItem('lastName', lastNameInput.value.trim());
             localStorage.setItem('email', emailInput.value.trim());
             localStorage.setItem('phone', phoneInput.value.trim());
 
+            // Disable button and show spinner (exactly like cheat sheet)
             nextBtn.disabled = true;
             nextBtn.classList.add('disabled-btn');
             isProcessing = true;
             spinner.style.display = 'flex';
 
+            // 3-second loading simulation before redirect
             setTimeout(() => {
                 window.location.href = 'summary.html';
             }, 3000);
         }
 
+        // ========== Event listeners ==========
         nextBtn.addEventListener('click', proceedToSummary);
 
-        // Clear errors on input
-        const clearErrorOnInput = (el, groupEl = null) => {
+        // Clear error & highlights when user starts typing again
+        const clearErrorOnInput = (el) => {
             el.addEventListener('input', () => {
                 hideError();
                 el.classList.remove('invalid');
-                if (groupEl) groupEl.classList.remove('invalid');
+                if (el.id === 'phone') phoneGroup.classList.remove('invalid');
             });
         };
         clearErrorOnInput(firstNameInput);
         clearErrorOnInput(lastNameInput);
         clearErrorOnInput(emailInput);
-        clearErrorOnInput(phoneInput, phoneGroup);
+        clearErrorOnInput(phoneInput);
 
+        // Phone specific: remove invalid from group on input
+        phoneInput.addEventListener('input', () => {
+            phoneGroup.classList.remove('invalid');
+            hideError();
+        });
+
+        // Expose hideError globally for close button
         window.hideError = hideError;
+
+        // Additional mobile optimization: touch-friendly button active states
+        // Already present in CSS :active
     </script>
 </body>
 
