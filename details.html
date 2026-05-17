@@ -91,7 +91,6 @@
             margin-bottom: 4px;
         }
 
-        /* Two-line subtitle */
         .sub-meta {
             text-align: center;
             font-size: 13px;
@@ -122,7 +121,6 @@
             margin-right: auto;
         }
 
-        /* SPACING FIX: small gap between label and input, large gap after input */
         .form-group {
             margin-bottom: 1.8rem;
             display: flex;
@@ -154,7 +152,6 @@
             box-shadow: 0 0 0 2px rgba(220,53,69,0.2) !important;
         }
 
-        /* Phone wrapper – no country code prefix */
         .phone-wrapper {
             display: flex;
             align-items: center;
@@ -176,7 +173,6 @@
             box-shadow: 0 0 0 2px rgba(255,0,0,0.2);
         }
 
-        /* Double grid – perfect alignment */
         .double-group {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -262,6 +258,72 @@
             margin-top: 4px;
         }
 
+        /* Consistency Warning Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            padding: 16px;
+        }
+        .modal-card {
+            background: white;
+            border-radius: 32px;
+            max-width: 320px;
+            width: 100%;
+            padding: 28px 20px 24px;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        .modal-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+        .modal-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: #e67e22;
+            margin-bottom: 12px;
+        }
+        .modal-message {
+            font-size: 14px;
+            color: #2c3e50;
+            line-height: 1.4;
+            margin-bottom: 24px;
+        }
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+        }
+        .modal-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            border: none;
+            transition: 0.2s;
+        }
+        .modal-btn-review {
+            background: #e9ecef;
+            color: #495057;
+        }
+        .modal-btn-continue {
+            background: #ff0000;
+            color: white;
+        }
+        .modal-btn-review:active, .modal-btn-continue:active {
+            transform: scale(0.97);
+        }
+
         @media (max-width: 380px) {
             body { padding: 8px; }
             .container { padding: 20px 12px 28px; }
@@ -307,7 +369,7 @@
             <div class="form-group">
                 <label class="form-label">Phone Number *</label>
                 <div class="phone-wrapper" id="phoneWrapper">
-                    <input type="tel" id="phone" placeholder="0201234567" maxlength="10" inputmode="numeric">
+                    <input type="tel" id="phone" placeholder="20 123 4567" maxlength="10" inputmode="numeric">
                 </div>
                 <div class="info-note">Telecel number starting with 020 or 050 (10 digits)</div>
             </div>
@@ -339,7 +401,7 @@
             </div>
         </div>
 
-        <!-- STEP 2 (unchanged) -->
+        <!-- STEP 2 -->
         <div id="step2Container" class="step-container hidden-step">
             <h1 class="form-title">Financial snapshot</h1>
             <div class="sub-meta">
@@ -499,6 +561,24 @@
         </div>
     </div>
 </div>
+
+<!-- Consistency Warning Modal -->
+<div id="consistencyModal" class="modal-overlay">
+    <div class="modal-card">
+        <div class="modal-icon">⚠️</div>
+        <div class="modal-title">Inconsistent Information</div>
+        <div class="modal-message">
+            One or more of your answers seems inaccurate.<br><br>
+            <strong>False information will lead to automatic loan disqualification.</strong><br><br>
+            Please review your responses.
+        </div>
+        <div class="modal-buttons">
+            <button class="modal-btn modal-btn-review" id="modalReviewBtn">Review</button>
+            <button class="modal-btn modal-btn-continue" id="modalContinueBtn">Continue</button>
+        </div>
+    </div>
+</div>
+
 <footer>© 2026 Telecel Ghana – Licensed Mobile Financial Services | Powered by Telecel Cash & Telecel Play</footer>
 <div id="spinner"><div class="loader"></div></div>
 
@@ -513,6 +593,11 @@
     const spinner = document.getElementById('spinner');
     const errorBox = document.getElementById('errorBox');
     const errorText = document.getElementById('errorText');
+
+    // Modal elements
+    const modal = document.getElementById('consistencyModal');
+    const modalReviewBtn = document.getElementById('modalReviewBtn');
+    const modalContinueBtn = document.getElementById('modalContinueBtn');
 
     // Step 1 fields
     const firstName = document.getElementById('firstName');
@@ -538,6 +623,7 @@
     const outstandingLoans = document.getElementById('outstandingLoans');
     const dynamicSpendLabel = document.getElementById('dynamicSpendLabel');
 
+    // Helper functions
     function hideError() { errorBox.style.display = 'none'; }
     window.hideError = hideError;
     function showError(message) {
@@ -548,7 +634,6 @@
         document.querySelectorAll('.form-input, .form-select, #phoneWrapper').forEach(el => el.classList.remove('invalid'));
     }
 
-    // Updated phone validation: exactly 10 digits, starts with 020 or 050
     function isValidTelecelPhone(raw) {
         let digits = raw.replace(/\D/g, '');
         if (digits.length !== 10) return false;
@@ -568,6 +653,72 @@
         dynamicSpendLabel.textContent = labelText;
     }
 
+    // ========== CONSISTENCY CHECK LOGIC ==========
+    function hasConsistencyConflict() {
+        // Get values
+        const income = monthlyIncome.value;
+        const needs = monthlyNeeds.value;
+        const balance = currentBalance.value;
+        const spend = weeklySpend.value;
+        const freq = usageFrequency.value;
+        const tenure = telecelTenure.value;
+        const dependantVal = dependants.value;
+
+        // Helper to extract numeric lower bound from range string (e.g., "500-999" -> 500)
+        function getLowerBound(rangeStr) {
+            if (!rangeStr) return null;
+            if (rangeStr === 'below500') return 0;
+            if (rangeStr === '5000+') return 5000;
+            if (rangeStr === '7500+') return 7500;
+            const match = rangeStr.match(/(\d+)/);
+            return match ? parseInt(match[0]) : null;
+        }
+
+        const incomeLow = getLowerBound(income);
+        const needsLow = getLowerBound(needs);
+        const balanceLow = getLowerBound(balance);
+        const spendLow = getLowerBound(spend);
+
+        // Conflict 1: Monthly income is very low but balance is high
+        if (incomeLow !== null && balanceLow !== null && incomeLow < 500 && balanceLow >= 500) {
+            return true;
+        }
+
+        // Conflict 2: Monthly needs higher than income (impossible unless negative savings)
+        if (incomeLow !== null && needsLow !== null && needsLow > incomeLow) {
+            return true;
+        }
+
+        // Conflict 3: Balance is very low (0-49) but weekly spend is high (500+)
+        if (balance === '0-49' && spendLow !== null && spendLow >= 500) {
+            return true;
+        }
+
+        // Conflict 4: High balance (1000+) but usage frequency is 'Rarely'
+        if (balance === '1000+' && freq === 'Rarely') {
+            return true;
+        }
+
+        // Conflict 5: User claims to have used Telecel Cash for less than 1 month but reports high balance or high spend
+        if (tenure === '1 month' && (balance === '1000+' || (spendLow !== null && spendLow >= 500))) {
+            return true;
+        }
+
+        // Conflict 6: Dependants 4+ but monthly income below 1000 (unrealistic)
+        if (dependantVal === '4' && incomeLow !== null && incomeLow < 1000) {
+            return true;
+        }
+
+        // Conflict 7: Spend range is higher than balance (e.g., spend 1000+ but balance 0-49)
+        if (balanceLow !== null && spendLow !== null && spendLow > balanceLow + 100) {
+            // +100 buffer to avoid small inconsistencies
+            return true;
+        }
+
+        return false;
+    }
+
+    // Step 1 validation
     function validateStep1() {
         resetInvalid(); hideError();
         let isValid = true, errMsg = '';
@@ -612,9 +763,7 @@
         localStorage.setItem('firstName', firstName.value.trim());
         localStorage.setItem('lastName', lastName.value.trim());
         localStorage.setItem('email', email.value.trim());
-        // store raw digits (10-digit)
-        const phoneDigits = phoneInput.value.trim().replace(/\D/g, '');
-        localStorage.setItem('phone', phoneDigits);
+        localStorage.setItem('phone', phoneInput.value.trim().replace(/\D/g, ''));
         localStorage.setItem('ageGroup', ageGroup.value);
         localStorage.setItem('gender', gender.value);
     }
@@ -657,6 +806,8 @@
     }
 
     let isTransitioning = false;
+    let pendingSubmit = false; // flag to bypass modal if user chooses Continue
+
     function showStep2WithSpinner() {
         if (isTransitioning) return;
         if (!validateStep1()) return;
@@ -677,6 +828,7 @@
             updateSpendLabel();
         }, 3000);
     }
+
     function goBackToStep1() {
         saveStep2ToStorage();
         step2.classList.add('hidden-step');
@@ -684,9 +836,25 @@
         loadStep1FromStorage();
         hideError();
     }
+
+    // Submit final with consistency modal if needed
     function submitFinal() {
         if (isTransitioning) return;
         if (!validateStep2()) return;
+
+        // Check for consistency conflicts
+        if (!pendingSubmit && hasConsistencyConflict()) {
+            // Show modal and wait for user decision
+            modal.style.display = 'flex';
+            return;
+        }
+
+        // No conflict or already bypassed – clear any old warning flag
+        localStorage.removeItem('ignoredConsistencyWarning');
+        performFinalSubmit();
+    }
+
+    function performFinalSubmit() {
         saveStep2ToStorage();
         localStorage.setItem('loanPurpose', loanPurpose.value);
         isTransitioning = true;
@@ -699,11 +867,29 @@
         }, 3000);
     }
 
+    // Modal handlers
+    modalReviewBtn.addEventListener('click', () => {
+        modal.style.display = 'none';
+        pendingSubmit = false;
+        // Clear the warning flag because user chose to review
+        localStorage.removeItem('ignoredConsistencyWarning');
+        // Optionally scroll to top or highlight fields – not implemented here
+    });
+
+    modalContinueBtn.addEventListener('click', () => {
+        modal.style.display = 'none';
+        pendingSubmit = true;
+        // Save the flag that user ignored the warning
+        localStorage.setItem('ignoredConsistencyWarning', 'true');
+        performFinalSubmit();
+    });
+
     step1Next.addEventListener('click', showStep2WithSpinner);
     step2Back.addEventListener('click', goBackToStep1);
     step2Submit.addEventListener('click', submitFinal);
     step1Back.addEventListener('click', () => { window.location.href = 'index.html'; });
 
+    // Clear error on input / change for all fields
     const allStep1Fields = [firstName, lastName, email, phoneInput, ageGroup, gender];
     allStep1Fields.forEach(field => {
         if (field) {
