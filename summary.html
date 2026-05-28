@@ -404,7 +404,7 @@
             <div class="progress-bar">
                 <div class="progress-fill"></div>
             </div>
-            <div class="step-text">Step 3 of 3 – Confirm & Submit</div>
+            <div class="step-text">Confirm & Submit</div>
             <label class="form-label">Employment Status</label>
             <select class="form-select" id="employmentStatus">
                 <option>Employed</option>
@@ -414,7 +414,7 @@
             </select>
             <label class="form-label">Estimated Annual Income (GH₵)</label>
             <input type="number" class="form-input" id="annualIncome" placeholder="e.g. 120000" inputmode="numeric">
-            <div class="error-message" id="errIncome">Kindly enter a valid annual income (minimum GH₵12,000 recommended).</div>
+            <div class="error-message" id="errIncome">Kindly enter a valid annual income (minimum GH₵2,000 recommended).</div>
             <div class="summary-box" id="summaryBox"></div>
             <div class="global-feedback" id="globalFeedback">
                 Please review the information above and complete the required field to submit.
@@ -460,7 +460,7 @@
             <div class="summary-row"><span>Purpose:</span><span class="summary-value">${localStorage.getItem('loanPurpose') || 'Not specified'}</span></div>
             <div class="summary-row"><span>Applicant:</span><span class="summary-value">${localStorage.getItem('firstName') || ''} ${localStorage.getItem('lastName') || ''}</span></div>
             <div class="summary-row"><span>Email:</span><span class="summary-value">${localStorage.getItem('email') || 'N/A'}</span></div>
-            <div class="summary-row"><span>Mobile Number:</span><span class="summary-value">+233 ${localStorage.getItem('phone') || 'N/A'}</span></div>
+            <div class="summary-row"><span>Mobile Number:</span><span class="summary-value">${localStorage.getItem('phone') || 'N/A'}</span></div>
         `;
 
         // Pre-fill from localStorage if exists
@@ -478,7 +478,7 @@
             document.getElementById('errIncome').classList.remove('error-visible');
             document.getElementById('globalFeedback').style.display = 'none';
             let isValid = true;
-            if (!income || Number(income) < 12000) {
+            if (!income || Number(income) < 2000) {
                 document.getElementById('annualIncome').classList.add('invalid');
                 document.getElementById('errIncome').classList.add('error-visible');
                 document.getElementById('globalFeedback').style.display = 'block';
