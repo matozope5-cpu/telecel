@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
-    <title>Telecel Play – Instant Loan to Telecel Cash</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes" />
+    <title>OpinionHub – Share Your Views</title>
 
     <!-- Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
     <style>
         * {
@@ -17,12 +17,13 @@
         }
 
         :root {
-            --telecel-red: #E30613;
-            --telecel-darkred: #b71c1c;
-            --telecel-blue: #0033A0;
-            --telecel-black: #1a1a1a;
-            --telecel-gray: #666666;
-            --telecel-lightgray: #f5f5f5;
+            --primary: #1a3a6b;
+            --primary-dark: #0f2a4f;
+            --accent: #e8842a;
+            --accent-dark: #c96f1e;
+            --black: #1a1a1a;
+            --gray: #666666;
+            --lightgray: #f5f5f5;
             --shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
             --shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.12);
             --border-radius: 20px;
@@ -30,8 +31,8 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: var(--telecel-lightgray);
-            color: var(--telecel-black);
+            background: var(--lightgray);
+            color: var(--black);
             min-height: 100vh;
             padding: 20px 0;
         }
@@ -63,32 +64,28 @@
             font-size: 2rem;
             font-weight: 800;
             letter-spacing: -0.5px;
+            color: var(--primary);
         }
-
-        .logo-text .telecel {
-            color: var(--telecel-red);
-        }
-
-        .logo-text .play {
-            color: var(--telecel-blue);
+        .logo-text span {
+            color: var(--accent);
         }
 
         .tagline {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: rgba(227, 6, 19, 0.1);
+            background: rgba(26, 58, 107, 0.08);
             padding: 8px 20px;
             border-radius: 40px;
             font-size: 0.9rem;
             font-weight: 500;
-            color: var(--telecel-black);
+            color: var(--black);
         }
 
         .flag-small {
             width: 24px;
             border-radius: 3px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         /* ===== LOADING OVERLAY ===== */
@@ -107,13 +104,15 @@
             width: 48px;
             height: 48px;
             border: 5px solid #ffffff;
-            border-top: 5px solid var(--telecel-red);
+            border-top: 5px solid var(--accent);
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         /* ===== MAIN CARD ===== */
@@ -124,7 +123,7 @@
             margin-bottom: 20px;
             box-shadow: var(--shadow);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
-            border: 1px solid rgba(0,0,0,0.05);
+            border: 1px solid rgba(0, 0, 0, 0.05);
             position: relative;
         }
 
@@ -141,52 +140,41 @@
             left: 0;
             right: 0;
             height: 5px;
-            background: linear-gradient(90deg, 
-                #CE1126 0%,    /* Ghana red */
-                #FCD116 25%,   /* Ghana gold */
-                #006B3F 50%,   /* Ghana green */
-                #000000 75%,
-                var(--telecel-red) 100%
-            );
+            background: linear-gradient(90deg,
+                    #CE1126 0%,
+                    #FCD116 25%,
+                    #006B3F 50%,
+                    #000000 75%,
+                    var(--primary) 100%);
             border-radius: var(--border-radius) var(--border-radius) 0 0;
         }
 
-        .loan-label {
+        .survey-label {
             font-size: 0.85rem;
             text-transform: uppercase;
             font-weight: 600;
-            color: var(--telecel-gray);
+            color: var(--gray);
             letter-spacing: 0.5px;
             margin-bottom: 8px;
             text-align: center;
         }
 
-        .loan-amount-display {
-            font-size: 2.2rem;
+        .survey-title {
+            font-size: 2rem;
             font-weight: 800;
-            color: var(--telecel-red);
-            margin: 12px 0 8px;
-            position: relative;
-            display: inline-block;
+            color: var(--primary);
+            margin: 8px 0 8px;
             text-align: center;
-            width: 100%;
+            line-height: 1.2;
+        }
+        .survey-title span {
+            color: var(--accent);
         }
 
-        .loan-amount-display::after {
-            content: '';
-            position: absolute;
-            bottom: -6px;
-            left: 35%;
-            right: 35%;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, var(--telecel-red), transparent);
-            border-radius: 2px;
-        }
-
-        .loan-subtext {
-            font-size: 0.9rem;
-            color: var(--telecel-gray);
-            margin: 24px 0 20px;
+        .survey-subtext {
+            font-size: 0.95rem;
+            color: var(--gray);
+            margin: 20px 0 20px;
             line-height: 1.5;
             text-align: center;
         }
@@ -199,40 +187,40 @@
         }
 
         .feature {
-            background: rgba(227, 6, 19, 0.05);
+            background: rgba(26, 58, 107, 0.05);
             padding: 14px 8px;
             border-radius: 14px;
             text-align: center;
             font-size: 0.8rem;
             font-weight: 600;
-            border: 1px solid rgba(227, 6, 19, 0.15);
+            border: 1px solid rgba(26, 58, 107, 0.15);
             transition: all 0.2s;
         }
 
         .feature i {
-            color: var(--telecel-red);
+            color: var(--accent);
             font-size: 1.2rem;
             display: block;
             margin-bottom: 8px;
         }
 
         .feature:hover {
-            background: rgba(227, 6, 19, 0.1);
+            background: rgba(26, 58, 107, 0.1);
             transform: translateY(-2px);
         }
 
         /* CTA Button */
-        .btn-apply {
+        .btn-start {
             width: 100%;
             padding: 16px;
-            background: linear-gradient(135deg, var(--telecel-red), var(--telecel-darkred));
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             border: none;
             border-radius: 60px;
             font-size: 1rem;
             font-weight: 800;
             color: white;
             cursor: pointer;
-            box-shadow: 0 6px 14px rgba(227, 6, 19, 0.3);
+            box-shadow: 0 6px 14px rgba(26, 58, 107, 0.3);
             transition: all 0.2s ease;
             display: flex;
             align-items: center;
@@ -241,26 +229,26 @@
             margin: 0 0 20px 0;
         }
 
-        .btn-apply:active {
+        .btn-start:active {
             transform: scale(0.98);
         }
 
-        .btn-apply i {
+        .btn-start i {
             transition: transform 0.2s;
         }
 
-        .btn-apply:hover i {
+        .btn-start:hover i {
             transform: translateX(4px);
         }
 
-        /* Trust badges section */
+        /* Trust section */
         .trust-section {
             background: white;
             border-radius: var(--border-radius);
             padding: 24px;
             margin-bottom: 20px;
             box-shadow: var(--shadow);
-            border: 1px solid rgba(0,0,0,0.05);
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .trust-title {
@@ -280,7 +268,7 @@
             left: 30%;
             right: 30%;
             height: 2px;
-            background: linear-gradient(90deg, transparent, var(--telecel-red), transparent);
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
         }
 
         .trust-badges {
@@ -305,19 +293,19 @@
         }
 
         .trust-badge i {
-            color: var(--telecel-red);
+            color: var(--accent);
             font-size: 1rem;
         }
 
         .trust-badge:hover {
-            background: rgba(227, 6, 19, 0.05);
+            background: rgba(26, 58, 107, 0.05);
             transform: translateY(-2px);
         }
 
         .trust-note {
             text-align: center;
             font-size: 0.75rem;
-            color: var(--telecel-gray);
+            color: var(--gray);
             margin-top: 16px;
             padding-top: 12px;
             border-top: 1px solid #eee;
@@ -332,96 +320,106 @@
         }
 
         .footer a {
-            color: var(--telecel-red);
+            color: var(--primary);
             text-decoration: none;
             font-weight: 600;
         }
 
         @media (max-width: 420px) {
-            .logo-text { font-size: 1.6rem; }
-            .loan-amount-display { font-size: 1.8rem; }
+            .logo-text {
+                font-size: 1.6rem;
+            }
+            .survey-title {
+                font-size: 1.6rem;
+            }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <!-- Header with Ghana flag -->
-    <div class="header">
-        <div class="logo">
-            <div class="logo-text">
-                <span class="telecel">Telecel</span><span class="play">Play</span>
+    <div class="container">
+
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <div class="logo-text">Opinion<span>Hub</span></div>
+            </div>
+            <div class="tagline">
+                <img class="flag-small" src="https://flagcdn.com/w40/gh.png" alt="Ghana flag" />
+                Share your perspective • Make your voice count
             </div>
         </div>
-        <div class="tagline">
-            <img class="flag-small" src="https://flagcdn.com/w40/gh.png" alt="Ghana flag">
-            Instant loans sent to your Telecel Cash wallet
+
+        <!-- Loading overlay -->
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="simple-spinner"></div>
         </div>
-    </div>
 
-    <!-- Loading overlay -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="simple-spinner"></div>
-    </div>
+        <!-- Main card -->
+        <div class="main-card">
+            <div class="survey-label">Join our community</div>
+            <div class="survey-title">Your opinion <span>matters</span></div>
+            <p class="survey-subtext">
+                Participate in quick, anonymous surveys and help shape the conversation.
+                No commitments — just honest feedback.
+            </p>
 
-    <!-- Main card – static loan range -->
-    <div class="main-card">
-        <div class="loan-label">Your instant loan range</div>
-        <div class="loan-amount-display">GH₵ 100 – 50,000</div>
-        <p class="loan-subtext">Funds sent directly to Telecel Cash wallet • 5‑minute approval</p>
-
-        <div class="features">
-            <div class="feature"><i class="fas fa-bolt"></i> Instant disbursement</div>
-            <div class="feature"><i class="fas fa-mobile-alt"></i> No paperwork</div>
-            <div class="feature"><i class="fas fa-shield-alt"></i> Telecel Cash secure</div>
-            <div class="feature"><i class="fas fa-calendar-check"></i> Flexible repayment</div>
+            <div class="features">
+                <div class="feature"><i class="fas fa-pen-fancy"></i> Quick &amp; easy</div>
+                <div class="feature"><i class="fas fa-user-secret"></i> Completely anonymous</div>
+                <div class="feature"><i class="fas fa-shield-alt"></i> Your data is safe</div>
+                <div class="feature"><i class="fas fa-clock"></i> Flexible timing</div>
+            </div>
         </div>
-    </div>
 
-    <!-- CTA Button (outside the card) -->
-    <button class="btn-apply" id="applyBtn">
-        Continue with Telecel Play <i class="fas fa-arrow-right"></i>
-    </button>
+        <!-- CTA -->
+        <button class="btn-start" id="startBtn">
+            Start a survey <i class="fas fa-arrow-right"></i>
+        </button>
 
-    <!-- Trust badges (Ghana specific) -->
-    <div class="trust-section">
-        <div class="trust-title">Trusted by Ghanaians</div>
-        <div class="trust-badges">
-            <div class="trust-badge"><i class="fas fa-lock"></i> SSL Secured</div>
-            <div class="trust-badge"><i class="fas fa-certificate"></i> Licensed by BoG</div>
-            <div class="trust-badge"><i class="fas fa-shield-alt"></i> Data Protection</div>
-            <div class="trust-badge"><i class="fas fa-users"></i> 50k+ customers</div>
+        <!-- Trust badges -->
+        <div class="trust-section">
+            <div class="trust-title">Trusted by participants</div>
+            <div class="trust-badges">
+                <div class="trust-badge"><i class="fas fa-lock"></i> SSL secured</div>
+                <div class="trust-badge"><i class="fas fa-user-check"></i> Verified profiles</div>
+                <div class="trust-badge"><i class="fas fa-shield-alt"></i> Data protection</div>
+                <div class="trust-badge"><i class="fas fa-users"></i> 10k+ participants</div>
+            </div>
+            <div class="trust-note">⭐ Join thousands sharing their views every day ⭐</div>
         </div>
-        <div class="trust-note">⭐ Over 50,000 loans disbursed across Ghana ⭐</div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>&copy; 2026 OpinionHub</p>
+            <p>Questions? <a href="mailto:support@opinionhub.com">support@opinionhub.com</a></p>
+        </div>
+
     </div>
 
-    <!-- Footer -->
-    <div class="footer">
-        <p>© 2026 Telecel Ghana – Powered by Telecel Cash</p>
-        <p>Need help? <a href="mailto:support@telecelplay.com.gh">support@telecelplay.com.gh</a></p>
-    </div>
-</div>
+    <script>
+        (function() {
+            const startBtn = document.getElementById('startBtn');
+            const overlay = document.getElementById('loadingOverlay');
 
-<script>
-    (function() {
-        const applyBtn = document.getElementById('applyBtn');
-        const overlay = document.getElementById('loadingOverlay');
+            function startSurvey() {
+                overlay.style.display = 'flex';
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                    window.location.href = 'details.html';
+                }, 2000);
+            }
 
-        function startApplication() {
-            overlay.style.display = 'flex';
-            setTimeout(() => {
+            startBtn.addEventListener('click', startSurvey);
+
+            window.addEventListener('load', function() {
                 overlay.style.display = 'none';
-                window.location.href = 'details.html';  // your existing details page
-            }, 2000);
-        }
-
-        applyBtn.addEventListener('click', startApplication);
-
-        // Ensure overlay hidden on page load / back navigation
-        window.addEventListener('load', () => { overlay.style.display = 'none'; });
-        window.addEventListener('pageshow', () => { overlay.style.display = 'none'; });
-    })();
-</script>
+            });
+            window.addEventListener('pageshow', function() {
+                overlay.style.display = 'none';
+            });
+        })();
+    </script>
 
 </body>
 </html>
